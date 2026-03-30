@@ -853,101 +853,47 @@
 <div class="toast" id="toast"></div>
 
 <script>
-// ===== DATA =====
-const CHARACTERS = [
-  {
-    id: 1, name: "Aria Voss", emoji: "🌸",
-    tags: ["Fantasy", "Elf", "Submissive", "Romance"],
-    images: ["🌸","💮","🌺","🌹","🌷"],
-    jaiUrl: "https://janitorai.com",
-    comments: [
-      { user: "alex_r", avatar: "A", text: "Aria is absolutely gorgeous, best character on the site!", time: "2h ago" },
-      { user: "neon_k", avatar: "N", text: "The artwork is stunning. Please post more!", time: "5h ago" }
-    ]
-  },
-  {
-    id: 2, name: "Nova Blackthorn", emoji: "⚡",
-    tags: ["Sci-Fi", "Dominant", "Cyberpunk", "Villain"],
-    images: ["⚡","🌩️","💜","🔮","✨"],
-    jaiUrl: "https://janitorai.com",
-    comments: [
-      { user: "shadow_p", avatar: "S", text: "Nova is everything I wanted in a character. Incredible work!", time: "1d ago" }
-    ]
-  },
-  {
-    id: 3, name: "Sakura Mitsuki", emoji: "🌙",
-    tags: ["Anime", "Shy", "Romance", "School"],
-    images: ["🌙","⭐","🌟","💫","✨","🌠"],
-    jaiUrl: "https://janitorai.com",
-    comments: []
-  },
-  {
-    id: 4, name: "Crimson Dae", emoji: "🔥",
-    tags: ["Fantasy", "Demon", "Dominant", "Dark"],
-    images: ["🔥","💢","❤️","🌹","🔴"],
-    jaiUrl: "https://janitorai.com",
-    comments: [
-      { user: "void_x", avatar: "V", text: "The vibe is immaculate. Already chatting with her on JAI!", time: "3h ago" }
-    ]
-  },
-  {
-    id: 5, name: "Lyra Sable", emoji: "🐺",
-    tags: ["Fantasy", "Wolf", "Possessive", "Adventure"],
-    images: ["🐺","🌲","🍂","🌙","⚔️"],
-    jaiUrl: "https://janitorai.com",
-    comments: []
-  },
-  {
-    id: 6, name: "Zara Quinn", emoji: "💎",
-    tags: ["Modern", "CEO", "Dominant", "Luxury"],
-    images: ["💎","👑","🖤","💼","🌆"],
-    jaiUrl: "https://janitorai.com",
-    comments: [
-      { user: "luxe_m", avatar: "L", text: "Zara has that energy. Obsessed!", time: "6h ago" }
-    ]
-  },
-  {
-    id: 7, name: "Ember Roux", emoji: "🌊",
-    tags: ["Fantasy", "Mermaid", "Sweet", "Romance"],
-    images: ["🌊","🐚","💙","🌺","🐠"],
-    jaiUrl: "https://janitorai.com",
-    comments: []
-  },
-  {
-    id: 8, name: "Kira Ashford", emoji: "🗡️",
-    tags: ["Fantasy", "Warrior", "Tsundere", "Action"],
-    images: ["🗡️","⚔️","🏹","🛡️","🔥"],
-    jaiUrl: "https://janitorai.com",
-    comments: []
-  },
-];
-
-const ALL_TAGS = [...new Set(CHARACTERS.flatMap(c => c.tags))].sort();
+// ===== CONFIG =====
+const API = 'https://limitlessai-production.up.railway.app';
 
 // ===== STATE =====
+let CHARACTERS = [];
+let ALL_TAGS = [];
 let currentUser = null;
 let activeTag = null;
 let currentChar = null;
 let authMode = 'login';
 let pendingEmail = '';
+let pendingRegData = {};
 let verifyStep = false;
 
 // ===== INIT =====
-window.addEventListener('DOMContentLoaded', () => {
-  // Check if age was already confirmed
+window.addEventListener('DOMContentLoaded', async () => {
   if(sessionStorage.getItem('age_ok')) {
     document.getElementById('age-gate').style.display = 'none';
   }
-  // Check saved user
   const saved = sessionStorage.getItem('lai_user');
   if(saved) { currentUser = JSON.parse(saved); updateNavUser(); }
 
-  renderTags();
-  renderGallery(CHARACTERS);
   updateThemeBtn();
+  await loadCharacters();
 });
 
-// ===== AGE GATE =====
+// ===== LOAD CHARACTERS FROM API =====
+async function loadCharacters() {
+  const grid = document.getElementById('gallery-grid');
+  grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1"><div class="empty-state-icon">⏳</div><h3>Loading characters...</h3></div>`;
+
+  try {
+    const res = await fetch(`${API}/api/characters`);
+    CHARACTERS = await res.json();
+    ALL_TAGS = [...new Set(CHARACTERS.flatMap(c => c.tags || []))].sort();
+    renderTags();
+    renderGallery(CHARACTERS);
+  } catch(e) {
+    grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1"><div class="empty-state-icon">⚠️</div><h3>Could not load characters</h3><p>Server may be starting up. Try refreshing in a moment.</p></div>`;
+  }
+}
 function enterSite() {
   sessionStorage.setItem('age_ok','1');
   const gate = document.getElementById('age-gate');
@@ -978,14 +924,14 @@ function renderTags() {
 function filterByTag(tag) {
   activeTag = tag;
   renderTags();
-  const filtered = tag ? CHARACTERS.filter(c => c.tags.includes(tag)) : CHARACTERS;
+  const filtered = tag ? CHARACTERS.filter(c => (c.tags||[]).includes(tag)) : CHARACTERS;
   const query = document.getElementById('search-input').value;
   renderGallery(applySearch(filtered, query));
 }
 
 // ===== SEARCH =====
 function handleSearch(q) {
-  const pool = activeTag ? CHARACTERS.filter(c => c.tags.includes(activeTag)) : CHARACTERS;
+  const pool = activeTag ? CHARACTERS.filter(c => (c.tags||[]).includes(activeTag)) : CHARACTERS;
   renderGallery(applySearch(pool, q));
 }
 
@@ -994,7 +940,7 @@ function applySearch(pool, q) {
   const lower = q.toLowerCase();
   return pool.filter(c =>
     c.name.toLowerCase().includes(lower) ||
-    c.tags.some(t => t.toLowerCase().includes(lower))
+    (c.tags||[]).some(t => t.toLowerCase().includes(lower))
   );
 }
 
@@ -1013,25 +959,31 @@ function renderGallery(chars) {
     return;
   }
 
-  grid.innerHTML = chars.map((c, i) => `
-    <div class="char-card" onclick="openCharModal(${c.id})" style="animation-delay:${i * 0.05}s">
+  grid.innerHTML = chars.map((c, i) => {
+    const imgCount = c.images ? c.images.length : 0;
+    const commentCount = c.comments ? c.comments.length : 0;
+    const thumb = c.images && c.images[0]
+      ? `<img src="${c.images[0].url}" style="width:100%;height:100%;object-fit:cover" onerror="this.parentElement.innerHTML='${c.emoji||'🌸'}'">`
+      : `<span>${c.emoji||'🌸'}</span>`;
+    return `
+    <div class="char-card" onclick="openCharModal('${c.id}')" style="animation-delay:${i * 0.05}s">
       <div class="char-thumb">
-        <span>${c.emoji}</span>
+        ${thumb}
         <div class="char-thumb-overlay"></div>
-        <div class="char-img-count">📷 ${c.images.length} images</div>
+        <div class="char-img-count">📷 ${imgCount} images</div>
       </div>
       <div class="char-info">
         <div class="char-name">${c.name}</div>
         <div class="char-tags">
-          ${c.tags.slice(0,3).map(t => `<span class="char-tag">${t}</span>`).join('')}
+          ${(c.tags||[]).slice(0,3).map(t => `<span class="char-tag">${t}</span>`).join('')}
         </div>
         <div class="char-meta">
-          <span>💬 ${c.comments.length} comments</span>
-          <a class="char-jai-link" onclick="event.stopPropagation()" href="${c.jaiUrl}" target="_blank">Chat on JAI →</a>
+          <span>💬 ${commentCount} comments</span>
+          <a class="char-jai-link" onclick="event.stopPropagation()" href="${c.jai_url||'https://janitorai.com'}" target="_blank">Chat on JAI →</a>
         </div>
       </div>
-    </div>
-  `).join('');
+    </div>`;
+  }).join('');
 }
 
 function showHome() {
@@ -1042,29 +994,25 @@ function showHome() {
 }
 
 // ===== CHARACTER MODAL =====
-function openCharModal(id) {
+async function openCharModal(id) {
   currentChar = CHARACTERS.find(c => c.id === id);
   if(!currentChar) return;
 
   document.getElementById('modal-char-name').textContent = currentChar.name;
-  document.getElementById('modal-jai-link').href = currentChar.jaiUrl;
+  document.getElementById('modal-jai-link').href = currentChar.jai_url || 'https://janitorai.com';
 
-  // Tags
   document.getElementById('modal-char-tags').innerHTML =
-    currentChar.tags.map(t => `<span class="tag active" style="cursor:default">${t}</span>`).join('');
+    (currentChar.tags||[]).map(t => `<span class="tag active" style="cursor:default">${t}</span>`).join('');
 
-  // Gallery
-  document.getElementById('modal-gallery').innerHTML =
-    currentChar.images.map((img, i) => `
-      <div class="modal-img" onclick="openLightbox('${img}')">
-        ${img}
-      </div>
-    `).join('');
+  // Gallery — real images
+  const imgs = currentChar.images || [];
+  document.getElementById('modal-gallery').innerHTML = imgs.length
+    ? imgs.map(img => `
+        <div class="modal-img" onclick="openLightbox('${img.url}')">
+          <img src="${img.url}" style="width:100%;height:100%;object-fit:cover;border-radius:6px" onerror="this.parentElement.innerHTML='🖼️'">
+        </div>`).join('')
+    : `<div style="color:var(--text3);font-size:0.875rem;padding:16px;grid-column:1/-1;text-align:center">No images yet</div>`;
 
-  // Comments
-  renderComments();
-
-  // Comment avatar
   if(currentUser) {
     document.getElementById('comment-avatar').textContent = currentUser.username[0].toUpperCase();
     document.getElementById('comment-input').placeholder = 'Leave a comment...';
@@ -1075,6 +1023,8 @@ function openCharModal(id) {
 
   document.getElementById('char-modal').classList.add('open');
   document.body.style.overflow = 'hidden';
+
+  await loadComments(id);
 }
 
 function closeCharModal(e) {
@@ -1084,22 +1034,34 @@ function closeCharModal(e) {
   currentChar = null;
 }
 
-function renderComments() {
-  if(!currentChar) return;
+async function loadComments(characterId) {
   const list = document.getElementById('comments-list');
-  if(!currentChar.comments.length) {
-    list.innerHTML = `<div style="color:var(--text3);font-size:0.875rem;text-align:center;padding:16px 0">No comments yet. Be the first!</div>`;
-    return;
+  list.innerHTML = `<div style="color:var(--text3);font-size:0.875rem;text-align:center;padding:16px">Loading comments...</div>`;
+
+  try {
+    const res = await fetch(`${API}/api/comments/${characterId}`);
+    const comments = await res.json();
+
+    if(!comments.length) {
+      list.innerHTML = `<div style="color:var(--text3);font-size:0.875rem;text-align:center;padding:16px 0">No comments yet. Be the first!</div>`;
+      return;
+    }
+
+    list.innerHTML = comments.map(c => {
+      const username = c.users?.username || 'Anonymous';
+      const time = new Date(c.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+      return `
+        <div class="comment">
+          <div class="comment-avatar">${username[0].toUpperCase()}</div>
+          <div class="comment-body">
+            <div class="comment-user">${username} <span>${time}</span></div>
+            <div class="comment-text">${c.text}</div>
+          </div>
+        </div>`;
+    }).join('');
+  } catch(e) {
+    list.innerHTML = `<div style="color:var(--text3);font-size:0.875rem;text-align:center;padding:16px">Could not load comments</div>`;
   }
-  list.innerHTML = currentChar.comments.map(c => `
-    <div class="comment">
-      <div class="comment-avatar">${c.avatar}</div>
-      <div class="comment-body">
-        <div class="comment-user">${c.user} <span>${c.time}</span></div>
-        <div class="comment-text">${c.text}</div>
-      </div>
-    </div>
-  `).join('');
 }
 
 function checkCommentAuth() {
@@ -1109,30 +1071,49 @@ function checkCommentAuth() {
   }
 }
 
-function submitComment() {
+async function submitComment() {
   if(!currentUser) { openAuth('login'); return; }
   const input = document.getElementById('comment-input');
   const text = input.value.trim();
   if(!text) return;
 
-  currentChar.comments.unshift({
-    user: currentUser.username,
-    avatar: currentUser.username[0].toUpperCase(),
-    text: text,
-    time: 'just now'
-  });
+  const btn = document.querySelector('.comment-submit');
+  btn.textContent = 'Posting...';
+  btn.disabled = true;
 
-  // Update count in main grid
-  const cards = document.querySelectorAll('.char-card');
-  // Re-render comments
-  input.value = '';
-  renderComments();
-  showToast('Comment posted! ✓');
-}
+  try {
+    const res = await fetch(`${API}/api/comments`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${currentUser.token}`
+      },
+      body: JSON.stringify({ character_id: currentChar.id, text })
+    });
+
+    if(res.ok) {
+      input.value = '';
+      showToast('Comment posted! ✓');
+      await loadComments(currentChar.id);
+    } else {
+      const err = await res.json();
+      showToast(err.error || 'Failed to post comment');
+    }
+  } catch(e) {
+    showToast('Network error, try again');
+  }
+
+  btn.textContent = 'Post';
+  btn.disabled = false;}
 
 // ===== LIGHTBOX =====
-function openLightbox(emoji) {
-  document.getElementById('lightbox-content').textContent = emoji;
+function openLightbox(url) {
+  const content = document.getElementById('lightbox-content');
+  if(url.startsWith('http')) {
+    content.innerHTML = `<img src="${url}" style="max-width:90vw;max-height:85vh;object-fit:contain;border-radius:8px">`;
+  } else {
+    content.textContent = url;
+  }
   document.getElementById('lightbox').classList.add('open');
 }
 function closeLightbox() {
@@ -1220,26 +1201,40 @@ function renderAuthForm() {
   }
 }
 
-function doLogin() {
-  const user = document.getElementById('login-user').value.trim();
+async function doLogin() {
+  const email = document.getElementById('login-user').value.trim();
   const pass = document.getElementById('login-pass').value;
-  if(!user || !pass) { showToast('Please fill in all fields'); return; }
+  if(!email || !pass) { showToast('Please fill in all fields'); return; }
 
-  // Simulate login
-  currentUser = { username: user, email: user };
-  sessionStorage.setItem('lai_user', JSON.stringify(currentUser));
-  updateNavUser();
-  closeAuth();
-  showToast(`Welcome back, ${user}! ✓`);
+  const btn = document.querySelector('.form-submit');
+  btn.textContent = 'Logging in...'; btn.disabled = true;
 
-  // Update comment area if modal is open
-  if(currentChar) {
-    document.getElementById('comment-avatar').textContent = user[0].toUpperCase();
-    document.getElementById('comment-input').placeholder = 'Leave a comment...';
+  try {
+    const res = await fetch(`${API}/api/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password: pass })
+    });
+    const data = await res.json();
+
+    if(!res.ok) { showToast(data.error || 'Login failed'); btn.textContent = 'Log in'; btn.disabled = false; return; }
+
+    currentUser = { username: data.username, email, token: data.token };
+    sessionStorage.setItem('lai_user', JSON.stringify(currentUser));
+    updateNavUser();
+    closeAuth();
+    showToast(`Welcome back, ${data.username}! ✓`);
+    if(currentChar) {
+      document.getElementById('comment-avatar').textContent = data.username[0].toUpperCase();
+      document.getElementById('comment-input').placeholder = 'Leave a comment...';
+    }
+  } catch(e) {
+    showToast('Network error, try again');
+    btn.textContent = 'Log in'; btn.disabled = false;
   }
 }
 
-function doRegister() {
+async function doRegister() {
   const username = document.getElementById('reg-user').value.trim();
   const email = document.getElementById('reg-email').value.trim();
   const pass = document.getElementById('reg-pass').value;
@@ -1247,45 +1242,73 @@ function doRegister() {
   if(!email.includes('@')) { showToast('Invalid email address'); return; }
   if(pass.length < 6) { showToast('Password must be at least 6 characters'); return; }
 
-  pendingEmail = email;
-  verifyStep = true;
-  renderAuthForm();
-  showToast('Verification code sent! (demo: use 123456)');
-}
+  const btn = document.querySelector('.form-submit');
+  btn.textContent = 'Sending code...'; btn.disabled = true;
 
-function nextDigit(i) {
-  const el = document.getElementById(`cd${i}`);
-  if(el.value && i < 5) document.getElementById(`cd${i+1}`).focus();
-}
+  try {
+    const res = await fetch(`${API}/api/register`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, email, password: pass })
+    });
+    const data = await res.json();
 
-function prevDigit(e, i) {
-  if(e.key === 'Backspace' && !document.getElementById(`cd${i}`).value && i > 0) {
-    document.getElementById(`cd${i-1}`).focus();
+    if(!res.ok) { showToast(data.error || 'Registration failed'); btn.textContent = 'Send verification code'; btn.disabled = false; return; }
+
+    pendingEmail = email;
+    pendingRegData = { username, email, password: pass };
+    verifyStep = true;
+    renderAuthForm();
+    showToast('Verification code sent to your email!');
+  } catch(e) {
+    showToast('Network error, try again');
+    btn.textContent = 'Send verification code'; btn.disabled = false;
   }
 }
 
-function verifyCode() {
+async function verifyCode() {
   const code = [0,1,2,3,4,5].map(i => document.getElementById(`cd${i}`).value).join('');
   if(code.length < 6) { showToast('Enter the full 6-digit code'); return; }
 
-  // Demo: accept 123456
-  if(code !== '123456') { showToast('Invalid code. Try 123456 (demo)'); return; }
+  const btn = document.querySelector('.form-submit');
+  btn.textContent = 'Verifying...'; btn.disabled = true;
 
-  const storedData = JSON.parse(sessionStorage.getItem('pending_reg') || '{}');
-  currentUser = { username: storedData.username || 'User', email: pendingEmail };
-  sessionStorage.setItem('lai_user', JSON.stringify(currentUser));
-  updateNavUser();
-  closeAuth();
-  showToast('Account created! Welcome 🎉');
+  try {
+    const res = await fetch(`${API}/api/verify`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ...pendingRegData, code })
+    });
+    const data = await res.json();
 
-  if(currentChar) {
-    document.getElementById('comment-avatar').textContent = currentUser.username[0].toUpperCase();
-    document.getElementById('comment-input').placeholder = 'Leave a comment...';
+    if(!res.ok) { showToast(data.error || 'Invalid code'); btn.textContent = 'Verify & Create Account'; btn.disabled = false; return; }
+
+    currentUser = { username: data.username, email: pendingRegData.email, token: data.token };
+    sessionStorage.setItem('lai_user', JSON.stringify(currentUser));
+    updateNavUser();
+    closeAuth();
+    showToast('Account created! Welcome 🎉');
+    if(currentChar) {
+      document.getElementById('comment-avatar').textContent = data.username[0].toUpperCase();
+      document.getElementById('comment-input').placeholder = 'Leave a comment...';
+    }
+  } catch(e) {
+    showToast('Network error, try again');
+    btn.textContent = 'Verify & Create Account'; btn.disabled = false;
   }
 }
 
-function resendCode() {
-  showToast('Code resent! (demo: use 123456)');
+async function resendCode() {
+  try {
+    await fetch(`${API}/api/register`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(pendingRegData)
+    });
+    showToast('New code sent!');
+  } catch(e) {
+    showToast('Failed to resend code');
+  }
 }
 
 function updateNavUser() {
