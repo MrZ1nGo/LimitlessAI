@@ -228,8 +228,3 @@ app.post('/api/comments', authMiddleware, async (req, res) => {
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-```
-
-**Шаг 3** — Зайди на Railway → Variables → убедись что есть эта переменная:
-```
-RESEND_API_KEY = твой_ключ_от_resend
