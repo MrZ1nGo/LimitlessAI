@@ -637,128 +637,8 @@
     line-height: 2;
   }
 
-  /* ===== ADMIN BADGE ===== */
-  .admin-check {
-    display: inline-flex; align-items: center; justify-content: center;
-    width: 16px; height: 16px; border-radius: 50%;
-    background: #4CAF50; color: #fff;
-    font-size: 0.6rem; font-weight: 900;
-    margin-left: 4px; flex-shrink: 0;
-    box-shadow: 0 0 6px rgba(76,175,80,0.5);
-    title: 'Admin';
-  }
-  .comment-delete-btn {
-    background: none; border: none;
-    color: var(--text3); font-size: 0.75rem;
-    cursor: pointer; padding: 2px 6px;
-    border-radius: 4px; transition: all 0.2s;
-    margin-left: auto;
-  }
-  .comment-delete-btn:hover { background: rgba(201,65,42,0.1); color: var(--accent); }
-
-  /* ===== ADMIN PANEL ===== */
-  .admin-modal-overlay {
-    position: fixed; inset: 0; z-index: 300;
-    background: var(--modal-overlay);
-    backdrop-filter: blur(8px);
-    display: flex; align-items: flex-start;
-    justify-content: center;
-    padding: 24px; overflow-y: auto;
-    opacity: 0; pointer-events: none;
-    transition: opacity 0.3s;
-  }
-  .admin-modal-overlay.open { opacity: 1; pointer-events: all; }
-  .admin-modal {
-    background: var(--card);
-    border: 1px solid var(--card-border);
-    border-radius: 16px;
-    width: 100%; max-width: 700px;
-    margin: auto; overflow: hidden;
-    transform: translateY(20px);
-    transition: transform 0.3s;
-  }
-  .admin-modal-overlay.open .admin-modal { transform: translateY(0); }
-  .admin-header {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 20px 24px;
-    border-bottom: 1px solid var(--card-border);
-    background: var(--bg2);
-  }
-  .admin-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.3rem; font-weight: 700;
-    display: flex; align-items: center; gap: 10px;
-  }
-  .admin-body { padding: 24px; }
-  .admin-tabs {
-    display: flex; gap: 0; margin-bottom: 24px;
-    border-radius: 8px; overflow: hidden;
-    border: 1px solid var(--card-border);
-  }
-  .admin-tab {
-    flex: 1; padding: 10px;
-    background: transparent; border: none;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 0.875rem; font-weight: 500;
-    color: var(--text2); cursor: pointer;
-    transition: all 0.2s;
-  }
-  .admin-tab.active { background: var(--accent); color: #fff; }
-  .admin-section { display: none; }
-  .admin-section.active { display: block; }
-  .char-list-item {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 12px 16px;
-    background: var(--bg2);
-    border: 1px solid var(--card-border);
-    border-radius: 8px; margin-bottom: 8px;
-  }
-  .char-list-name { font-weight: 600; font-size: 0.9rem; }
-  .char-list-tags { font-size: 0.75rem; color: var(--text3); margin-top: 2px; }
-  .btn-danger {
-    background: rgba(201,65,42,0.1);
-    color: var(--accent); border: 1px solid rgba(201,65,42,0.2);
-    padding: 6px 12px; border-radius: 6px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 0.8rem; font-weight: 600;
-    cursor: pointer; transition: all 0.2s;
-    white-space: nowrap;
-  }
-  .btn-danger:hover { background: var(--accent); color: #fff; }
-  .btn-success {
-    background: rgba(76,175,80,0.1);
-    color: #4CAF50; border: 1px solid rgba(76,175,80,0.2);
-    padding: 6px 12px; border-radius: 6px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 0.8rem; font-weight: 600;
-    cursor: pointer; transition: all 0.2s;
-  }
-  .btn-success:hover { background: #4CAF50; color: #fff; }
-  .img-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px,1fr)); gap: 8px; margin-top: 12px; }
-  .img-list-item {
-    position: relative; aspect-ratio: 3/4;
-    border-radius: 6px; overflow: hidden;
-    border: 1px solid var(--card-border);
-  }
-  .img-list-item img { width:100%; height:100%; object-fit:cover; }
-  .img-delete-btn {
-    position: absolute; top: 4px; right: 4px;
-    width: 22px; height: 22px;
-    background: rgba(0,0,0,0.7); color: #fff;
-    border: none; border-radius: 50%;
-    font-size: 0.7rem; cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-  }
-  .admin-btn {
-    display: inline-flex; align-items: center; gap: 6px;
-    background: var(--accent); color: #fff;
-    border: none; padding: 9px 18px;
-    border-radius: 8px; font-family: 'DM Sans', sans-serif;
-    font-size: 0.875rem; font-weight: 600;
-    cursor: pointer; transition: all 0.2s;
-  }
-  .admin-btn:hover { background: var(--accent2); }
-
+  /* ===== FOOTER ===== */
+  footer {
     border-top: 1px solid var(--card-border);
     padding: 32px 24px;
     text-align: center; color: var(--text3);
@@ -894,62 +774,6 @@
   <div class="gallery-grid" id="gallery-grid"></div>
 
 </main>
-
-<!-- ADMIN PANEL -->
-<div class="admin-modal-overlay" id="admin-modal" onclick="closeAdmin(event)">
-  <div class="admin-modal" onclick="event.stopPropagation()">
-    <div class="admin-header">
-      <div class="admin-title">⚙️ Admin Panel</div>
-      <button class="modal-close" onclick="closeAdmin()">✕</button>
-    </div>
-    <div class="admin-body">
-      <div class="admin-tabs">
-        <button class="admin-tab active" onclick="switchAdminTab('create')">➕ Create Character</button>
-        <button class="admin-tab" onclick="switchAdminTab('manage')">🗂 Manage Characters</button>
-      </div>
-
-      <!-- CREATE CHARACTER -->
-      <div class="admin-section active" id="admin-create">
-        <div class="form-group">
-          <label class="form-label">Character Name</label>
-          <input class="form-input" id="admin-name" placeholder="e.g. Aria Voss">
-        </div>
-        <div class="form-group">
-          <label class="form-label">Tags (comma separated)</label>
-          <input class="form-input" id="admin-tags" placeholder="e.g. Fantasy, Elf, Romance">
-        </div>
-        <div class="form-group">
-          <label class="form-label">JanitorAI URL</label>
-          <input class="form-input" id="admin-jai" placeholder="https://janitorai.com/characters/...">
-        </div>
-        <div class="form-group">
-          <label class="form-label">Emoji (fallback icon)</label>
-          <input class="form-input" id="admin-emoji" placeholder="🌸" style="max-width:100px">
-        </div>
-        <button class="admin-btn" onclick="adminCreateCharacter()">➕ Create Character</button>
-      </div>
-
-      <!-- MANAGE CHARACTERS -->
-      <div class="admin-section" id="admin-manage">
-        <div id="admin-char-list" style="margin-bottom:20px">
-          <div style="color:var(--text3);text-align:center;padding:20px">Loading...</div>
-        </div>
-
-        <!-- ADD IMAGES -->
-        <div id="admin-images-section" style="display:none">
-          <div style="border-top:1px solid var(--card-border);padding-top:20px;margin-top:4px">
-            <div style="font-weight:600;margin-bottom:12px" id="admin-images-title">Images</div>
-            <div class="img-list" id="admin-img-list"></div>
-            <div style="display:flex;gap:10px;margin-top:16px;flex-wrap:wrap">
-              <input class="form-input" id="admin-img-url" placeholder="Paste direct image URL (i.ibb.co/...)" style="flex:1;min-width:200px">
-              <button class="admin-btn" onclick="adminAddImage()">Add Image</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
 
 <!-- FOOTER -->
 <footer>
@@ -1225,20 +1049,12 @@ async function loadComments(characterId) {
 
     list.innerHTML = comments.map(c => {
       const username = c.users?.username || 'Anonymous';
-      const isUserAdmin = c.users?.is_admin;
       const time = new Date(c.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-      const adminBadge = isUserAdmin ? '<span class="admin-check">✓</span>' : '';
-      const deleteBtn = currentUser?.isAdmin
-        ? `<button class="comment-delete-btn" onclick="adminDeleteComment('${c.id}')">🗑 Delete</button>`
-        : '';
       return `
-        <div class="comment" id="comment-${c.id}">
+        <div class="comment">
           <div class="comment-avatar">${username[0].toUpperCase()}</div>
-          <div class="comment-body" style="flex:1">
-            <div class="comment-user" style="display:flex;align-items:center;gap:4px">
-              ${username}${adminBadge}<span>${time}</span>
-              ${deleteBtn}
-            </div>
+          <div class="comment-body">
+            <div class="comment-user">${username} <span>${time}</span></div>
             <div class="comment-text">${c.text}</div>
           </div>
         </div>`;
@@ -1389,7 +1205,7 @@ async function doLogin() {
 
     if(!res.ok) { showToast(data.error || 'Login failed'); btn.textContent = 'Log in'; btn.disabled = false; return; }
 
-    currentUser = { username: data.username, email, token: data.token, isAdmin: data.isAdmin };
+    currentUser = { username: data.username, email, token: data.token };
     sessionStorage.setItem('lai_user', JSON.stringify(currentUser));
     updateNavUser();
     closeAuth();
@@ -1425,7 +1241,7 @@ async function doRegister() {
 
     if(!res.ok) { showToast(data.error || 'Registration failed'); btn.textContent = 'Create Account'; btn.disabled = false; return; }
 
-    currentUser = { username: data.username, email, token: data.token, isAdmin: data.isAdmin };
+    currentUser = { username: data.username, email, token: data.token };
     sessionStorage.setItem('lai_user', JSON.stringify(currentUser));
     updateNavUser();
     closeAuth();
@@ -1437,204 +1253,6 @@ async function doRegister() {
   } catch(e) {
     showToast('Network error, try again');
     btn.textContent = 'Create Account'; btn.disabled = false;
-  }
-}
-
-// ===== ADMIN PANEL =====
-let adminSelectedCharId = null;
-let adminSelectedCharName = null;
-
-function openAdmin() {
-  if(!currentUser?.isAdmin) return;
-  document.getElementById('admin-modal').classList.add('open');
-  document.body.style.overflow = 'hidden';
-  switchAdminTab('create');
-  loadAdminCharList();
-}
-
-function closeAdmin(e) {
-  if(e && e.target !== document.getElementById('admin-modal')) return;
-  document.getElementById('admin-modal').classList.remove('open');
-  document.body.style.overflow = '';
-  adminSelectedCharId = null;
-}
-
-function switchAdminTab(tab) {
-  document.querySelectorAll('.admin-tab').forEach((t,i) => {
-    t.classList.toggle('active', (i===0 && tab==='create') || (i===1 && tab==='manage'));
-  });
-  document.getElementById('admin-create').classList.toggle('active', tab==='create');
-  document.getElementById('admin-manage').classList.toggle('active', tab==='manage');
-  if(tab === 'manage') loadAdminCharList();
-}
-
-async function loadAdminCharList() {
-  const list = document.getElementById('admin-char-list');
-  list.innerHTML = `<div style="color:var(--text3);text-align:center;padding:20px">Loading...</div>`;
-
-  try {
-    const res = await fetch(`${API}/api/characters`);
-    const chars = await res.json();
-
-    if(!chars.length) {
-      list.innerHTML = `<div style="color:var(--text3);text-align:center;padding:20px">No characters yet</div>`;
-      return;
-    }
-
-    list.innerHTML = chars.map(c => `
-      <div class="char-list-item">
-        <div>
-          <div class="char-list-name">${c.emoji || '🌸'} ${c.name}</div>
-          <div class="char-list-tags">${(c.tags||[]).join(', ')} · ${(c.images||[]).length} images</div>
-        </div>
-        <div style="display:flex;gap:8px;flex-shrink:0">
-          <button class="btn-success" onclick="selectCharForImages('${c.id}','${c.name.replace(/'/g,"\\'")}')">🖼 Images</button>
-          <button class="btn-danger" onclick="adminDeleteChar('${c.id}','${c.name.replace(/'/g,"\\'")}')">🗑 Delete</button>
-        </div>
-      </div>
-    `).join('');
-  } catch(e) {
-    list.innerHTML = `<div style="color:var(--accent);text-align:center;padding:20px">Error loading characters</div>`;
-  }
-}
-
-async function adminCreateCharacter() {
-  const name = document.getElementById('admin-name').value.trim();
-  const tagsRaw = document.getElementById('admin-tags').value.trim();
-  const jai_url = document.getElementById('admin-jai').value.trim();
-  const emoji = document.getElementById('admin-emoji').value.trim() || '🌸';
-
-  if(!name) { showToast('Character name is required'); return; }
-
-  const tags = tagsRaw ? tagsRaw.split(',').map(t => t.trim()).filter(Boolean) : [];
-
-  const btn = document.querySelector('#admin-create .admin-btn');
-  btn.textContent = 'Creating...'; btn.disabled = true;
-
-  try {
-    const res = await fetch(`${API}/api/characters`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${currentUser.token}`
-      },
-      body: JSON.stringify({ name, tags, jai_url, emoji })
-    });
-    const data = await res.json();
-
-    if(!res.ok) { showToast(data.error || 'Failed to create'); btn.textContent = '➕ Create Character'; btn.disabled = false; return; }
-
-    showToast(`✓ "${name}" created!`);
-    document.getElementById('admin-name').value = '';
-    document.getElementById('admin-tags').value = '';
-    document.getElementById('admin-jai').value = '';
-    document.getElementById('admin-emoji').value = '';
-    await loadCharacters();
-  } catch(e) {
-    showToast('Network error');
-  }
-  btn.textContent = '➕ Create Character'; btn.disabled = false;
-}
-
-async function adminDeleteChar(id, name) {
-  if(!confirm(`Delete "${name}"? This will also delete all images and comments.`)) return;
-
-  try {
-    const res = await fetch(`${API}/api/characters/${id}`, {
-      method: 'DELETE',
-      headers: { 'Authorization': `Bearer ${currentUser.token}` }
-    });
-    if(res.ok) {
-      showToast(`✓ "${name}" deleted`);
-      await loadCharacters();
-      await loadAdminCharList();
-      document.getElementById('admin-images-section').style.display = 'none';
-    } else {
-      showToast('Failed to delete');
-    }
-  } catch(e) {
-    showToast('Network error');
-  }
-}
-
-async function selectCharForImages(id, name) {
-  adminSelectedCharId = id;
-  adminSelectedCharName = name;
-  document.getElementById('admin-images-title').textContent = `Images for: ${name}`;
-  document.getElementById('admin-images-section').style.display = 'block';
-  await loadAdminImages();
-}
-
-async function loadAdminImages() {
-  const list = document.getElementById('admin-img-list');
-  list.innerHTML = '<div style="color:var(--text3);font-size:0.8rem">Loading...</div>';
-
-  try {
-    const res = await fetch(`${API}/api/characters`);
-    const chars = await res.json();
-    const char = chars.find(c => c.id === adminSelectedCharId);
-    const imgs = char?.images || [];
-
-    if(!imgs.length) {
-      list.innerHTML = '<div style="color:var(--text3);font-size:0.8rem">No images yet</div>';
-      return;
-    }
-
-    list.innerHTML = imgs.map(img => `
-      <div class="img-list-item">
-        <img src="${img.url}" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22><text y=%2220%22>🖼️</text></svg>'">
-        <button class="img-delete-btn" onclick="adminDeleteImage('${img.id}')">✕</button>
-      </div>
-    `).join('');
-  } catch(e) {
-    list.innerHTML = '<div style="color:var(--accent);font-size:0.8rem">Error</div>';
-  }
-}
-
-async function adminAddImage() {
-  const url = document.getElementById('admin-img-url').value.trim();
-  if(!url) { showToast('Enter image URL'); return; }
-  if(!adminSelectedCharId) { showToast('Select a character first'); return; }
-
-  try {
-    const res = await fetch(`${API}/api/images`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${currentUser.token}`
-      },
-      body: JSON.stringify({ character_id: adminSelectedCharId, url })
-    });
-
-    if(res.ok) {
-      document.getElementById('admin-img-url').value = '';
-      showToast('✓ Image added!');
-      await loadAdminImages();
-      await loadCharacters();
-    } else {
-      const err = await res.json();
-      showToast(err.error || 'Failed to add image');
-    }
-  } catch(e) {
-    showToast('Network error');
-  }
-}
-
-async function adminDeleteImage(imgId) {
-  try {
-    const res = await fetch(`${API}/api/images/${imgId}`, {
-      method: 'DELETE',
-      headers: { 'Authorization': `Bearer ${currentUser.token}` }
-    });
-    if(res.ok) {
-      showToast('✓ Image deleted');
-      await loadAdminImages();
-      await loadCharacters();
-    } else {
-      showToast('Failed to delete image');
-    }
-  } catch(e) {
-    showToast('Network error');
   }
 }
 
@@ -1686,16 +1304,10 @@ async function resendCode() {
 function updateNavUser() {
   const container = document.getElementById('nav-auth');
   if(currentUser) {
-    const adminBadge = currentUser.isAdmin ? '<span class="admin-check">✓</span>' : '';
-    const adminBtn = currentUser.isAdmin
-      ? `<button class="nav-btn nav-btn-ghost" onclick="openAdmin()" style="font-size:0.8rem">⚙️ Admin</button>`
-      : '';
     container.innerHTML = `
-      ${adminBtn}
       <div class="user-badge" onclick="logout()">
         <div class="user-badge-avatar">${currentUser.username[0].toUpperCase()}</div>
         <span>${currentUser.username}</span>
-        ${adminBadge}
         <span style="color:var(--text3);font-size:0.75rem">Log out</span>
       </div>
     `;
@@ -1955,23 +1567,6 @@ function closeLegal(e) {
   if (e && e.target !== document.getElementById('legal-modal')) return;
   document.getElementById('legal-modal').classList.remove('open');
   document.body.style.overflow = '';
-}
-
-async function adminDeleteComment(commentId) {
-  try {
-    const res = await fetch(`${API}/api/comments/${commentId}`, {
-      method: 'DELETE',
-      headers: { 'Authorization': `Bearer ${currentUser.token}` }
-    });
-    if(res.ok) {
-      document.getElementById(`comment-${commentId}`)?.remove();
-      showToast('✓ Comment deleted');
-    } else {
-      showToast('Failed to delete comment');
-    }
-  } catch(e) {
-    showToast('Network error');
-  }
 }
 
 // ===== TOAST =====
