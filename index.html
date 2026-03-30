@@ -1150,20 +1150,6 @@ function renderAuthForm() {
   const title = document.getElementById('auth-title');
   const subtitle = document.getElementById('auth-subtitle');
 
-  if(verifyStep) {
-    title.textContent = 'Check your email';
-    subtitle.textContent = `We sent a 6-digit code to ${pendingEmail}`;
-    container.innerHTML = `
-      <div class="code-inputs">
-        ${[0,1,2,3,4,5].map(i => `<input class="code-digit" id="cd${i}" maxlength="1" type="text" inputmode="numeric" oninput="nextDigit(${i})" onkeydown="prevDigit(event,${i})">`).join('')}
-      </div>
-      <button class="form-submit" onclick="verifyCode()">Verify & Create Account</button>
-      <p class="form-note">Didn't receive it? <a href="#" onclick="resendCode()" style="color:var(--accent)">Resend code</a></p>
-    `;
-    setTimeout(() => document.getElementById('cd0')?.focus(), 100);
-    return;
-  }
-
   if(authMode === 'login') {
     title.textContent = 'Welcome back';
     subtitle.textContent = 'Sign in to leave comments and more';
@@ -1195,7 +1181,7 @@ function renderAuthForm() {
         <label class="form-label">Password</label>
         <input class="form-input" id="reg-pass" type="password" placeholder="••••••••">
       </div>
-      <button class="form-submit" onclick="doRegister()">Send verification code</button>
+      <button class="form-submit" onclick="doRegister()">Create Account</button>
       <p class="form-note">By signing up you agree to our <a href="#" onclick="openLegal('tos')" style="color:var(--accent)">Terms of Service</a>.<br>Registration is completely optional.</p>
     `;
   }
@@ -1243,7 +1229,7 @@ async function doRegister() {
   if(pass.length < 6) { showToast('Password must be at least 6 characters'); return; }
 
   const btn = document.querySelector('.form-submit');
-  btn.textContent = 'Sending code...'; btn.disabled = true;
+  btn.textContent = 'Creating account...'; btn.disabled = true;
 
   try {
     const res = await fetch(`${API}/api/register`, {
@@ -1253,16 +1239,20 @@ async function doRegister() {
     });
     const data = await res.json();
 
-    if(!res.ok) { showToast(data.error || 'Registration failed'); btn.textContent = 'Send verification code'; btn.disabled = false; return; }
+    if(!res.ok) { showToast(data.error || 'Registration failed'); btn.textContent = 'Create Account'; btn.disabled = false; return; }
 
-    pendingEmail = email;
-    pendingRegData = { username, email, password: pass };
-    verifyStep = true;
-    renderAuthForm();
-    showToast('Verification code sent to your email!');
+    currentUser = { username: data.username, email, token: data.token };
+    sessionStorage.setItem('lai_user', JSON.stringify(currentUser));
+    updateNavUser();
+    closeAuth();
+    showToast('Account created! Welcome 🎉');
+    if(currentChar) {
+      document.getElementById('comment-avatar').textContent = data.username[0].toUpperCase();
+      document.getElementById('comment-input').placeholder = 'Leave a comment...';
+    }
   } catch(e) {
     showToast('Network error, try again');
-    btn.textContent = 'Send verification code'; btn.disabled = false;
+    btn.textContent = 'Create Account'; btn.disabled = false;
   }
 }
 
