@@ -43,7 +43,7 @@ app.post('/api/register', async (req, res) => {
     const password_hash = await bcrypt.hash(password, 12);
     const { data: user, error } = await supabase.from('users').insert({ username, email, password_hash, verified: true }).select().single();
     if (error) return res.status(400).json({ error: error.message });
-    const token = jwt.sign({ userId: user.id, username: user.username, isAdmin: user.is_admin }, JWT_SECRET, { expiresIn: '30d' });
+    const token = jwt.sign({ userId: user.id, username: user.username, isAdmin: user.is_admin }, JWT_SECRET, { expiresIn: '90d' });
     res.json({ success: true, token, username: user.username, isAdmin: user.is_admin, avatar_url: user.avatar_url || null });
   } catch (err) { res.status(500).json({ error: err.message }); }
 });
@@ -58,7 +58,7 @@ app.post('/api/login', async (req, res) => {
     if (!user) return res.status(400).json({ error: 'Invalid email or password' });
     const valid = await bcrypt.compare(password, user.password_hash);
     if (!valid) return res.status(400).json({ error: 'Invalid email or password' });
-    const token = jwt.sign({ userId: user.id, username: user.username, isAdmin: user.is_admin }, JWT_SECRET, { expiresIn: '30d' });
+    const token = jwt.sign({ userId: user.id, username: user.username, isAdmin: user.is_admin }, JWT_SECRET, { expiresIn: '90d' });
     res.json({ success: true, token, username: user.username, isAdmin: user.is_admin, avatar_url: user.avatar_url || null });
   } catch (err) { res.status(500).json({ error: err.message }); }
 });
@@ -72,7 +72,7 @@ app.get('/api/profile', authMiddleware, async (req, res) => {
   } catch (err) { res.status(500).json({ error: err.message }); }
 });
 
-// ===== UPDATE PROFILE (username) =====
+// ===== UPDATE PROFILE =====
 app.patch('/api/profile', authMiddleware, async (req, res) => {
   try {
     const { username } = req.body;
@@ -81,59 +81,36 @@ app.patch('/api/profile', authMiddleware, async (req, res) => {
     if (trimmed.length < 3) return res.status(400).json({ error: 'Username must be at least 3 characters' });
     if (trimmed.length > 30) return res.status(400).json({ error: 'Username too long (max 30 chars)' });
     if (!/^[a-zA-Z0-9_\-\.]+$/.test(trimmed)) return res.status(400).json({ error: 'Username can only contain letters, numbers, _ - .' });
-
-    // Check if taken by another user
     const { data: existing } = await supabase.from('users').select('id').eq('username', trimmed).neq('id', req.user.userId).maybeSingle();
     if (existing) return res.status(400).json({ error: 'Username already taken' });
-
     const { data: user, error } = await supabase.from('users').update({ username: trimmed }).eq('id', req.user.userId).select('id, username, email, avatar_url, is_admin').single();
     if (error) return res.status(500).json({ error: error.message });
-
-    // Return new token with updated username
-    const newToken = jwt.sign({ userId: user.id, username: user.username, isAdmin: user.is_admin }, JWT_SECRET, { expiresIn: '30d' });
+    const newToken = jwt.sign({ userId: user.id, username: user.username, isAdmin: user.is_admin }, JWT_SECRET, { expiresIn: '90d' });
     res.json({ success: true, user, token: newToken });
   } catch (err) { res.status(500).json({ error: err.message }); }
 });
 
 // ===== UPLOAD AVATAR =====
-// Accepts base64 image in body: { image: "data:image/png;base64,..." }
 app.post('/api/profile/avatar', authMiddleware, async (req, res) => {
   try {
     const { image } = req.body;
     if (!image) return res.status(400).json({ error: 'No image provided' });
-
-    // Parse base64
     const matches = image.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/);
     if (!matches) return res.status(400).json({ error: 'Invalid image format' });
-
     const mimeType = matches[1];
     const base64Data = matches[2];
     const buffer = Buffer.from(base64Data, 'base64');
-
-    // Limit size ~3MB
     if (buffer.length > 3 * 1024 * 1024) return res.status(400).json({ error: 'Image too large (max 3MB)' });
-
     const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
     if (!allowedTypes.includes(mimeType)) return res.status(400).json({ error: 'Only JPG, PNG, GIF, WEBP allowed' });
-
     const ext = mimeType.split('/')[1].replace('jpeg', 'jpg');
     const fileName = `avatar_${req.user.userId}_${Date.now()}.${ext}`;
-
-    // Upload to Supabase Storage bucket "avatars"
-    const { error: uploadError } = await supabase.storage
-      .from('avatars')
-      .upload(fileName, buffer, { contentType: mimeType, upsert: true });
-
+    const { error: uploadError } = await supabase.storage.from('avatars').upload(fileName, buffer, { contentType: mimeType, upsert: true });
     if (uploadError) return res.status(500).json({ error: uploadError.message });
-
-    // Get public URL
     const { data: urlData } = supabase.storage.from('avatars').getPublicUrl(fileName);
     const avatar_url = urlData.publicUrl;
-
-    // Update user record
     const { error: updateError } = await supabase.from('users').update({ avatar_url }).eq('id', req.user.userId);
     if (updateError) return res.status(500).json({ error: updateError.message });
-
     res.json({ success: true, avatar_url });
   } catch (err) { res.status(500).json({ error: err.message }); }
 });
@@ -142,13 +119,30 @@ app.post('/api/profile/avatar', authMiddleware, async (req, res) => {
 app.get('/api/characters', async (req, res) => {
   try {
     const { search, tag, sort } = req.query;
-    let query = supabase.from('characters').select('*, images ( id, url ), comments ( id )');
+    const userId = req.query.userId || null;
+
+    let query = supabase.from('characters').select('*, images ( id, url ), comments ( id ), character_likes ( user_id )');
     if (search) query = query.ilike('name', `%${search}%`);
+
     const orderBy = sort === 'views' ? 'views' : 'created_at';
     const { data, error } = await query.order(orderBy, { ascending: false });
     if (error) return res.status(500).json({ error: error.message });
+
     let result = data;
     if (tag) result = data.filter(c => c.tags?.includes(tag));
+
+    const now = new Date();
+    const h24 = new Date(now - 24 * 60 * 60 * 1000);
+    const w7  = new Date(now - 7  * 24 * 60 * 60 * 1000);
+
+    result = result.map(c => ({
+      ...c,
+      likes_count: c.character_likes?.length || 0,
+      user_liked: userId ? c.character_likes?.some(l => l.user_id === userId) : false,
+      is_trending_24h: new Date(c.created_at) >= h24,
+      is_trending_weekly: new Date(c.created_at) >= w7,
+    }));
+
     res.json(result);
   } catch (err) { res.status(500).json({ error: err.message }); }
 });
@@ -156,9 +150,15 @@ app.get('/api/characters', async (req, res) => {
 // ===== CHARACTERS CREATE =====
 app.post('/api/characters', adminMiddleware, async (req, res) => {
   try {
-    const { name, tags, jai_url, emoji } = req.body;
+    const { name, tags, jai_url, emoji, author } = req.body;
     if (!name) return res.status(400).json({ error: 'Name is required' });
-    const { data, error } = await supabase.from('characters').insert({ name, tags: tags || [], jai_url: jai_url || '', emoji: emoji || '🌸' }).select().single();
+    const { data, error } = await supabase.from('characters').insert({
+      name,
+      tags: tags || [],
+      jai_url: jai_url || '',
+      emoji: emoji || '🌸',
+      author: author || req.user.username || 'MrZ1nGo'
+    }).select().single();
     if (error) return res.status(500).json({ error: error.message });
     res.json(data);
   } catch (err) { res.status(500).json({ error: err.message }); }
@@ -167,8 +167,8 @@ app.post('/api/characters', adminMiddleware, async (req, res) => {
 // ===== CHARACTERS UPDATE =====
 app.patch('/api/characters/:id', adminMiddleware, async (req, res) => {
   try {
-    const { name, tags, emoji, jai_url } = req.body;
-    const { data, error } = await supabase.from('characters').update({ name, tags, emoji, jai_url }).eq('id', req.params.id).select().single();
+    const { name, tags, emoji, jai_url, author } = req.body;
+    const { data, error } = await supabase.from('characters').update({ name, tags, emoji, jai_url, author }).eq('id', req.params.id).select().single();
     if (error) return res.status(500).json({ error: error.message });
     res.json(data);
   } catch (err) { res.status(500).json({ error: err.message }); }
@@ -188,6 +188,22 @@ app.post('/api/characters/:id/view', async (req, res) => {
   try {
     await supabase.rpc('increment_views', { char_id: req.params.id });
     res.json({ success: true });
+  } catch (err) { res.status(500).json({ error: err.message }); }
+});
+
+// ===== CHARACTER LIKE =====
+app.post('/api/characters/:id/like', authMiddleware, async (req, res) => {
+  try {
+    const charId = req.params.id;
+    const userId = req.user.userId;
+    const { data: existing } = await supabase.from('character_likes').select('id').eq('character_id', charId).eq('user_id', userId).maybeSingle();
+    if (existing) {
+      await supabase.from('character_likes').delete().eq('id', existing.id);
+      res.json({ liked: false });
+    } else {
+      await supabase.from('character_likes').insert({ character_id: charId, user_id: userId });
+      res.json({ liked: true });
+    }
   } catch (err) { res.status(500).json({ error: err.message }); }
 });
 
@@ -265,7 +281,7 @@ app.patch('/api/comments/:id/pin', adminMiddleware, async (req, res) => {
   } catch (err) { res.status(500).json({ error: err.message }); }
 });
 
-// ===== LIKES =====
+// ===== COMMENT LIKES =====
 app.post('/api/comments/:id/like', authMiddleware, async (req, res) => {
   try {
     const { isAuthorLike } = req.body;
@@ -295,9 +311,9 @@ app.get('/api/upcoming', async (req, res) => {
 // ===== UPCOMING CREATE =====
 app.post('/api/upcoming', adminMiddleware, async (req, res) => {
   try {
-    const { name, image_url } = req.body;
+    const { name, image_url, tags } = req.body;
     await supabase.from('upcoming').update({ is_active: false }).eq('is_active', true);
-    const { data, error } = await supabase.from('upcoming').insert({ name, image_url, is_active: true }).select().single();
+    const { data, error } = await supabase.from('upcoming').insert({ name, image_url, tags: tags || [], is_active: true }).select().single();
     if (error) return res.status(500).json({ error: error.message });
     res.json(data);
   } catch (err) { res.status(500).json({ error: err.message }); }
