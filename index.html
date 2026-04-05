@@ -1369,115 +1369,26 @@ async function loadAdminImages() {
     }).join('');
   } catch (e) { list.innerHTML = '<div style="color:var(--accent);font-size:0.8rem">Error loading</div>'; }
 }
-function toggleImgSelect(id, el) {
-  if (selectedImageIds.has(id)) {
-    selectedImageIds.delete(id);
-    document.getElementById(`sel-${id}`).style.display = 'none';
-    el.style.outline = '';
-  } else {
-    selectedImageIds.add(id);
-    document.getElementById(`sel-${id}`).style.display = 'flex';
-    el.style.outline = '2px solid var(--accent)';
+async function adminAddImage(){
+  const url=document.getElementById('admin-img-url').value.trim();
+  if(!url){showToast('Enter image URL');return;}
+  if(!adminSelectedCharId){showToast('Select a character first');return;}
+  // Warn if not a direct image link
+  if(!url.match(/\.(jpg|jpeg|png|gif|webp|avif)(\?.*)?$/i) && !url.includes('ibb.co') && !url.includes('cdn')) {
+    if(!confirm('This URL might not be a direct image link. Images not ending in .jpg/.png/.gif/.webp may not display. Add anyway?')) return;
   }
-  updateSelectedUI();
-}
-
-function adminSelectAll() {
-  const imgs = document.querySelectorAll('#admin-img-list .img-item');
-  const allIds = [...imgs].map(el => el.id.replace('img-item-', ''));
-  if (selectedImageIds.size === allIds.length) {
-    // Deselect all
-    selectedImageIds = new Set();
-    imgs.forEach(el => { el.style.outline = ''; });
-    document.querySelectorAll('[id^="sel-"]').forEach(el => el.style.display = 'none');
-  } else {
-    // Select all
-    selectedImageIds = new Set(allIds);
-    imgs.forEach(el => { el.style.outline = '2px solid var(--accent)'; });
-    document.querySelectorAll('[id^="sel-"]').forEach(el => el.style.display = 'flex');
-  }
-  updateSelectedUI();
-}
-
-function updateSelectedUI() {
-  const count = selectedImageIds.size;
-  const btn = document.getElementById('admin-delete-selected-btn');
-  const actions = document.getElementById('admin-img-actions');
-  if (actions) actions.style.display = 'flex';
-  if (btn) {
-    btn.style.display = count > 0 ? 'inline-flex' : 'none';
-    const span = btn.querySelector('span');
-    if (span) span.textContent = count;
-  }
-}
-
-async function adminDeleteSelected() {
-  if (!selectedImageIds.size) return;
-  if (!confirm(`Delete ${selectedImageIds.size} selected image(s)?`)) return;
-  const ids = [...selectedImageIds];
   try {
-    const res = await fetch(`${API}/api/images/delete-bulk`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${currentUser.token}` },
-      body: JSON.stringify({ ids })
-    });
-    if (res.ok) {
-      const data = await res.json();
-      showToast(`✓ Deleted ${data.deleted} image(s)`);
-      selectedImageIds = new Set();
-      await loadAdminImages();
-      await loadCharacters();
-    } else {
-      const err = await res.json();
-      showToast(err.error || 'Failed to delete');
-    }
-  } catch (e) { showToast('Network error'); }
+    const res=await fetch(`${API}/api/images`,{method:'POST',headers:{'Content-Type':'application/json','Authorization':`Bearer ${currentUser.token}`},body:JSON.stringify({character_id:adminSelectedCharId,url})});
+    if(res.ok){document.getElementById('admin-img-url').value='';showToast('✓ Image added!');await loadAdminImages();await loadCharacters();}
+    else{const err=await res.json();showToast(err.error||'Failed');}
+  } catch(e){showToast('Network error');}
 }
-
-async function adminDeleteImage(imgId) {
+async function adminDeleteImage(imgId){
   try {
-    const res = await fetch(`${API}/api/images/${imgId}`, {
-      method: 'DELETE', headers: { 'Authorization': `Bearer ${currentUser.token}` }
-    });
-    if (res.ok) { showToast('✓ Image deleted'); await loadAdminImages(); await loadCharacters(); }
+    const res=await fetch(`${API}/api/images/${imgId}`,{method:'DELETE',headers:{'Authorization':`Bearer ${currentUser.token}`}});
+    if(res.ok){showToast('✓ Image deleted');await loadAdminImages();await loadCharacters();}
     else showToast('Failed to delete image');
-  } catch (e) { showToast('Network error'); }
-}
-
-async function adminAddImage() {
-  const url = document.getElementById('admin-img-url').value.trim();
-  if (!url) { showToast('Enter image URL'); return; }
-  if (!adminSelectedCharId) { showToast('Select a character first'); return; }
-  try {
-    const res = await fetch(`${API}/api/images`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${currentUser.token}` },
-      body: JSON.stringify({ character_id: adminSelectedCharId, url })
-    });
-    if (res.ok) { document.getElementById('admin-img-url').value = ''; showToast('✓ Image added!'); await loadAdminImages(); await loadCharacters(); }
-    else { const err = await res.json(); showToast(err.error || 'Failed'); }
-  } catch (e) { showToast('Network error'); }
-}
-
-async function adminSyncFromStorage() {
-  if (!adminSelectedCharId) { showToast('Select a character first'); return; }
-  const btn = document.getElementById('sync-btn');
-  btn.textContent = '⏳ Syncing...'; btn.disabled = true;
-  try {
-    const res = await fetch(`${API}/api/storage/sync/${adminSelectedCharId}`, {
-      method: 'POST',
-      headers: { 'Authorization': `Bearer ${currentUser.token}` }
-    });
-    const data = await res.json();
-    if (res.ok) {
-      showToast(`✓ Synced ${data.synced} new images (${data.total} total, ${data.skipped} already existed)`);
-      await loadAdminImages();
-      await loadCharacters();
-    } else {
-      showToast(data.error || 'Sync failed');
-    }
-  } catch (e) { showToast('Network error'); }
-  btn.textContent = '⚡ Sync from Storage Folder'; btn.disabled = false;
+  } catch(e){showToast('Network error');}
 }
 
 async function adminSaveUpcoming(){
