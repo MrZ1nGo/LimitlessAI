@@ -550,17 +550,34 @@
       <div class="admin-section" id="admin-manage">
         <div id="admin-char-list" style="margin-bottom:18px"><div style="color:var(--text3);text-align:center;padding:20px">Loading...</div></div>
         <div id="admin-images-section" style="display:none">
-          <div style="border-top:1px solid var(--card-border);padding-top:18px">
-            <div style="font-weight:600;margin-bottom:10px" id="admin-images-title">Images</div>
-            <p style="font-size:0.75rem;color:var(--accent);margin-bottom:10px">⚠️ Use direct image links only (e.g. i.ibb.co/... or direct CDN URLs). Links that open a webpage will not work and will show as broken.</p>
-            <div class="img-grid" id="admin-img-list"></div>
-            <div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap">
-              <input class="form-input" id="admin-img-url" placeholder="Direct image URL (i.ibb.co/...)" style="flex:1;min-width:180px">
-              <button class="admin-btn" onclick="adminAddImage()">Add Image</button>
-            </div>
-          </div>
-        </div>
+  <div style="border-top:1px solid var(--card-border);padding-top:18px">
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:10px">
+      <div style="font-weight:600" id="admin-images-title">Images</div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap" id="admin-img-actions" style="display:none">
+        <button class="btn-edit" onclick="adminSelectAll()">☑️ All</button>
+        <button class="btn-danger" id="admin-delete-selected-btn" onclick="adminDeleteSelected()" style="display:none">🗑 Delete Selected (<span id="selected-count">0</span>)</button>
       </div>
+    </div>
+
+    <!-- SYNC FROM STORAGE -->
+    <div style="background:var(--bg2);border:1px solid var(--card-border);border-radius:8px;padding:12px;margin-bottom:12px">
+      <div style="font-size:0.8rem;font-weight:600;margin-bottom:4px">⚡ Auto-sync from Supabase Storage</div>
+      <div style="font-size:0.74rem;color:var(--text3);margin-bottom:8px">Create a folder in Storage → images/<strong id="sync-folder-name">Character Name</strong>/ and upload images there. Then click Sync.</div>
+      <button class="admin-btn" onclick="adminSyncFromStorage()" id="sync-btn">⚡ Sync from Storage Folder</button>
+    </div>
+
+    <div class="img-grid" id="admin-img-list"></div>
+
+    <!-- MANUAL URL ADD -->
+    <div style="margin-top:12px">
+      <div style="font-size:0.75rem;color:var(--text3);margin-bottom:6px">Or add manually by URL:</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <input class="form-input" id="admin-img-url" placeholder="Direct image URL" style="flex:1;min-width:180px">
+        <button class="admin-btn" onclick="adminAddImage()">Add URL</button>
+      </div>
+    </div>
+  </div>
+</div>
       <div class="admin-section" id="admin-upcoming">
         <p style="color:var(--text2);font-size:0.85rem;margin-bottom:14px">Set a sneak peek card on the main page.</p>
         <div class="form-group"><label class="form-label">Character Name</label><input class="form-input" id="upcoming-admin-name" placeholder="e.g. Aria Voss or leave empty for ???"></div>
