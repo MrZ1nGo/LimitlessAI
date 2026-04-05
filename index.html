@@ -372,7 +372,10 @@
     <p>Explore curated NSFW art of your favorite AI characters. Find them, admire them, chat with them on JanitorAI.</p>
   </section>
 
-  <div class="ad-banner"><strong>Advertisement</strong>Your ad could be here</div>
+    <div style="width:100%;overflow:hidden;margin-bottom:28px;display:flex;justify-content:center;">
+  <ins class="eas6a97888e2" data-zoneid="5890550"></ins> 
+ <script>(AdProvider = window.AdProvider || []).push({"serve": {}});</script>
+</div>
 
   <div id="upcoming-section">
     <div class="upcoming-card">
@@ -441,7 +444,10 @@
       <div class="modal-char-tags" id="modal-char-tags"></div>
       <div class="modal-meta" id="modal-meta"></div>
       <a class="modal-jai-btn" id="modal-jai-link" href="#" target="_blank">💬 Chat on JanitorAI</a>
-      <div class="ad-banner" style="margin-bottom:20px"><strong>Advertisement</strong>Your ad could be here</div>
+      <div style="width:100%;overflow:hidden;margin-bottom:18px;display:flex;justify-content:center;">
+  <ins class="eas6a97888e2" data-zoneid="5890554"></ins> 
+ <script>(AdProvider = window.AdProvider || []).push({"serve": {}});</script>
+</div>
       <div class="modal-gallery" id="modal-gallery"></div>
       <div class="comments-section">
         <div class="comments-title">Comments</div>
@@ -1373,7 +1379,181 @@ async function adminClearUpcoming(){
 }
 
 // ===== LEGAL =====
-const LEGAL_CONTENT={age:{title:'18+ Age Verification Policy',icon:'⚠️',body:`<div class="legal-warning-box">⚠️ THIS WEBSITE CONTAINS SEXUALLY EXPLICIT ADULT CONTENT INTENDED FOR ADULTS ONLY</div><h3>Who May Access This Site</h3><p>By entering LimitlessAI, you confirm under penalty of perjury that:</p><ul><li>You are at least <strong>18 years of age</strong>, or the age of majority in your jurisdiction — whichever is greater.</li><li>You understand and acknowledge that this website contains explicit sexual content, including adult images and fictional character artwork.</li><li>You are not accessing this website from any location, country, state, or municipality where adult content is prohibited by law.</li><li>You are not a minor, and you will not permit minors to access or view this website in any form.</li><li>You are accessing this website voluntarily, of your own free will, and for your own personal use only.</li></ul><h3>Fictional Characters Notice</h3><p><strong>All characters depicted on this website are entirely fictional. All characters are adults aged 18 years or older.</strong></p>`},tos:{title:'Terms of Service',icon:'📋',body:`<p class="legal-effective">Effective Date: March 30, 2025</p><h3>1. Acceptance of Terms</h3><p>These Terms of Service govern your use of LimitlessAI, operated by MrZ1nGo. By accessing the Site, you confirm that you are at least 18 years of age.</p><h3>2. Age Restriction</h3><p>This website is strictly intended for adults aged 18 years or older.</p><h3>3. Nature of Content</h3><p>The Site contains adult-oriented content. <strong>All characters depicted are fictional adults aged 18 or older.</strong></p>`},privacy:{title:'Privacy Policy',icon:'🔒',body:`<p class="legal-effective">Effective Date: March 30, 2025</p><h3>1. Information We Collect</h3><p>When you visit the Site, we may collect technical information including IP address, browser type, and pages visited.</p><h3>2. Cookie Consent</h3><p>By continuing to use this Site, you consent to the use of cookies.</p><h3>3. Contact</h3><p>For questions: <strong>contact@limitlessai.com</strong></p>`},dmca:{title:'DMCA & Copyright Policy',icon:'⚖️',body:`<p class="legal-effective">Effective Date: March 30, 2025</p><h3>1. Our Content Policy</h3><p>LimitlessAI is a fan art and AI-generated image gallery. All images are AI-generated artwork created by the site operator.</p><h3>2. DMCA Takedown</h3><p>Send DMCA notices to: <strong>dmca@limitlessai.com</strong></p>`}};
+const LEGAL_CONTENT = {
+  age: {
+    title: '18+ Age Verification Policy', icon: '⚠️',
+    body: `
+      <div class="legal-warning-box">⚠️ THIS WEBSITE CONTAINS SEXUALLY EXPLICIT ADULT CONTENT INTENDED FOR ADULTS ONLY</div>
+      <h3>Who May Access This Site</h3>
+      <p>By entering LimitlessAI, you confirm under penalty of perjury that:</p>
+      <ul>
+        <li>You are at least <strong>18 years of age</strong>, or the age of majority in your jurisdiction — whichever is greater.</li>
+        <li>You understand and acknowledge that this website contains explicit sexual content, including adult images and fictional character artwork.</li>
+        <li>You are not accessing this website from any location, country, state, or municipality where adult content is prohibited by law.</li>
+        <li>You are not a minor, and you will not permit minors to access or view this website in any form.</li>
+        <li>You are accessing this website voluntarily, of your own free will, and for your own personal use only.</li>
+        <li>You are not acting as an agent of any government or law enforcement agency in any capacity related to this content.</li>
+      </ul>
+      <h3>Fictional Characters Notice</h3>
+      <p><strong>All characters depicted on this website are entirely fictional. All characters are adults aged 18 years or older.</strong> Any similarity to real persons, living or dead, is purely coincidental. The website operator does not endorse, promote, or encourage any real-world conduct depicted in fictional scenarios.</p>
+      <h3>Parental Controls</h3>
+      <p>Parents and guardians are responsible for ensuring minors do not access adult content. We strongly recommend the use of parental control software. Resources such as <strong>Net Nanny</strong>, <strong>Bark</strong>, and <strong>Circle</strong> can help restrict access to adult content on shared devices.</p>
+      <h3>Consequences of Misrepresentation</h3>
+      <p>If you misrepresent your age to access this website, you do so in violation of these terms. The website operator bears no responsibility for any consequences arising from such misrepresentation. All liability rests solely with the individual who provided false information.</p>
+      <h3>Compliance</h3>
+      <p>This site is operated in compliance with applicable international laws regarding adult content distribution. If you believe content on this site violates any law, please contact us immediately via our DMCA/Contact page.</p>
+    `
+  },
+  tos: {
+    title: 'Terms of Service', icon: '📋',
+    body: `
+      <p class="legal-effective">Effective Date: March 30, 2025 &nbsp;|&nbsp; Last Updated: March 30, 2025</p>
+      <p>PLEASE READ THESE TERMS CAREFULLY. BY ACCESSING OR USING LIMITLESSAI, YOU AGREE TO BE BOUND BY THESE TERMS. IF YOU DO NOT AGREE, DO NOT USE THIS WEBSITE.</p>
+      <h3>1. Acceptance of Terms</h3>
+      <p>These Terms of Service ("Terms") govern your use of LimitlessAI ("the Site"), operated by MrZ1nGo ("we," "us," or "our"). By accessing the Site, you confirm that you are at least 18 years of age and agree to be bound by these Terms and all applicable laws and regulations.</p>
+      <h3>2. Age Restriction</h3>
+      <p>This website is strictly intended for adults aged 18 years or older (or the age of majority in your jurisdiction, whichever is greater). By using this Site, you represent and warrant that you meet this age requirement. We reserve the right to terminate access for anyone who misrepresents their age.</p>
+      <h3>3. Nature of Content</h3>
+      <p>The Site contains adult-oriented content including explicit images and fictional AI character artwork. All content is provided for entertainment purposes only. <strong>All characters depicted on this Site are fictional adults aged 18 or older.</strong> Any resemblance to real persons is purely coincidental.</p>
+      <p>The website operator does not claim ownership of third-party intellectual property. All JanitorAI character concepts belong to their respective creators on the JanitorAI platform. Images are posted for fan/promotional purposes. If you believe any content infringes your rights, see our DMCA Policy below.</p>
+      <h3>4. Permitted Use</h3>
+      <p>You may access and view the Site for your personal, non-commercial use only. You may NOT:</p>
+      <ul>
+        <li>Copy, reproduce, distribute, or republish any content from this Site without explicit written permission.</li>
+        <li>Use automated tools, bots, scrapers, or crawlers to access or index the Site.</li>
+        <li>Attempt to gain unauthorized access to any portion of the Site or its related systems.</li>
+        <li>Use the Site for any unlawful purpose or in violation of any applicable laws or regulations.</li>
+        <li>Share, distribute, or make accessible any content from this Site to minors.</li>
+        <li>Use content from this Site for commercial purposes without prior written consent.</li>
+      </ul>
+      <h3>5. Platform & Liability Shield</h3>
+      <p>LimitlessAI operates as a content publishing platform. All content is curated and uploaded solely by the site operator (MrZ1nGo). The Site does not host user-generated content at this time. Notwithstanding this, the operator expressly disclaims liability for any third-party intellectual property claims, and will respond promptly to valid DMCA takedown requests.</p>
+      <h3>6. Content Disclaimer</h3>
+      <p>All content on this Site is fictional and intended for adult audiences only. The content does not promote, encourage, or endorse any real-world harmful behavior. The website operator is not responsible for how users interpret or use the content displayed on this Site.</p>
+      <h3>7. Third-Party Advertising</h3>
+      <p>This Site displays advertisements served by third-party advertising networks. These networks may use cookies or other tracking technologies to deliver targeted advertisements. We are not responsible for the content of third-party advertisements. Your interactions with advertisers are solely between you and the advertiser. Ad networks operate under their own privacy policies.</p>
+      <h3>8. Optional User Accounts</h3>
+      <p>The Site may offer optional account registration for features such as leaving comments. Registration is entirely voluntary and not required to browse content. If you register, you are responsible for maintaining the confidentiality of your credentials and for all activity under your account. You agree that any content you submit (comments, etc.) will not contain illegal material, harassment, or content involving minors.</p>
+      <h3>9. Intellectual Property</h3>
+      <p>The overall design, layout, branding, and original content of this Site are the property of MrZ1nGo. Third-party character names, images, or concepts may be the intellectual property of their respective original creators. We make no claim of ownership over such third-party intellectual property and will remove infringing content upon valid request.</p>
+      <h3>10. Limitation of Liability</h3>
+      <p>TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, THE SITE AND ITS OPERATOR SHALL NOT BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES ARISING FROM YOUR USE OF OR INABILITY TO USE THE SITE, OR FROM ANY CONTENT ACCESSED THROUGH THE SITE. THE SITE IS PROVIDED ON AN "AS IS" AND "AS AVAILABLE" BASIS WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED.</p>
+      <h3>11. Indemnification</h3>
+      <p>You agree to defend, indemnify, and hold harmless MrZ1nGo and the Site from and against any and all claims, damages, obligations, losses, liabilities, costs, or expenses (including reasonable attorney's fees) arising from: (a) your use of the Site; (b) your violation of these Terms; (c) your violation of any third-party right; or (d) any claim that content you submitted caused damage to a third party.</p>
+      <h3>12. Governing Law & Jurisdiction</h3>
+      <p>These Terms shall be governed by and construed in accordance with the laws of the jurisdiction in which the website operator is located, without regard to conflict of law principles. By using this Site, you agree that any dispute arising under these Terms shall be subject to the exclusive jurisdiction of the competent courts of the operator's jurisdiction.</p>
+      <h3>13. Changes to Terms</h3>
+      <p>We reserve the right to modify these Terms at any time. Changes will be posted on this page with an updated effective date. Continued use of the Site after changes are posted constitutes acceptance of the revised Terms.</p>
+      <h3>14. Contact</h3>
+      <p>For questions regarding these Terms, contact us at: <strong>contact@limitlessai.com</strong></p>
+    `
+  },
+  privacy: {
+    title: 'Privacy Policy', icon: '🔒',
+    body: `
+      <p class="legal-effective">Effective Date: March 30, 2025 &nbsp;|&nbsp; Last Updated: March 30, 2025</p>
+      <p>This Privacy Policy describes how LimitlessAI ("the Site," "we," "us," or "our") collects, uses, and handles information when you visit or use our website. We are committed to protecting your privacy.</p>
+      <h3>1. Information We Collect</h3>
+      <p><strong>A. Automatically Collected Information</strong><br>When you visit the Site, our hosting provider and third-party services may automatically collect certain non-personal technical information, including: IP address (anonymized where possible), browser type and version, pages visited and time spent, referring website, device type and operating system. This data is used for analytics, performance monitoring, and security only.</p>
+      <p><strong>B. Optional Account Registration</strong><br>If you choose to create an optional account to leave comments, we may collect: username or display name, email address (used only for account verification), and a hashed/encrypted password. Account registration is entirely optional and not required to browse or view content.</p>
+      <p><strong>C. Cookies & Tracking Technologies</strong><br>The Site may use cookies for: session management (if you have an account), third-party advertising (ad networks may set their own cookies), and analytics. You can control or disable cookies through your browser settings. Note that disabling cookies may affect certain features of the Site.</p>
+      <h3>2. Cookie Consent</h3>
+      <p>By continuing to use this Site, you consent to the use of cookies as described in this Privacy Policy. This Site uses the following types of cookies:</p>
+      <ul>
+        <li><strong>Essential cookies</strong> — necessary for basic site functionality</li>
+        <li><strong>Analytics cookies</strong> — help us understand how visitors use the Site</li>
+        <li><strong>Advertising cookies</strong> — placed by third-party ad networks to serve relevant ads</li>
+      </ul>
+      <p>You may withdraw your consent at any time by clearing cookies in your browser settings or using a browser extension to block cookies.</p>
+      <h3>3. How We Use Your Information</h3>
+      <ul>
+        <li>To operate and maintain the Site</li>
+        <li>To respond to your inquiries or support requests</li>
+        <li>To enable optional features such as commenting</li>
+        <li>To monitor and improve site performance and security</li>
+        <li>To display advertisements through third-party ad networks</li>
+      </ul>
+      <p><strong>We do not sell, rent, or trade your personal information to third parties.</strong></p>
+      <h3>4. Third-Party Advertising & Data</h3>
+      <p>This Site uses third-party advertising networks (such as ExoClick, TrafficJunky, or similar adult ad networks) to display advertisements. These networks may collect data about your browsing habits across websites using cookies or similar technologies to deliver targeted advertisements. We are not responsible for the data practices of these networks. Please review the privacy policies of any advertising network shown on this Site.</p>
+      <h3>5. Data Retention</h3>
+      <p>We retain automatically collected technical data only as long as necessary for the purposes described in this policy. If you create an optional account, your data will be retained until you request deletion. You may request deletion of your account and associated data by contacting us at <strong>contact@limitlessai.com</strong>.</p>
+      <h3>6. Data Security</h3>
+      <p>We take reasonable technical measures to protect information collected by this Site, including encrypted password storage and HTTPS. However, no method of transmission over the Internet is 100% secure, and we cannot guarantee the absolute security of your information.</p>
+      <h3>7. Children's Privacy (COPPA Compliance)</h3>
+      <p>This Site is strictly intended for adults aged 18 and over. We do not knowingly collect personal information from individuals under the age of 18. If we become aware that we have inadvertently collected personal information from a minor, we will delete such information immediately. If you believe a minor has provided us with personal information, please contact us immediately at <strong>contact@limitlessai.com</strong>.</p>
+      <h3>8. Your Rights (GDPR / Global)</h3>
+      <p>Depending on your location, you may have the following rights regarding your personal data:</p>
+      <ul>
+        <li>Right to access the data we hold about you</li>
+        <li>Right to request correction of inaccurate data</li>
+        <li>Right to request deletion of your data ("right to be forgotten")</li>
+        <li>Right to withdraw consent at any time</li>
+        <li>Right to data portability</li>
+        <li>Right to lodge a complaint with a supervisory authority</li>
+      </ul>
+      <p>To exercise any of these rights, contact us at <strong>contact@limitlessai.com</strong>.</p>
+      <h3>9. International Transfers</h3>
+      <p>Your information may be processed in countries outside your own. By using this Site, you consent to such transfers. We take steps to ensure that your data receives an adequate level of protection wherever it is processed.</p>
+      <h3>10. Links to Third-Party Sites</h3>
+      <p>This Site contains links to external websites, including JanitorAI. We are not responsible for the privacy practices or content of those sites. We encourage you to review their privacy policies.</p>
+      <h3>11. Changes to This Privacy Policy</h3>
+      <p>We may update this Privacy Policy from time to time. Changes will be posted on this page with an updated effective date. Continued use of the Site constitutes acceptance of the revised policy.</p>
+      <h3>12. Contact</h3>
+      <p>For questions about this Privacy Policy: <strong>contact@limitlessai.com</strong></p>
+    `
+  },
+  dmca: {
+    title: 'DMCA & Copyright Policy', icon: '⚖️',
+    body: `
+      <p class="legal-effective">Effective Date: March 30, 2025</p>
+      <p>LimitlessAI respects the intellectual property rights of others and expects users to do the same. This page describes our policy regarding copyright infringement claims under the Digital Millennium Copyright Act (DMCA) and equivalent international copyright laws.</p>
+      <h3>1. Our Content Policy</h3>
+      <p>LimitlessAI is a fan art and AI-generated image gallery. All images published on this Site are:</p>
+      <ul>
+        <li>AI-generated artwork created by the site operator (MrZ1nGo)</li>
+        <li>Published for fan, promotional, and entertainment purposes</li>
+        <li>Based on fictional characters from the JanitorAI platform</li>
+      </ul>
+      <p>We do not claim ownership of original character concepts created by third parties. We are not affiliated with JanitorAI, Anthropic, or any other platform mentioned on this Site.</p>
+      <h3>2. Copyright Infringement Notice (DMCA Takedown)</h3>
+      <p>If you believe that content on this Site infringes your copyright, you may submit a takedown request. To be valid, your notice must include:</p>
+      <ul>
+        <li><strong>Your full legal name</strong> and contact information (address, phone, email)</li>
+        <li><strong>Identification of the copyrighted work</strong> you claim has been infringed</li>
+        <li><strong>Identification of the infringing material</strong> on our Site (URL or description)</li>
+        <li>A statement that you have a <strong>good faith belief</strong> that the use is not authorized by the copyright owner, its agent, or the law</li>
+        <li>A statement, under <strong>penalty of perjury</strong>, that the information in your notice is accurate, and that you are the copyright owner or authorized to act on their behalf</li>
+        <li>Your <strong>electronic or physical signature</strong></li>
+      </ul>
+      <h3>3. How to Submit a Takedown Request</h3>
+      <p>Send your DMCA notice to our designated copyright agent:</p>
+      <div class="legal-contact-box">
+        <strong>Copyright Agent — LimitlessAI</strong><br>
+        Email: <strong>dmca@limitlessai.com</strong><br>
+        Subject line: "DMCA Takedown Request"
+      </div>
+      <p>We will acknowledge receipt of valid requests within <strong>3 business days</strong> and will remove or disable access to the infringing content promptly upon verification.</p>
+      <h3>4. Counter-Notice</h3>
+      <p>If you believe content was removed as a result of a mistake or misidentification, you may submit a counter-notice containing:</p>
+      <ul>
+        <li>Your name, address, phone number, and email</li>
+        <li>Identification of the removed content and its former location on the Site</li>
+        <li>A statement under penalty of perjury that you have a good faith belief the content was removed by mistake</li>
+        <li>Your consent to the jurisdiction of the appropriate federal court</li>
+        <li>Your electronic or physical signature</li>
+      </ul>
+      <h3>5. Repeat Infringer Policy</h3>
+      <p>LimitlessAI has a strict policy of terminating accounts (if applicable) of users who are repeat infringers. We will not hesitate to disable access to any content found to repeatedly infringe third-party copyrights.</p>
+      <h3>6. False Claims Warning</h3>
+      <p>Please note that under Section 512(f) of the DMCA, any person who knowingly and materially misrepresents that material is infringing may be liable for damages, including attorney's fees. Do not submit a takedown notice if you are not sure that the material infringes your rights.</p>
+      <h3>7. Disclaimer of Affiliation</h3>
+      <p>LimitlessAI is an independent fan site. We are not affiliated with, endorsed by, or connected to JanitorAI, Anthropic, or any AI platform. Character names and concepts referenced on this Site belong to their respective creators.</p>
+      <h3>8. Contact for Other IP Issues</h3>
+      <p>For non-DMCA intellectual property concerns, contact us at: <strong>contact@limitlessai.com</strong></p>
+    `
+  }
+};
 
 function openLegal(type){const page=LEGAL_CONTENT[type];if(!page)return;document.getElementById('legal-modal-title').textContent=page.icon+' '+page.title;document.getElementById('legal-modal-body').innerHTML=page.body;document.getElementById('legal-modal').classList.add('open');document.body.style.overflow='hidden';}
 function closeLegal(e){if(e&&e.target!==document.getElementById('legal-modal'))return;document.getElementById('legal-modal').classList.remove('open');document.body.style.overflow='';}
