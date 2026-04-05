@@ -8,10 +8,7 @@ const app = express();
 app.use(cors());
 app.use(express.json({ limit: '10mb' }));
 
-const supabase = createClient(
-  process.env.SUPABASE_URL,
-  process.env.SUPABASE_SERVICE_KEY
-);
+const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_KEY);
 const JWT_SECRET = process.env.JWT_SECRET;
 
 function authMiddleware(req, res, next) {
@@ -76,7 +73,7 @@ app.get('/api/profile', authMiddleware, async (req, res) => {
 app.patch('/api/profile', authMiddleware, async (req, res) => {
   try {
     const { username } = req.body;
-    if (!username || !username.trim()) return res.status(400).json({ error: 'Username is required' });
+    if (!username?.trim()) return res.status(400).json({ error: 'Username is required' });
     const trimmed = username.trim();
     if (trimmed.length < 3) return res.status(400).json({ error: 'Username must be at least 3 characters' });
     if (trimmed.length > 30) return res.status(400).json({ error: 'Username too long (max 30 chars)' });
@@ -98,43 +95,109 @@ app.post('/api/profile/avatar', authMiddleware, async (req, res) => {
     const matches = image.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/);
     if (!matches) return res.status(400).json({ error: 'Invalid image format' });
     const mimeType = matches[1];
-    const base64Data = matches[2];
-    const buffer = Buffer.from(base64Data, 'base64');
+    const buffer = Buffer.from(matches[2], 'base64');
     if (buffer.length > 3 * 1024 * 1024) return res.status(400).json({ error: 'Image too large (max 3MB)' });
-    const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
-    if (!allowedTypes.includes(mimeType)) return res.status(400).json({ error: 'Only JPG, PNG, GIF, WEBP allowed' });
+    const allowed = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+    if (!allowed.includes(mimeType)) return res.status(400).json({ error: 'Only JPG, PNG, GIF, WEBP allowed' });
     const ext = mimeType.split('/')[1].replace('jpeg', 'jpg');
     const fileName = `avatar_${req.user.userId}_${Date.now()}.${ext}`;
     const { error: uploadError } = await supabase.storage.from('avatars').upload(fileName, buffer, { contentType: mimeType, upsert: true });
     if (uploadError) return res.status(500).json({ error: uploadError.message });
     const { data: urlData } = supabase.storage.from('avatars').getPublicUrl(fileName);
-    const avatar_url = urlData.publicUrl;
-    const { error: updateError } = await supabase.from('users').update({ avatar_url }).eq('id', req.user.userId);
-    if (updateError) return res.status(500).json({ error: updateError.message });
-    res.json({ success: true, avatar_url });
+    await supabase.from('users').update({ avatar_url: urlData.publicUrl }).eq('id', req.user.userId);
+    res.json({ success: true, avatar_url: urlData.publicUrl });
+  } catch (err) { res.status(500).json({ error: err.message }); }
+});
+
+// ===== STORAGE: List files in folder by character name =====
+app.get('/api/storage/images/:folderName', adminMiddleware, async (req, res) => {
+  try {
+    const folderName = decodeURIComponent(req.params.folderName);
+    const { data, error } = await supabase.storage.from('images').list(folderName, {
+      limit: 500,
+      sortBy: { column: 'name', order: 'asc' }
+    });
+    if (error) return res.status(500).json({ error: error.message });
+    const files = (data || []).filter(f => f.name && !f.name.endsWith('/'));
+    const urls = files.map(f => {
+      const { data: urlData } = supabase.storage.from('images').getPublicUrl(`${folderName}/${f.name}`);
+      return { name: f.name, url: urlData.publicUrl, path: `${folderName}/${f.name}` };
+    });
+    res.json(urls);
+  } catch (err) { res.status(500).json({ error: err.message }); }
+});
+
+// ===== STORAGE: Sync images from folder to character =====
+// Reads all files in images/{characterName}/ and adds them to DB if not already there
+app.post('/api/storage/sync/:characterId', adminMiddleware, async (req, res) => {
+  try {
+    const { characterId } = req.params;
+
+    // Get character name
+    const { data: char, error: charError } = await supabase.from('characters').select('name').eq('id', characterId).single();
+    if (charError || !char) return res.status(404).json({ error: 'Character not found' });
+
+    const folderName = char.name;
+
+    // List files in storage folder
+    const { data: files, error: listError } = await supabase.storage.from('images').list(folderName, {
+      limit: 500,
+      sortBy: { column: 'name', order: 'asc' }
+    });
+    if (listError) return res.status(500).json({ error: `Storage error: ${listError.message}` });
+
+    const validFiles = (files || []).filter(f => f.name && f.name.match(/\.(jpg|jpeg|png|gif|webp|avif)$/i));
+    if (!validFiles.length) return res.json({ synced: 0, message: 'No image files found in folder' });
+
+    // Get existing URLs for this character
+    const { data: existingImages } = await supabase.from('images').select('url').eq('character_id', characterId);
+    const existingUrls = new Set((existingImages || []).map(i => i.url));
+
+    // Build public URLs and insert only new ones
+    const toInsert = [];
+    for (const file of validFiles) {
+      const path = `${folderName}/${file.name}`;
+      const { data: urlData } = supabase.storage.from('images').getPublicUrl(path);
+      const url = urlData.publicUrl;
+      if (!existingUrls.has(url)) {
+        toInsert.push({ character_id: characterId, url });
+      }
+    }
+
+    if (toInsert.length > 0) {
+      const { error: insertError } = await supabase.from('images').insert(toInsert);
+      if (insertError) return res.status(500).json({ error: insertError.message });
+    }
+
+    res.json({ synced: toInsert.length, total: validFiles.length, skipped: validFiles.length - toInsert.length });
+  } catch (err) { res.status(500).json({ error: err.message }); }
+});
+
+// ===== STORAGE: Delete file from storage =====
+app.delete('/api/storage/file', adminMiddleware, async (req, res) => {
+  try {
+    const { path } = req.body;
+    if (!path) return res.status(400).json({ error: 'path required' });
+    const { error } = await supabase.storage.from('images').remove([path]);
+    if (error) return res.status(500).json({ error: error.message });
+    res.json({ success: true });
   } catch (err) { res.status(500).json({ error: err.message }); }
 });
 
 // ===== CHARACTERS GET =====
 app.get('/api/characters', async (req, res) => {
   try {
-    const { search, tag, sort } = req.query;
+    const { search, tag } = req.query;
     const userId = req.query.userId || null;
-
     let query = supabase.from('characters').select('*, images ( id, url ), comments ( id ), character_likes ( user_id )');
     if (search) query = query.ilike('name', `%${search}%`);
-
-    const orderBy = sort === 'views' ? 'views' : 'created_at';
-    const { data, error } = await query.order(orderBy, { ascending: false });
+    const { data, error } = await query.order('created_at', { ascending: false });
     if (error) return res.status(500).json({ error: error.message });
-
     let result = data;
     if (tag) result = data.filter(c => c.tags?.includes(tag));
-
     const now = new Date();
     const h24 = new Date(now - 24 * 60 * 60 * 1000);
-    const w7  = new Date(now - 7  * 24 * 60 * 60 * 1000);
-
+    const w7 = new Date(now - 7 * 24 * 60 * 60 * 1000);
     result = result.map(c => ({
       ...c,
       likes_count: c.character_likes?.length || 0,
@@ -142,7 +205,6 @@ app.get('/api/characters', async (req, res) => {
       is_trending_24h: new Date(c.created_at) >= h24,
       is_trending_weekly: new Date(c.created_at) >= w7,
     }));
-
     res.json(result);
   } catch (err) { res.status(500).json({ error: err.message }); }
 });
@@ -153,10 +215,7 @@ app.post('/api/characters', adminMiddleware, async (req, res) => {
     const { name, tags, jai_url, emoji, author } = req.body;
     if (!name) return res.status(400).json({ error: 'Name is required' });
     const { data, error } = await supabase.from('characters').insert({
-      name,
-      tags: tags || [],
-      jai_url: jai_url || '',
-      emoji: emoji || '🌸',
+      name, tags: tags || [], jai_url: jai_url || '', emoji: emoji || '🌸',
       author: author || req.user.username || 'MrZ1nGo'
     }).select().single();
     if (error) return res.status(500).json({ error: error.message });
@@ -207,7 +266,7 @@ app.post('/api/characters/:id/like', authMiddleware, async (req, res) => {
   } catch (err) { res.status(500).json({ error: err.message }); }
 });
 
-// ===== IMAGES ADD =====
+// ===== IMAGES ADD (manual URL) =====
 app.post('/api/images', adminMiddleware, async (req, res) => {
   try {
     const { character_id, url } = req.body;
@@ -218,12 +277,23 @@ app.post('/api/images', adminMiddleware, async (req, res) => {
   } catch (err) { res.status(500).json({ error: err.message }); }
 });
 
-// ===== IMAGES DELETE =====
+// ===== IMAGES DELETE (single) =====
 app.delete('/api/images/:id', adminMiddleware, async (req, res) => {
   try {
     const { error } = await supabase.from('images').delete().eq('id', req.params.id);
     if (error) return res.status(500).json({ error: error.message });
     res.json({ success: true });
+  } catch (err) { res.status(500).json({ error: err.message }); }
+});
+
+// ===== IMAGES DELETE BULK =====
+app.post('/api/images/delete-bulk', adminMiddleware, async (req, res) => {
+  try {
+    const { ids } = req.body;
+    if (!ids || !ids.length) return res.status(400).json({ error: 'ids array required' });
+    const { error } = await supabase.from('images').delete().in('id', ids);
+    if (error) return res.status(500).json({ error: error.message });
+    res.json({ success: true, deleted: ids.length });
   } catch (err) { res.status(500).json({ error: err.message }); }
 });
 
