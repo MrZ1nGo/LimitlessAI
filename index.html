@@ -550,17 +550,34 @@
       <div class="admin-section" id="admin-manage">
         <div id="admin-char-list" style="margin-bottom:18px"><div style="color:var(--text3);text-align:center;padding:20px">Loading...</div></div>
         <div id="admin-images-section" style="display:none">
-          <div style="border-top:1px solid var(--card-border);padding-top:18px">
-            <div style="font-weight:600;margin-bottom:10px" id="admin-images-title">Images</div>
-            <p style="font-size:0.75rem;color:var(--accent);margin-bottom:10px">⚠️ Use direct image links only (e.g. i.ibb.co/... or direct CDN URLs). Links that open a webpage will not work and will show as broken.</p>
-            <div class="img-grid" id="admin-img-list"></div>
-            <div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap">
-              <input class="form-input" id="admin-img-url" placeholder="Direct image URL (i.ibb.co/...)" style="flex:1;min-width:180px">
-              <button class="admin-btn" onclick="adminAddImage()">Add Image</button>
-            </div>
-          </div>
-        </div>
+  <div style="border-top:1px solid var(--card-border);padding-top:18px">
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:10px">
+      <div style="font-weight:600" id="admin-images-title">Images</div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap" id="admin-img-actions" style="display:none">
+        <button class="btn-edit" onclick="adminSelectAll()">☑️ All</button>
+        <button class="btn-danger" id="admin-delete-selected-btn" onclick="adminDeleteSelected()" style="display:none">🗑 Delete Selected (<span id="selected-count">0</span>)</button>
       </div>
+    </div>
+
+    <!-- SYNC FROM STORAGE -->
+    <div style="background:var(--bg2);border:1px solid var(--card-border);border-radius:8px;padding:12px;margin-bottom:12px">
+      <div style="font-size:0.8rem;font-weight:600;margin-bottom:4px">⚡ Auto-sync from Supabase Storage</div>
+      <div style="font-size:0.74rem;color:var(--text3);margin-bottom:8px">Create a folder in Storage → images/<strong id="sync-folder-name">Character Name</strong>/ and upload images there. Then click Sync.</div>
+      <button class="admin-btn" onclick="adminSyncFromStorage()" id="sync-btn">⚡ Sync from Storage Folder</button>
+    </div>
+
+    <div class="img-grid" id="admin-img-list"></div>
+
+    <!-- MANUAL URL ADD -->
+    <div style="margin-top:12px">
+      <div style="font-size:0.75rem;color:var(--text3);margin-bottom:6px">Or add manually by URL:</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <input class="form-input" id="admin-img-url" placeholder="Direct image URL" style="flex:1;min-width:180px">
+        <button class="admin-btn" onclick="adminAddImage()">Add URL</button>
+      </div>
+    </div>
+  </div>
+</div>
       <div class="admin-section" id="admin-upcoming">
         <p style="color:var(--text2);font-size:0.85rem;margin-bottom:14px">Set a sneak peek card on the main page.</p>
         <div class="form-group"><label class="form-label">Character Name</label><input class="form-input" id="upcoming-admin-name" placeholder="e.g. Aria Voss or leave empty for ???"></div>
@@ -1318,51 +1335,150 @@ async function adminDeleteChar(id,name){
   } catch(e){showToast('Network error');}
 }
 
-async function selectCharForImages(id,name){
-  adminSelectedCharId=id;
-  document.getElementById('admin-images-title').textContent=`Images for: ${name}`;
-  document.getElementById('admin-images-section').style.display='block';
+let selectedImageIds = new Set();
+
+async function selectCharForImages(id, name) {
+  adminSelectedCharId = id;
+  selectedImageIds = new Set();
+  document.getElementById('admin-images-title').textContent = `Images for: ${name}`;
+  document.getElementById('sync-folder-name').textContent = name;
+  document.getElementById('admin-images-section').style.display = 'block';
+  updateSelectedUI();
   await loadAdminImages();
 }
-async function loadAdminImages(){
-  const list=document.getElementById('admin-img-list');
-  list.innerHTML='<div style="color:var(--text3);font-size:0.8rem">Loading...</div>';
+
+async function loadAdminImages() {
+  const list = document.getElementById('admin-img-list');
+  list.innerHTML = '<div style="color:var(--text3);font-size:0.8rem;padding:8px">Loading...</div>';
+  selectedImageIds = new Set();
+  updateSelectedUI();
   try {
-    const res=await fetch(`${API}/api/characters`);
-    const chars=await res.json();
-    const char=chars.find(c=>c.id===adminSelectedCharId);
-    const imgs=char?.images||[];
-    if(!imgs.length){list.innerHTML='<div style="color:var(--text3);font-size:0.8rem">No images yet</div>';return;}
-    // FIX: show broken indicator in admin too
-    list.innerHTML=imgs.map(img=>{
-      const isBroken = !img.url.match(/\.(jpg|jpeg|png|gif|webp|avif)(\?.*)?$/i) && !img.url.includes('ibb.co') && !img.url.includes('cdn') && !img.url.includes('raw.');
-      return `<div class="img-item${isBroken?' broken':''}">
+    const res = await fetch(`${API}/api/characters`);
+    const chars = await res.json();
+    const char = chars.find(c => c.id === adminSelectedCharId);
+    const imgs = char?.images || [];
+    if (!imgs.length) { list.innerHTML = '<div style="color:var(--text3);font-size:0.8rem;padding:8px">No images yet. Use Sync or add by URL.</div>'; return; }
+
+    list.innerHTML = imgs.map(img => {
+      const isBroken = !img.url.match(/\.(jpg|jpeg|png|gif|webp|avif)(\?.*)?$/i) && !img.url.includes('supabase') && !img.url.includes('ibb.co');
+      return `<div class="img-item${isBroken ? ' broken' : ''}" id="img-item-${img.id}" onclick="toggleImgSelect('${img.id}', this)" style="cursor:pointer;user-select:none;">
         <img src="${img.url}" onerror="this.closest('.img-item').classList.add('broken');this.style.display='none'">
-        <button class="img-del" onclick="adminDeleteImage('${img.id}')">✕</button>
+        <div class="img-select-overlay" id="sel-${img.id}" style="position:absolute;inset:0;background:rgba(201,65,42,0.45);display:none;align-items:center;justify-content:center;font-size:1.4rem;border-radius:6px;">✓</div>
+        <button class="img-del" onclick="event.stopPropagation();adminDeleteImage('${img.id}')" title="Delete">✕</button>
       </div>`;
     }).join('');
-  } catch(e){list.innerHTML='<div style="color:var(--accent);font-size:0.8rem">Error</div>';}
+  } catch (e) { list.innerHTML = '<div style="color:var(--accent);font-size:0.8rem">Error loading</div>'; }
 }
-async function adminAddImage(){
-  const url=document.getElementById('admin-img-url').value.trim();
-  if(!url){showToast('Enter image URL');return;}
-  if(!adminSelectedCharId){showToast('Select a character first');return;}
-  // Warn if not a direct image link
-  if(!url.match(/\.(jpg|jpeg|png|gif|webp|avif)(\?.*)?$/i) && !url.includes('ibb.co') && !url.includes('cdn')) {
-    if(!confirm('This URL might not be a direct image link. Images not ending in .jpg/.png/.gif/.webp may not display. Add anyway?')) return;
+
+function toggleImgSelect(id, el) {
+  if (selectedImageIds.has(id)) {
+    selectedImageIds.delete(id);
+    document.getElementById(`sel-${id}`).style.display = 'none';
+    el.style.outline = '';
+  } else {
+    selectedImageIds.add(id);
+    document.getElementById(`sel-${id}`).style.display = 'flex';
+    el.style.outline = '2px solid var(--accent)';
   }
-  try {
-    const res=await fetch(`${API}/api/images`,{method:'POST',headers:{'Content-Type':'application/json','Authorization':`Bearer ${currentUser.token}`},body:JSON.stringify({character_id:adminSelectedCharId,url})});
-    if(res.ok){document.getElementById('admin-img-url').value='';showToast('✓ Image added!');await loadAdminImages();await loadCharacters();}
-    else{const err=await res.json();showToast(err.error||'Failed');}
-  } catch(e){showToast('Network error');}
+  updateSelectedUI();
 }
-async function adminDeleteImage(imgId){
+
+function adminSelectAll() {
+  const imgs = document.querySelectorAll('#admin-img-list .img-item');
+  const allIds = [...imgs].map(el => el.id.replace('img-item-', ''));
+  if (selectedImageIds.size === allIds.length) {
+    // Deselect all
+    selectedImageIds = new Set();
+    imgs.forEach(el => { el.style.outline = ''; });
+    document.querySelectorAll('[id^="sel-"]').forEach(el => el.style.display = 'none');
+  } else {
+    // Select all
+    selectedImageIds = new Set(allIds);
+    imgs.forEach(el => { el.style.outline = '2px solid var(--accent)'; });
+    document.querySelectorAll('[id^="sel-"]').forEach(el => el.style.display = 'flex');
+  }
+  updateSelectedUI();
+}
+
+function updateSelectedUI() {
+  const count = selectedImageIds.size;
+  const btn = document.getElementById('admin-delete-selected-btn');
+  const actions = document.getElementById('admin-img-actions');
+  if (actions) actions.style.display = 'flex';
+  if (btn) {
+    btn.style.display = count > 0 ? 'inline-flex' : 'none';
+    const span = btn.querySelector('span');
+    if (span) span.textContent = count;
+  }
+}
+
+async function adminDeleteSelected() {
+  if (!selectedImageIds.size) return;
+  if (!confirm(`Delete ${selectedImageIds.size} selected image(s)?`)) return;
+  const ids = [...selectedImageIds];
   try {
-    const res=await fetch(`${API}/api/images/${imgId}`,{method:'DELETE',headers:{'Authorization':`Bearer ${currentUser.token}`}});
-    if(res.ok){showToast('✓ Image deleted');await loadAdminImages();await loadCharacters();}
+    const res = await fetch(`${API}/api/images/delete-bulk`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${currentUser.token}` },
+      body: JSON.stringify({ ids })
+    });
+    if (res.ok) {
+      const data = await res.json();
+      showToast(`✓ Deleted ${data.deleted} image(s)`);
+      selectedImageIds = new Set();
+      await loadAdminImages();
+      await loadCharacters();
+    } else {
+      const err = await res.json();
+      showToast(err.error || 'Failed to delete');
+    }
+  } catch (e) { showToast('Network error'); }
+}
+
+async function adminDeleteImage(imgId) {
+  try {
+    const res = await fetch(`${API}/api/images/${imgId}`, {
+      method: 'DELETE', headers: { 'Authorization': `Bearer ${currentUser.token}` }
+    });
+    if (res.ok) { showToast('✓ Image deleted'); await loadAdminImages(); await loadCharacters(); }
     else showToast('Failed to delete image');
-  } catch(e){showToast('Network error');}
+  } catch (e) { showToast('Network error'); }
+}
+
+async function adminAddImage() {
+  const url = document.getElementById('admin-img-url').value.trim();
+  if (!url) { showToast('Enter image URL'); return; }
+  if (!adminSelectedCharId) { showToast('Select a character first'); return; }
+  try {
+    const res = await fetch(`${API}/api/images`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${currentUser.token}` },
+      body: JSON.stringify({ character_id: adminSelectedCharId, url })
+    });
+    if (res.ok) { document.getElementById('admin-img-url').value = ''; showToast('✓ Image added!'); await loadAdminImages(); await loadCharacters(); }
+    else { const err = await res.json(); showToast(err.error || 'Failed'); }
+  } catch (e) { showToast('Network error'); }
+}
+
+async function adminSyncFromStorage() {
+  if (!adminSelectedCharId) { showToast('Select a character first'); return; }
+  const btn = document.getElementById('sync-btn');
+  btn.textContent = '⏳ Syncing...'; btn.disabled = true;
+  try {
+    const res = await fetch(`${API}/api/storage/sync/${adminSelectedCharId}`, {
+      method: 'POST',
+      headers: { 'Authorization': `Bearer ${currentUser.token}` }
+    });
+    const data = await res.json();
+    if (res.ok) {
+      showToast(`✓ Synced ${data.synced} new images (${data.total} total, ${data.skipped} already existed)`);
+      await loadAdminImages();
+      await loadCharacters();
+    } else {
+      showToast(data.error || 'Sync failed');
+    }
+  } catch (e) { showToast('Network error'); }
+  btn.textContent = '⚡ Sync from Storage Folder'; btn.disabled = false;
 }
 
 async function adminSaveUpcoming(){
