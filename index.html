@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="icon" type="image/png" href="https://i.ibb.co.com/sptpBsLd/Flux-Schnell-minimalist-orange-logo-icon-in-the-shape-of-a-ful-0-removebg-preview-1.png">
-<!-- MagSrv Ad Provider -->
 <script async type="application/javascript" src="https://a.magsrv.com/ad-provider.js"></script>
 <title>LimitlessAI</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -125,7 +124,7 @@
   .hero h1 em{font-style:italic;color:var(--accent);}
   .hero p{color:var(--text2);font-size:1rem;max-width:520px;margin:0 auto 24px;line-height:1.6;}
 
-  /* UPCOMING */
+  /* UPCOMING — REDESIGNED */
   #upcoming-section{display:none;margin-bottom:28px;}
   .upcoming-card{background:linear-gradient(135deg,var(--bg2) 0%,var(--bg3) 100%);border:1px solid var(--card-border);border-radius:20px;padding:0;display:flex;align-items:stretch;position:relative;overflow:hidden;min-height:160px;}
   .upcoming-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(201,65,42,0.08),transparent 60%);pointer-events:none;}
@@ -175,6 +174,7 @@
   .char-card:hover .char-thumb-overlay{opacity:1;}
   .char-img-count{position:absolute;bottom:10px;right:10px;background:rgba(0,0,0,0.7);color:#fff;font-size:0.72rem;font-weight:600;padding:3px 9px;border-radius:100px;opacity:0;transition:opacity 0.3s;}
   .char-card:hover .char-img-count{opacity:1;}
+  /* LIKE BUTTON on card */
   .char-like-btn{position:absolute;top:10px;right:10px;background:rgba(0,0,0,0.55);backdrop-filter:blur(4px);border:1px solid rgba(255,255,255,0.15);color:#fff;border-radius:20px;padding:4px 10px;font-size:0.75rem;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:4px;transition:all 0.2s;opacity:0;}
   .char-card:hover .char-like-btn{opacity:1;}
   .char-like-btn.liked{background:rgba(201,65,42,0.85);border-color:var(--accent);opacity:1;}
@@ -207,6 +207,7 @@
   .modal-gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;margin-bottom:24px;}
   .modal-img{aspect-ratio:3/4;background:var(--bg3);border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;border:2px solid transparent;transition:all 0.2s;overflow:hidden;position:relative;}
   .modal-img:hover{border-color:var(--accent);transform:scale(1.02);}
+  /* Broken image indicator */
   .modal-img.broken{border-color:rgba(201,65,42,0.4);background:rgba(201,65,42,0.05);}
   .modal-img.broken::after{content:'⚠️ Bad URL';position:absolute;bottom:6px;left:0;right:0;text-align:center;font-size:0.65rem;color:var(--accent);}
 
@@ -243,7 +244,6 @@
   /* AD */
   .ad-banner{background:var(--bg2);border:1px dashed var(--card-border);border-radius:8px;padding:14px;text-align:center;margin-bottom:28px;color:var(--text3);font-size:0.78rem;letter-spacing:1px;text-transform:uppercase;}
   .ad-banner strong{display:block;font-size:1.1rem;margin-bottom:3px;color:var(--text2);}
-  .ad-native-wrap{width:100%;overflow:hidden;margin-bottom:28px;display:flex;justify-content:center;}
 
   /* LIGHTBOX */
   .lightbox{position:fixed;inset:0;z-index:500;background:rgba(0,0,0,0.96);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity 0.3s;}
@@ -278,7 +278,7 @@
   /* ADMIN MODAL */
   .admin-modal-overlay{position:fixed;inset:0;z-index:300;background:var(--modal-overlay);backdrop-filter:blur(8px);display:flex;align-items:flex-start;justify-content:center;padding:16px;overflow-y:auto;opacity:0;pointer-events:none;transition:opacity 0.3s;}
   .admin-modal-overlay.open{opacity:1;pointer-events:all;}
-  .admin-modal{background:var(--card);border:1px solid var(--card-border);border-radius:16px;width:100%;max-width:700px;margin:auto;overflow:hidden;transform:translateY(20px);transition:transform 0.3s;}
+  .admin-modal{background:var(--card);border:1px solid var(--card-border);border-radius:16px;width:100%;max-width:680px;margin:auto;overflow:hidden;transform:translateY(20px);transition:transform 0.3s;}
   .admin-modal-overlay.open .admin-modal{transform:translateY(0);}
   .admin-header{display:flex;align-items:center;justify-content:space-between;padding:18px 20px;border-bottom:1px solid var(--card-border);background:var(--bg2);}
   .admin-title{font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:700;}
@@ -302,21 +302,15 @@
   .btn-edit:hover{background:#3b82f6;color:#fff;}
   .btn-save{background:var(--accent);color:#fff;border:none;padding:5px 14px;border-radius:6px;font-family:'DM Sans',sans-serif;font-size:0.78rem;font-weight:600;cursor:pointer;transition:all 0.2s;}
   .btn-save:hover{background:var(--accent2);}
-
-  /* IMAGE GRID — multi-select */
   .img-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(90px,1fr));gap:7px;margin-top:10px;}
-  .img-item{position:relative;aspect-ratio:3/4;border-radius:6px;overflow:hidden;border:1px solid var(--card-border);cursor:pointer;user-select:none;transition:outline 0.1s;}
-  .img-item img{width:100%;height:100%;object-fit:cover;pointer-events:none;}
+  .img-item{position:relative;aspect-ratio:3/4;border-radius:6px;overflow:hidden;border:1px solid var(--card-border);}
+  .img-item img{width:100%;height:100%;object-fit:cover;}
+  /* Broken image in admin */
   .img-item.broken{border-color:rgba(201,65,42,0.5);background:rgba(201,65,42,0.05);}
   .img-item.broken::after{content:'⚠️';position:absolute;bottom:4px;left:50%;transform:translateX(-50%);font-size:0.8rem;}
-  .img-item.selected{outline:3px solid var(--accent);}
-  .img-select-check{position:absolute;inset:0;background:rgba(201,65,42,0.45);display:none;align-items:center;justify-content:center;font-size:1.6rem;color:#fff;border-radius:6px;pointer-events:none;}
-  .img-item.selected .img-select-check{display:flex;}
-  .img-del{position:absolute;top:3px;right:3px;width:20px;height:20px;background:rgba(0,0,0,0.7);color:#fff;border:none;border-radius:50%;font-size:0.65rem;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:2;}
-
+  .img-del{position:absolute;top:3px;right:3px;width:20px;height:20px;background:rgba(0,0,0,0.7);color:#fff;border:none;border-radius:50%;font-size:0.65rem;cursor:pointer;display:flex;align-items:center;justify-content:center;}
   .admin-btn{display:inline-flex;align-items:center;gap:5px;background:var(--accent);color:#fff;border:none;padding:8px 16px;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:0.85rem;font-weight:600;cursor:pointer;transition:all 0.2s;}
   .admin-btn:hover{background:var(--accent2);}
-  .admin-btn:disabled{opacity:0.6;cursor:not-allowed;}
 
   /* LEGAL */
   .legal-body h3{font-family:'Playfair Display',serif;font-size:1.05rem;font-weight:700;color:var(--text);margin:24px 0 10px;padding-bottom:6px;border-bottom:1px solid var(--card-border);}
@@ -405,19 +399,12 @@
     <p>Explore curated NSFW art of your favorite AI characters. Find them, admire them, chat with them on JanitorAI.</p>
   </section>
 
-  <!-- Native Ad #1 — below hero -->
-  <div class="ad-native-wrap">
-    <ins class="eas6a97888e20" data-zoneid="5892044"></ins>
-    <script>(AdProvider = window.AdProvider || []).push({"serve": {}});</script>
-  </div>
+  <div style="width:100%;overflow:hidden;margin-bottom:28px;display:flex;justify-content:center;">
+  <ins class="eas6a97888e2" data-zoneid="5890550"></ins> 
+ <script>(AdProvider = window.AdProvider || []).push({"serve": {}});</script>
+</div>
 
-  <!-- Banner Ad #1 -->
-  <div class="ad-native-wrap">
-    <ins class="eas6a97888e2" data-zoneid="5890550"></ins>
-    <script>(AdProvider = window.AdProvider || []).push({"serve": {}});</script>
-  </div>
-
-  <!-- UPCOMING -->
+  <!-- UPCOMING — REDESIGNED -->
   <div id="upcoming-section">
     <div class="upcoming-card">
       <div class="upcoming-img-wrap" id="upcoming-img-wrap">
@@ -449,7 +436,7 @@
           <span class="chevron">▾</span>
         </button>
         <div class="sort-dropdown-menu" id="sort-menu">
-          <button class="sort-option active" onclick="setSort('views')">
+          <button class="sort-option" onclick="setSort('views')">
             <span class="sort-option-icon">🔥</span>
             <div><div>Most Viewed</div><div class="sort-option-sub">All-time popular</div></div>
           </button>
@@ -471,12 +458,6 @@
     </div>
   </div>
   <div class="gallery-grid" id="gallery-grid"></div>
-
-  <!-- Native Ad #2 — below gallery -->
-  <div class="ad-native-wrap">
-    <ins class="eas6a97888e20" data-zoneid="5892044"></ins>
-    <script>(AdProvider = window.AdProvider || []).push({"serve": {}});</script>
-  </div>
 </main>
 
 <footer>
@@ -516,21 +497,11 @@
       <div class="modal-char-tags" id="modal-char-tags"></div>
       <div class="modal-meta" id="modal-meta"></div>
       <a class="modal-jai-btn" id="modal-jai-link" href="#" target="_blank">💬 Chat on JanitorAI</a>
-
-      <!-- Ad inside character modal -->
-      <div class="ad-native-wrap" style="margin-bottom:18px;">
-        <ins class="eas6a97888e2" data-zoneid="5890554"></ins>
-        <script>(AdProvider = window.AdProvider || []).push({"serve": {}});</script>
-      </div>
-
+      <div style="width:100%;overflow:hidden;margin-bottom:18px;display:flex;justify-content:center;">
+  <ins class="eas6a97888e2" data-zoneid="5890554"></ins> 
+ <script>(AdProvider = window.AdProvider || []).push({"serve": {}});</script>
+</div>
       <div class="modal-gallery" id="modal-gallery"></div>
-
-      <!-- Native Ad between gallery and comments -->
-      <div class="ad-native-wrap" style="margin-bottom:20px;">
-        <ins class="eas6a97888e20" data-zoneid="5892044"></ins>
-        <script>(AdProvider = window.AdProvider || []).push({"serve": {}});</script>
-      </div>
-
       <div class="comments-section">
         <div class="comments-title">Comments</div>
         <div class="comment-input-wrap">
@@ -568,61 +539,28 @@
         <button class="admin-tab" onclick="switchAdminTab('manage')">🗂 Manage</button>
         <button class="admin-tab" onclick="switchAdminTab('upcoming')">🔥 Upcoming</button>
       </div>
-
-      <!-- CREATE TAB -->
       <div class="admin-section active" id="admin-create">
         <div class="form-group"><label class="form-label">Character Name</label><input class="form-input" id="admin-name" placeholder="e.g. Aria Voss"></div>
         <div class="form-group"><label class="form-label">Tags (comma separated)</label><input class="form-input" id="admin-tags" placeholder="Fantasy, Elf, Romance"></div>
         <div class="form-group"><label class="form-label">JanitorAI URL</label><input class="form-input" id="admin-jai" placeholder="https://janitorai.com/characters/..."></div>
         <div class="form-group"><label class="form-label">Emoji</label><input class="form-input" id="admin-emoji" placeholder="🌸" style="max-width:90px"></div>
-        <div class="form-group"><label class="form-label">Author</label><input class="form-input" id="admin-author" placeholder="MrZ1nGo"></div>
+        <div class="form-group"><label class="form-label">Author (optional)</label><input class="form-input" id="admin-author" placeholder="MrZ1nGo"></div>
         <button class="admin-btn" onclick="adminCreateCharacter()">➕ Create Character</button>
       </div>
-
-      <!-- MANAGE TAB -->
       <div class="admin-section" id="admin-manage">
         <div id="admin-char-list" style="margin-bottom:18px"><div style="color:var(--text3);text-align:center;padding:20px">Loading...</div></div>
-
-        <!-- IMAGES SECTION with multi-select -->
         <div id="admin-images-section" style="display:none">
           <div style="border-top:1px solid var(--card-border);padding-top:18px">
-
-            <!-- Header row with title + action buttons -->
-            <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:10px">
-              <div style="font-weight:600;font-size:0.9rem" id="admin-images-title">Images</div>
-              <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center">
-                <button class="btn-edit" onclick="adminSelectAll()" title="Select / deselect all">☑️ All</button>
-                <button class="btn-danger" id="admin-delete-selected-btn" onclick="adminDeleteSelected()" style="display:none">
-                  🗑 Delete Selected (<span id="selected-count">0</span>)
-                </button>
-              </div>
-            </div>
-
-            <!-- Auto-sync from Supabase Storage -->
-            <div style="background:var(--bg2);border:1px solid var(--card-border);border-radius:10px;padding:14px;margin-bottom:14px">
-              <div style="font-size:0.82rem;font-weight:700;margin-bottom:4px">⚡ Auto-sync from Supabase Storage</div>
-              <div style="font-size:0.74rem;color:var(--text3);margin-bottom:10px;line-height:1.5">
-                In Supabase Storage → bucket <strong>images</strong> → create folder named exactly <strong id="sync-folder-name" style="color:var(--accent)">Character Name</strong> → upload images there → click Sync.
-              </div>
-              <button class="admin-btn" onclick="adminSyncFromStorage()" id="sync-btn">⚡ Sync from Storage Folder</button>
-            </div>
-
-            <!-- Image grid -->
+            <div style="font-weight:600;margin-bottom:10px" id="admin-images-title">Images</div>
+            <p style="font-size:0.75rem;color:var(--accent);margin-bottom:10px">⚠️ Use direct image links only (e.g. i.ibb.co/... or direct CDN URLs). Links that open a webpage will not work and will show as broken.</p>
             <div class="img-grid" id="admin-img-list"></div>
-
-            <!-- Manual URL add -->
-            <div style="margin-top:14px;padding-top:12px;border-top:1px dashed var(--card-border)">
-              <div style="font-size:0.74rem;color:var(--text3);margin-bottom:8px">Or add manually by direct URL:</div>
-              <div style="display:flex;gap:8px;flex-wrap:wrap">
-                <input class="form-input" id="admin-img-url" placeholder="Direct image URL (supabase / cdn)" style="flex:1;min-width:180px">
-                <button class="admin-btn" onclick="adminAddImage()">Add URL</button>
-              </div>
+            <div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap">
+              <input class="form-input" id="admin-img-url" placeholder="Direct image URL (i.ibb.co/...)" style="flex:1;min-width:180px">
+              <button class="admin-btn" onclick="adminAddImage()">Add Image</button>
             </div>
           </div>
         </div>
       </div>
-
-      <!-- UPCOMING TAB -->
       <div class="admin-section" id="admin-upcoming">
         <p style="color:var(--text2);font-size:0.85rem;margin-bottom:14px">Set a sneak peek card on the main page.</p>
         <div class="form-group"><label class="form-label">Character Name</label><input class="form-input" id="upcoming-admin-name" placeholder="e.g. Aria Voss or leave empty for ???"></div>
@@ -672,7 +610,9 @@
 
 <!-- LIGHTBOX -->
 <div class="lightbox" id="lightbox">
-  <div class="lightbox-img-wrap"><img id="lightbox-img" src="" alt=""></div>
+  <div class="lightbox-img-wrap" id="lightbox-img-wrap">
+    <img id="lightbox-img" src="" alt="">
+  </div>
   <button class="lightbox-close" onclick="closeLightbox()">✕</button>
   <button class="lightbox-nav lightbox-prev" onclick="lightboxNav(-1)">‹</button>
   <button class="lightbox-nav lightbox-next" onclick="lightboxNav(1)">›</button>
@@ -684,22 +624,27 @@
 <script>
 const API = 'https://limitlessai-production.up.railway.app';
 const ADMIN_CHECK_URL = 'https://i.ibb.co.com/R4hKHQr9/check-1.png';
+// Storage key for persistent login
 const STORAGE_KEY = 'lai_user_v2';
 
 let CHARACTERS = [], ALL_TAGS = [], currentUser = null, activeTag = null, currentChar = null, authMode = 'login';
-let adminSelectedCharId = null, adminSelectedCharName = null, currentSort = 'views';
+let adminSelectedCharId = null, currentSort = 'views';
 let lightboxImages = [], lightboxIndex = 0;
 let pendingAvatarBase64 = null;
-let selectedImageIds = new Set();
 
 // ===== INIT =====
 window.addEventListener('DOMContentLoaded', async () => {
   const savedTheme = localStorage.getItem('lai_theme') || 'light';
   document.documentElement.setAttribute('data-theme', savedTheme);
   updateThemeBtn();
+
+  // AGE GATE — use localStorage so it persists
   if(localStorage.getItem('age_ok')) document.getElementById('age-gate').style.display = 'none';
+
+  // FIX: Use localStorage (not sessionStorage) so login persists across sessions
   const saved = localStorage.getItem(STORAGE_KEY);
   if(saved) { try { currentUser = JSON.parse(saved); updateNavUser(); } catch(e) { localStorage.removeItem(STORAGE_KEY); } }
+
   await loadCharacters();
   await loadUpcoming();
 
@@ -707,6 +652,7 @@ window.addEventListener('DOMContentLoaded', async () => {
     const btn = document.getElementById('user-avatar-btn');
     const dd = document.getElementById('profile-dropdown');
     if(btn && dd && !btn.contains(e.target) && !dd.contains(e.target)) closeProfileDropdown();
+
     const sortBtn = document.getElementById('sort-btn');
     const sortMenu = document.getElementById('sort-menu');
     if(sortBtn && sortMenu && !sortBtn.contains(e.target) && !sortMenu.contains(e.target)) closeSortMenu();
@@ -714,104 +660,148 @@ window.addEventListener('DOMContentLoaded', async () => {
 });
 
 function enterSite() {
-  localStorage.setItem('age_ok','1');
+  localStorage.setItem('age_ok','1'); // persist age gate
   const gate = document.getElementById('age-gate');
-  gate.style.transition='opacity 0.5s';gate.style.opacity='0';
-  setTimeout(()=>gate.style.display='none',500);
+  gate.style.transition = 'opacity 0.5s'; gate.style.opacity = '0';
+  setTimeout(() => gate.style.display = 'none', 500);
 }
+
 function toggleTheme() {
-  const newTheme = document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark';
-  document.documentElement.setAttribute('data-theme',newTheme);
-  localStorage.setItem('lai_theme',newTheme);
+  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+  const newTheme = isDark ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', newTheme);
+  localStorage.setItem('lai_theme', newTheme);
   updateThemeBtn();
 }
-function updateThemeBtn(){document.getElementById('theme-btn').textContent=document.documentElement.getAttribute('data-theme')==='dark'?'🌙':'☀️';}
+function updateThemeBtn() {
+  document.getElementById('theme-btn').textContent = document.documentElement.getAttribute('data-theme') === 'dark' ? '🌙' : '☀️';
+}
 
 // ===== SORT DROPDOWN =====
-const SORT_LABELS={views:'🔥 Most Viewed',new:'🕒 Latest',trending24:'⚡ Trending 24h',trending7:'📈 Trending Weekly'};
-function toggleSortMenu(){
-  const btn=document.getElementById('sort-btn'),menu=document.getElementById('sort-menu');
-  const isOpen=menu.classList.contains('open');
-  if(isOpen){menu.classList.remove('open');btn.classList.remove('open');}
-  else{menu.classList.add('open');btn.classList.add('open');}
+const SORT_LABELS = {
+  views:      '🔥 Most Viewed',
+  new:        '🕒 Latest',
+  trending24: '⚡ Trending 24h',
+  trending7:  '📈 Trending Weekly',
+};
+
+function toggleSortMenu() {
+  const btn = document.getElementById('sort-btn');
+  const menu = document.getElementById('sort-menu');
+  const isOpen = menu.classList.contains('open');
+  if(isOpen) { menu.classList.remove('open'); btn.classList.remove('open'); }
+  else { menu.classList.add('open'); btn.classList.add('open'); }
 }
-function closeSortMenu(){document.getElementById('sort-btn')?.classList.remove('open');document.getElementById('sort-menu')?.classList.remove('open');}
-function setSort(sort){
-  currentSort=sort;
-  document.getElementById('sort-label').textContent=SORT_LABELS[sort];
-  document.querySelectorAll('.sort-option').forEach((el,i)=>{const sorts=['views','new','trending24','trending7'];el.classList.toggle('active',sorts[i]===sort);});
+function closeSortMenu() {
+  document.getElementById('sort-btn')?.classList.remove('open');
+  document.getElementById('sort-menu')?.classList.remove('open');
+}
+function setSort(sort) {
+  currentSort = sort;
+  document.getElementById('sort-label').textContent = SORT_LABELS[sort];
+  document.querySelectorAll('.sort-option').forEach((el, i) => {
+    const sorts = ['views','new','trending24','trending7'];
+    el.classList.toggle('active', sorts[i] === sort);
+  });
   closeSortMenu();
-  const pool=activeTag?CHARACTERS.filter(c=>(c.tags||[]).includes(activeTag)):CHARACTERS;
-  renderGallery(applySearch(pool,document.getElementById('search-input').value));
+  const pool = activeTag ? CHARACTERS.filter(c=>(c.tags||[]).includes(activeTag)) : CHARACTERS;
+  renderGallery(applySearch(pool, document.getElementById('search-input').value));
 }
 
 // ===== UPCOMING =====
-async function loadUpcoming(){
-  try{
-    const res=await fetch(`${API}/api/upcoming`);
-    const data=await res.json();
-    if(data&&(data.name||data.image_url)){
-      document.getElementById('upcoming-section').style.display='block';
-      document.getElementById('upcoming-name').textContent=data.name||'???';
-      const wrap=document.getElementById('upcoming-img-wrap');
-      if(data.image_url){wrap.innerHTML=`<img src="${data.image_url}" onerror="this.parentElement.innerHTML='<div class=upcoming-img-placeholder>🌟</div>'">`;}
-      const tagsEl=document.getElementById('upcoming-tags');
-      if(data.tags&&data.tags.length){tagsEl.innerHTML=data.tags.map(t=>`<span class="upcoming-tag">${t}</span>`).join('');}
+async function loadUpcoming() {
+  try {
+    const res = await fetch(`${API}/api/upcoming`);
+    const data = await res.json();
+    if(data && (data.name || data.image_url)) {
+      document.getElementById('upcoming-section').style.display = 'block';
+      document.getElementById('upcoming-name').textContent = data.name || '???';
+      const wrap = document.getElementById('upcoming-img-wrap');
+      if(data.image_url) {
+        wrap.innerHTML = `<img src="${data.image_url}" onerror="this.parentElement.innerHTML='<div class=upcoming-img-placeholder>🌟</div>'">`;
+      }
+      const tagsEl = document.getElementById('upcoming-tags');
+      if(data.tags && data.tags.length) {
+        tagsEl.innerHTML = data.tags.map(t=>`<span class="upcoming-tag">${t}</span>`).join('');
+      }
     }
-  }catch(e){}
+  } catch(e) {}
 }
 
 // ===== LOAD CHARACTERS =====
-async function loadCharacters(){
-  const grid=document.getElementById('gallery-grid');
-  grid.innerHTML=`<div class="empty-state" style="grid-column:1/-1"><div class="empty-state-icon">⏳</div><h3>Loading characters...</h3></div>`;
-  try{
-    const userId=currentUser?.userId||'';
-    const res=await fetch(`${API}/api/characters?userId=${userId}`);
-    CHARACTERS=await res.json();
-    ALL_TAGS=[...new Set(CHARACTERS.flatMap(c=>c.tags||[]))].sort();
-    renderTags();renderGallery(CHARACTERS);
-  }catch(e){
-    grid.innerHTML=`<div class="empty-state" style="grid-column:1/-1"><div class="empty-state-icon">⚠️</div><h3>Could not load characters</h3><p>Server may be starting up. Refresh in a moment.</p></div>`;
+async function loadCharacters() {
+  const grid = document.getElementById('gallery-grid');
+  grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1"><div class="empty-state-icon">⏳</div><h3>Loading characters...</h3></div>`;
+  try {
+    const userId = currentUser?.userId || '';
+    const res = await fetch(`${API}/api/characters?userId=${userId}`);
+    CHARACTERS = await res.json();
+    ALL_TAGS = [...new Set(CHARACTERS.flatMap(c => c.tags||[]))].sort();
+    renderTags(); renderGallery(CHARACTERS);
+  } catch(e) {
+    grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1"><div class="empty-state-icon">⚠️</div><h3>Could not load characters</h3><p>Server may be starting up. Refresh in a moment.</p></div>`;
   }
 }
 
-function renderTags(){
-  document.getElementById('tags-row').innerHTML=
-    `<span class="tag ${!activeTag?'active':''}" onclick="filterByTag(null)">All</span>`+
-    ALL_TAGS.map(t=>`<span class="tag ${activeTag===t?'active':''}" onclick="filterByTag('${t}')">${t}</span>`).join('');
+function renderTags() {
+  document.getElementById('tags-row').innerHTML =
+    `<span class="tag ${!activeTag?'active':''}" onclick="filterByTag(null)">All</span>` +
+    ALL_TAGS.map(t => `<span class="tag ${activeTag===t?'active':''}" onclick="filterByTag('${t}')">${t}</span>`).join('');
 }
-function filterByTag(tag){activeTag=tag;renderTags();renderGallery(applySearch(tag?CHARACTERS.filter(c=>(c.tags||[]).includes(tag)):CHARACTERS,document.getElementById('search-input').value));}
-function handleSearch(q){renderGallery(applySearch(activeTag?CHARACTERS.filter(c=>(c.tags||[]).includes(activeTag)):CHARACTERS,q));}
-function applySearch(pool,q){if(!q.trim())return pool;const l=q.toLowerCase();return pool.filter(c=>c.name.toLowerCase().includes(l)||(c.tags||[]).some(t=>t.toLowerCase().includes(l)));}
-function showHome(){activeTag=null;document.getElementById('search-input').value='';renderTags();renderGallery(CHARACTERS);}
+function filterByTag(tag) {
+  activeTag = tag; renderTags();
+  renderGallery(applySearch(tag ? CHARACTERS.filter(c=>(c.tags||[]).includes(tag)) : CHARACTERS, document.getElementById('search-input').value));
+}
+function handleSearch(q) {
+  renderGallery(applySearch(activeTag ? CHARACTERS.filter(c=>(c.tags||[]).includes(activeTag)) : CHARACTERS, q));
+}
+function applySearch(pool, q) {
+  if(!q.trim()) return pool;
+  const l = q.toLowerCase();
+  return pool.filter(c => c.name.toLowerCase().includes(l) || (c.tags||[]).some(t=>t.toLowerCase().includes(l)));
+}
+function showHome() {
+  activeTag = null; document.getElementById('search-input').value = '';
+  renderTags(); renderGallery(CHARACTERS);
+}
 
-function sortChars(chars){
-  const now=new Date(),h24=new Date(now-24*60*60*1000),w7=new Date(now-7*24*60*60*1000);
-  let pool=[...chars];
-  if(currentSort==='trending24'){pool=pool.filter(c=>new Date(c.created_at)>=h24);pool.sort((a,b)=>(b.views||0)-(a.views||0));}
-  else if(currentSort==='trending7'){pool=pool.filter(c=>new Date(c.created_at)>=w7);pool.sort((a,b)=>(b.views||0)-(a.views||0));}
-  else if(currentSort==='views'){pool.sort((a,b)=>(b.views||0)-(a.views||0));}
-  else{pool.sort((a,b)=>new Date(b.created_at)-new Date(a.created_at));}
+function sortChars(chars) {
+  const now = new Date();
+  const h24 = new Date(now - 24*60*60*1000);
+  const w7  = new Date(now - 7*24*60*60*1000);
+  let pool = [...chars];
+
+  if(currentSort === 'trending24') {
+    pool = pool.filter(c => new Date(c.created_at) >= h24);
+    pool.sort((a,b) => (b.views||0)-(a.views||0));
+  } else if(currentSort === 'trending7') {
+    pool = pool.filter(c => new Date(c.created_at) >= w7);
+    pool.sort((a,b) => (b.views||0)-(a.views||0));
+  } else if(currentSort === 'views') {
+    pool.sort((a,b) => (b.views||0)-(a.views||0));
+  } else {
+    pool.sort((a,b) => new Date(b.created_at)-new Date(a.created_at));
+  }
   return pool;
 }
 
-function renderGallery(chars){
-  const grid=document.getElementById('gallery-grid');
-  const sorted=sortChars(chars);
-  document.getElementById('gallery-count').textContent=`${sorted.length} character${sorted.length!==1?'s':''}`;
-  if(!sorted.length){
-    const msg=(currentSort==='trending24'||currentSort==='trending7')?'No characters in this period yet.':'Try a different search or tag.';
-    grid.innerHTML=`<div class="empty-state" style="grid-column:1/-1"><div class="empty-state-icon">🔍</div><h3>No characters found</h3><p>${msg}</p></div>`;
+function renderGallery(chars) {
+  const grid = document.getElementById('gallery-grid');
+  const sorted = sortChars(chars);
+  document.getElementById('gallery-count').textContent = `${sorted.length} character${sorted.length!==1?'s':''}`;
+
+  if(!sorted.length) {
+    const msg = (currentSort==='trending24'||currentSort==='trending7') ? 'No characters in this period yet.' : 'Try a different search or tag.';
+    grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1"><div class="empty-state-icon">🔍</div><h3>No characters found</h3><p>${msg}</p></div>`;
     return;
   }
-  grid.innerHTML=sorted.map((c,i)=>{
-    const imgCount=c.images?.length||0,commentCount=c.comments?.length||0,views=c.views||0,likes=c.likes_count||0;
-    const thumb=c.images?.[0]
-      ?`<img src="${c.images[0].url}" style="width:100%;height:100%;object-fit:cover" loading="lazy" onerror="this.parentElement.innerHTML='<span>${c.emoji||'🌸'}</span>'">`
-      :`<span>${c.emoji||'🌸'}</span>`;
-    const likedClass=c.user_liked?'liked':'';
-    const author=c.author||'MrZ1nGo';
+  grid.innerHTML = sorted.map((c,i) => {
+    const imgCount = c.images?.length||0, commentCount = c.comments?.length||0, views = c.views||0, likes = c.likes_count||0;
+    const thumb = c.images?.[0]
+      ? `<img src="${c.images[0].url}" style="width:100%;height:100%;object-fit:cover" onerror="this.parentElement.innerHTML='<span>${c.emoji||'🌸'}</span>'">`
+      : `<span>${c.emoji||'🌸'}</span>`;
+    const likedClass = c.user_liked ? 'liked' : '';
+    const author = c.author || 'MrZ1nGo';
     return `<div class="char-card" onclick="openCharModal('${c.id}')" style="animation-delay:${Math.min(i,10)*0.04}s">
       <div class="char-thumb">${thumb}
         <div class="char-thumb-overlay"></div>
@@ -832,75 +822,105 @@ function renderGallery(chars){
 }
 
 // ===== CHARACTER LIKE =====
-async function toggleCharLike(charId,btn){
-  if(!currentUser){openAuth('login');return;}
-  try{
-    const res=await fetch(`${API}/api/characters/${charId}/like`,{method:'POST',headers:{'Content-Type':'application/json','Authorization':`Bearer ${currentUser.token}`}});
-    const data=await res.json();
-    if(res.ok){
-      btn.classList.toggle('liked',data.liked);
-      const span=btn.querySelector('span');
-      const char=CHARACTERS.find(c=>c.id===charId);
-      if(char){char.likes_count=(char.likes_count||0)+(data.liked?1:-1);char.user_liked=data.liked;if(span)span.textContent=char.likes_count;}
+async function toggleCharLike(charId, btn) {
+  if(!currentUser) { openAuth('login'); return; }
+  try {
+    const res = await fetch(`${API}/api/characters/${charId}/like`, {
+      method:'POST', headers:{'Content-Type':'application/json','Authorization':`Bearer ${currentUser.token}`}
+    });
+    const data = await res.json();
+    if(res.ok) {
+      btn.classList.toggle('liked', data.liked);
+      const span = btn.querySelector('span');
+      const char = CHARACTERS.find(c=>c.id===charId);
+      if(char) {
+        char.likes_count = (char.likes_count||0) + (data.liked?1:-1);
+        char.user_liked = data.liked;
+        if(span) span.textContent = char.likes_count;
+      }
     }
-  }catch(e){showToast('Network error');}
+  } catch(e) { showToast('Network error'); }
 }
 
 // ===== CHARACTER MODAL =====
-async function openCharModal(id){
-  currentChar=CHARACTERS.find(c=>c.id===id);
-  if(!currentChar)return;
-  fetch(`${API}/api/characters/${id}/view`,{method:'POST'}).then(()=>{const char=CHARACTERS.find(c=>c.id===id);if(char)char.views=(char.views||0)+1;}).catch(()=>{});
+async function openCharModal(id) {
+  currentChar = CHARACTERS.find(c=>c.id===id);
+  if(!currentChar) return;
+  fetch(`${API}/api/characters/${id}/view`,{method:'POST'}).then(()=>{
+    const char=CHARACTERS.find(c=>c.id===id);
+    if(char){char.views=(char.views||0)+1;}
+  }).catch(()=>{});
+
   document.getElementById('modal-char-name').textContent=currentChar.name;
   document.getElementById('modal-jai-link').href=currentChar.jai_url||'https://janitorai.com';
   document.getElementById('modal-char-tags').innerHTML=(currentChar.tags||[]).map(t=>`<span class="tag active" style="cursor:default">${t}</span>`).join('');
   document.getElementById('modal-meta').innerHTML=`<span>👁 ${currentChar.views||0} views</span><span>❤️ ${currentChar.likes_count||0} likes</span><span>💬 <span id="modal-comment-count">${currentChar.comments?.length||0}</span> comments</span><span>by @${currentChar.author||'MrZ1nGo'}</span>`;
-  const imgs=currentChar.images||[];
-  lightboxImages=imgs.map(i=>i.url);
-  document.getElementById('modal-gallery').innerHTML=imgs.length
-    ?imgs.map((img,idx)=>`<div class="modal-img" onclick="openLightbox(${idx})">
-        <img src="${img.url}" style="width:100%;height:100%;object-fit:cover;border-radius:6px" loading="lazy"
-          onerror="this.closest('.modal-img').classList.add('broken');this.style.display='none'">
-      </div>`).join('')
-    :`<div style="color:var(--text3);font-size:0.875rem;padding:16px;grid-column:1/-1;text-align:center">No images yet</div>`;
-  const avatarEl=document.getElementById('comment-avatar');
-  if(currentUser){
-    avatarEl.innerHTML=currentUser.avatar_url?`<img src="${currentUser.avatar_url}" style="width:100%;height:100%;object-fit:cover">`:currentUser.username[0].toUpperCase();
+
+  const imgs = currentChar.images||[];
+  lightboxImages = imgs.map(i=>i.url);
+
+  // FIX: detect broken images (non-direct links)
+  document.getElementById('modal-gallery').innerHTML = imgs.length
+    ? imgs.map((img,idx)=>{
+        const isBroken = !img.url.match(/\.(jpg|jpeg|png|gif|webp|avif)(\?.*)?$/i) && !img.url.includes('ibb.co') && !img.url.includes('cdn') && !img.url.includes('raw.');
+        return `<div class="modal-img${isBroken?' broken':''}" onclick="openLightbox(${idx})">
+          <img src="${img.url}" style="width:100%;height:100%;object-fit:cover;border-radius:6px"
+            onerror="this.closest('.modal-img').classList.add('broken');this.style.display='none'">
+        </div>`;
+      }).join('')
+    : `<div style="color:var(--text3);font-size:0.875rem;padding:16px;grid-column:1/-1;text-align:center">No images yet</div>`;
+
+  const avatarEl = document.getElementById('comment-avatar');
+  if(currentUser) {
+    avatarEl.innerHTML = currentUser.avatar_url
+      ? `<img src="${currentUser.avatar_url}" style="width:100%;height:100%;object-fit:cover" onerror="this.parentElement.innerHTML='${currentUser.username[0].toUpperCase()}'">` 
+      : currentUser.username[0].toUpperCase();
     document.getElementById('comment-input').placeholder='Leave a comment...';
-  }else{avatarEl.innerHTML='?';document.getElementById('comment-input').placeholder='Sign in to leave a comment...';}
+  } else {
+    avatarEl.innerHTML='?';
+    document.getElementById('comment-input').placeholder='Sign in to leave a comment...';
+  }
   document.getElementById('char-modal').classList.add('open');
   document.body.style.overflow='hidden';
   await loadComments(id);
 }
-function closeCharModal(e){
+function closeCharModal(e) {
   if(e&&e.target!==document.getElementById('char-modal'))return;
   document.getElementById('char-modal').classList.remove('open');
   document.body.style.overflow='';currentChar=null;
 }
 
 // ===== COMMENTS =====
-async function loadComments(characterId){
+async function loadComments(characterId) {
   const list=document.getElementById('comments-list');
   list.innerHTML=`<div style="color:var(--text3);font-size:0.875rem;text-align:center;padding:16px">Loading comments...</div>`;
-  try{
+  try {
     const userId=currentUser?.userId||'';
     const res=await fetch(`${API}/api/comments/${characterId}?userId=${userId}`);
-    if(!res.ok)throw new Error('fail');
+    if(!res.ok) throw new Error('fail');
     const comments=await res.json();
     if(!comments.length){list.innerHTML=`<div style="color:var(--text3);font-size:0.875rem;text-align:center;padding:16px 0">No comments yet. Be the first!</div>`;return;}
     list.innerHTML=comments.map(c=>buildCommentHTML(c)).join('');
-  }catch(e){list.innerHTML=`<div style="color:var(--text3);font-size:0.875rem;text-align:center;padding:16px">Could not load comments</div>`;}
+  } catch(e){list.innerHTML=`<div style="color:var(--text3);font-size:0.875rem;text-align:center;padding:16px">Could not load comments</div>`;}
 }
-function buildCommentHTML(c){
-  const username=c.users?.username||'Anonymous',avatarUrl=c.users?.avatar_url||null,isUserAdmin=c.users?.is_admin;
+
+function buildCommentHTML(c) {
+  const username=c.users?.username||'Anonymous';
+  const avatarUrl=c.users?.avatar_url||null;
+  const isUserAdmin=c.users?.is_admin;
   const time=new Date(c.created_at).toLocaleDateString('en-US',{month:'short',day:'numeric'});
   const adminBadge=isUserAdmin?`<img src="${ADMIN_CHECK_URL}" class="admin-check-img" title="Admin" onerror="this.style.display='none'">`:'' ;
   const pinnedBadge=c.is_pinned?`<span class="pinned-badge">📌 Pinned</span>`:'';
-  const likeBtn=`<button class="like-btn ${c.user_liked?'active':''}" onclick="toggleLike('${c.id}',false,this)">👍 <span>${c.likes_count||0}</span></button>`;
+  const likesCount=c.likes_count||0;
+  const likeBtn=`<button class="like-btn ${c.user_liked?'active':''}" onclick="toggleLike('${c.id}',false,this)">👍 <span>${likesCount}</span></button>`;
   const authorLikeVisible=currentUser?.isAdmin||c.author_liked;
   const authorLikeBtn=authorLikeVisible?`<button class="author-like-btn ${c.author_liked?'active':''}" onclick="toggleLike('${c.id}',true,this)" ${!currentUser?.isAdmin?'disabled':''} title="Author like">❤️</button>`:'';
-  const adminBtns=currentUser?.isAdmin?`<button class="admin-action-btn" onclick="togglePinComment('${c.id}',${!c.is_pinned})">${c.is_pinned?'📌 Unpin':'📌 Pin'}</button><button class="admin-action-btn" onclick="deleteComment('${c.id}')">🗑 Delete</button>`:'';
-  const avatarInner=avatarUrl?`<img src="${avatarUrl}" style="width:100%;height:100%;object-fit:cover">`:username[0].toUpperCase();
+  const adminBtns=currentUser?.isAdmin?`
+    <button class="admin-action-btn" onclick="togglePinComment('${c.id}',${!c.is_pinned})">${c.is_pinned?'📌 Unpin':'📌 Pin'}</button>
+    <button class="admin-action-btn" onclick="deleteComment('${c.id}')">🗑 Delete</button>`:'';
+  const avatarInner = avatarUrl
+    ? `<img src="${avatarUrl}" style="width:100%;height:100%;object-fit:cover" onerror="this.style.display='none'">`
+    : username[0].toUpperCase();
   return `<div class="comment ${c.is_pinned?'pinned':''}" id="comment-${c.id}">
     ${pinnedBadge}
     <div class="comment-avatar-sm">${avatarInner}</div>
@@ -911,46 +931,66 @@ function buildCommentHTML(c){
     </div>
   </div>`;
 }
+
 function checkCommentAuth(){if(!currentUser){document.getElementById('comment-input').blur();openAuth('login');}}
-async function submitComment(){
+
+async function submitComment() {
   if(!currentUser){openAuth('login');return;}
   const input=document.getElementById('comment-input');
-  const text=input.value.trim();if(!text)return;
-  const btn=document.querySelector('.comment-submit-btn');btn.textContent='Posting...';btn.disabled=true;
-  try{
+  const text=input.value.trim();
+  if(!text)return;
+  const btn=document.querySelector('.comment-submit-btn');
+  btn.textContent='Posting...';btn.disabled=true;
+  try {
     const res=await fetch(`${API}/api/comments`,{method:'POST',headers:{'Content-Type':'application/json','Authorization':`Bearer ${currentUser.token}`},body:JSON.stringify({character_id:currentChar.id,text})});
     if(res.ok){
-      const newComment=await res.json();input.value='';
+      const newComment=await res.json();
+      input.value='';
       const list=document.getElementById('comments-list');
-      const empty=list.querySelector('div[style]');if(empty)empty.remove();
-      const wrapper=document.createElement('div');wrapper.innerHTML=buildCommentHTML(newComment);list.prepend(wrapper.firstChild);
+      const empty=list.querySelector('div[style]');
+      if(empty)empty.remove();
+      const wrapper=document.createElement('div');
+      wrapper.innerHTML=buildCommentHTML(newComment);
+      list.prepend(wrapper.firstChild);
       const char=CHARACTERS.find(c=>c.id===currentChar.id);
       if(char){if(!char.comments)char.comments=[];char.comments.push({id:'new'});const countEl=document.getElementById('modal-comment-count');if(countEl)countEl.textContent=char.comments.length;}
       showToast('Comment posted! ✓');
-    }else{const err=await res.json();showToast(err.error||'Failed to post comment');}
-  }catch(e){showToast('Network error, try again');}
+    } else {const err=await res.json();showToast(err.error||'Failed to post comment');}
+  } catch(e){showToast('Network error, try again');}
   btn.textContent='Post';btn.disabled=false;
 }
-async function toggleLike(commentId,isAuthorLike,btn){
-  if(!currentUser){openAuth('login');return;}if(isAuthorLike&&!currentUser.isAdmin)return;
-  try{
+
+async function toggleLike(commentId,isAuthorLike,btn) {
+  if(!currentUser){openAuth('login');return;}
+  if(isAuthorLike&&!currentUser.isAdmin)return;
+  try {
     const res=await fetch(`${API}/api/comments/${commentId}/like`,{method:'POST',headers:{'Content-Type':'application/json','Authorization':`Bearer ${currentUser.token}`},body:JSON.stringify({isAuthorLike})});
     const data=await res.json();
     if(res.ok){btn.classList.toggle('active',data.liked);if(!isAuthorLike){const span=btn.querySelector('span');if(span)span.textContent=parseInt(span.textContent)+(data.liked?1:-1);}}
-  }catch(e){showToast('Network error');}
+  } catch(e){showToast('Network error');}
 }
-async function togglePinComment(commentId,pin){
+
+async function togglePinComment(commentId,pin) {
   if(!currentUser?.isAdmin)return;
-  try{const res=await fetch(`${API}/api/comments/${commentId}/pin`,{method:'PATCH',headers:{'Content-Type':'application/json','Authorization':`Bearer ${currentUser.token}`},body:JSON.stringify({pinned:pin})});if(res.ok){showToast(pin?'📌 Comment pinned':'Comment unpinned');await loadComments(currentChar.id);}}catch(e){showToast('Network error');}
+  try {
+    const res=await fetch(`${API}/api/comments/${commentId}/pin`,{method:'PATCH',headers:{'Content-Type':'application/json','Authorization':`Bearer ${currentUser.token}`},body:JSON.stringify({pinned:pin})});
+    if(res.ok){showToast(pin?'📌 Comment pinned':'Comment unpinned');await loadComments(currentChar.id);}
+  } catch(e){showToast('Network error');}
 }
-async function deleteComment(commentId){
+
+async function deleteComment(commentId) {
   if(!currentUser?.isAdmin)return;
-  try{const res=await fetch(`${API}/api/comments/${commentId}`,{method:'DELETE',headers:{'Authorization':`Bearer ${currentUser.token}`}});if(res.ok){document.getElementById(`comment-${commentId}`)?.remove();showToast('✓ Comment deleted');}}catch(e){showToast('Network error');}
+  try {
+    const res=await fetch(`${API}/api/comments/${commentId}`,{method:'DELETE',headers:{'Authorization':`Bearer ${currentUser.token}`}});
+    if(res.ok){document.getElementById(`comment-${commentId}`)?.remove();showToast('✓ Comment deleted');}
+  } catch(e){showToast('Network error');}
 }
 
 // ===== LIGHTBOX =====
 function openLightbox(index){
-  if(document.querySelectorAll('.modal-img')[index]?.classList.contains('broken')){showToast('⚠️ Broken image URL');return;}
+  // Only open if image is not broken
+  const imgs = document.querySelectorAll('.modal-img');
+  if(imgs[index]?.classList.contains('broken')) { showToast('⚠️ This image URL is broken. Admin should delete it.'); return; }
   lightboxIndex=index;updateLightbox();document.getElementById('lightbox').classList.add('open');document.addEventListener('keydown',lightboxKeyHandler);
 }
 function closeLightbox(){document.getElementById('lightbox').classList.remove('open');document.removeEventListener('keydown',lightboxKeyHandler);}
@@ -959,11 +999,21 @@ function updateLightbox(){document.getElementById('lightbox-img').src=lightboxIm
 function lightboxKeyHandler(e){if(e.key==='ArrowRight')lightboxNav(1);else if(e.key==='ArrowLeft')lightboxNav(-1);else if(e.key==='Escape')closeLightbox();}
 
 // ===== PROFILE DROPDOWN =====
-function toggleProfileDropdown(){const btn=document.getElementById('user-avatar-btn'),dd=document.getElementById('profile-dropdown');if(!btn||!dd)return;dd.classList.contains('open')?closeProfileDropdown():(dd.classList.add('open'),btn.classList.add('open'));}
-function closeProfileDropdown(){document.getElementById('user-avatar-btn')?.classList.remove('open');document.getElementById('profile-dropdown')?.classList.remove('open');}
+function toggleProfileDropdown() {
+  const btn = document.getElementById('user-avatar-btn');
+  const dd = document.getElementById('profile-dropdown');
+  if(!btn||!dd) return;
+  const isOpen = dd.classList.contains('open');
+  if(isOpen) closeProfileDropdown();
+  else { dd.classList.add('open'); btn.classList.add('open'); }
+}
+function closeProfileDropdown() {
+  document.getElementById('user-avatar-btn')?.classList.remove('open');
+  document.getElementById('profile-dropdown')?.classList.remove('open');
+}
 
 // ===== AUTH =====
-function openAuth(mode){
+function openAuth(mode) {
   authMode=mode;
   document.getElementById('auth-modal').classList.add('open');
   document.body.style.overflow='hidden';
@@ -971,57 +1021,86 @@ function openAuth(mode){
   document.getElementById('tab-register').classList.toggle('active',mode==='register');
   renderAuthForm();
 }
-function closeAuth(e){if(e&&e.target!==document.getElementById('auth-modal'))return;document.getElementById('auth-modal').classList.remove('open');document.body.style.overflow='';}
-function switchTab(mode){authMode=mode;document.getElementById('tab-login').classList.toggle('active',mode==='login');document.getElementById('tab-register').classList.toggle('active',mode==='register');renderAuthForm();}
-function renderAuthForm(){
-  const c=document.getElementById('auth-form-container'),t=document.getElementById('auth-title'),s=document.getElementById('auth-subtitle');
+function closeAuth(e) {
+  if(e&&e.target!==document.getElementById('auth-modal'))return;
+  document.getElementById('auth-modal').classList.remove('open');
+  document.body.style.overflow='';
+}
+function switchTab(mode) {
+  authMode=mode;
+  document.getElementById('tab-login').classList.toggle('active',mode==='login');
+  document.getElementById('tab-register').classList.toggle('active',mode==='register');
+  renderAuthForm();
+}
+function renderAuthForm() {
+  const c=document.getElementById('auth-form-container');
+  const t=document.getElementById('auth-title');
+  const s=document.getElementById('auth-subtitle');
   if(authMode==='login'){
     t.textContent='Welcome back';s.textContent='Sign in to leave comments and more';
     c.innerHTML=`<div class="form-group"><label class="form-label">Email or Username</label><input class="form-input" id="login-user" type="text" placeholder="your@email.com or username"></div><div class="form-group"><label class="form-label">Password</label><input class="form-input" id="login-pass" type="password" placeholder="••••••••"></div><button class="form-submit" onclick="doLogin()">Log in</button><p class="form-note">Don't have an account? <a href="#" onclick="switchTab('register')" style="color:var(--accent)">Sign up free</a></p>`;
-  }else{
+  } else {
     t.textContent='Create account';s.textContent='Optional — needed to leave comments';
     c.innerHTML=`<div class="form-group"><label class="form-label">Username</label><input class="form-input" id="reg-user" type="text" placeholder="CoolUsername"></div><div class="form-group"><label class="form-label">Email</label><input class="form-input" id="reg-email" type="email" placeholder="your@email.com"></div><div class="form-group"><label class="form-label">Password</label><input class="form-input" id="reg-pass" type="password" placeholder="••••••••"></div><button class="form-submit" onclick="doRegister()">Create Account</button><p class="form-note">By signing up you agree to our <a href="#" onclick="openLegal('tos')" style="color:var(--accent)">Terms of Service</a>.</p>`;
   }
 }
-function saveUser(data){currentUser=data;localStorage.setItem(STORAGE_KEY,JSON.stringify(currentUser));}
-async function doLogin(){
-  const email=document.getElementById('login-user').value.trim(),pass=document.getElementById('login-pass').value;
+
+function saveUser(userData) {
+  currentUser = userData;
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(currentUser));
+}
+
+async function doLogin() {
+  const email=document.getElementById('login-user').value.trim();
+  const pass=document.getElementById('login-pass').value;
   if(!email||!pass){showToast('Please fill in all fields');return;}
   const btn=document.querySelector('.form-submit');btn.textContent='Logging in...';btn.disabled=true;
-  try{
+  try {
     const res=await fetch(`${API}/api/login`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,password:pass})});
     const data=await res.json();
     if(!res.ok){showToast(data.error||'Login failed');btn.textContent='Log in';btn.disabled=false;return;}
     saveUser({username:data.username,email,token:data.token,isAdmin:data.isAdmin,avatar_url:data.avatar_url||null});
     updateNavUser();closeAuth();showToast(`Welcome back, ${data.username}! ✓`);
     if(currentChar){const av=document.getElementById('comment-avatar');av.innerHTML=currentUser.avatar_url?`<img src="${currentUser.avatar_url}" style="width:100%;height:100%;object-fit:cover">`:currentUser.username[0].toUpperCase();document.getElementById('comment-input').placeholder='Leave a comment...';}
-  }catch(e){showToast('Network error, try again');btn.textContent='Log in';btn.disabled=false;}
+  } catch(e){showToast('Network error, try again');btn.textContent='Log in';btn.disabled=false;}
 }
-async function doRegister(){
-  const username=document.getElementById('reg-user').value.trim(),email=document.getElementById('reg-email').value.trim(),pass=document.getElementById('reg-pass').value;
+
+async function doRegister() {
+  const username=document.getElementById('reg-user').value.trim();
+  const email=document.getElementById('reg-email').value.trim();
+  const pass=document.getElementById('reg-pass').value;
   if(!username||!email||!pass){showToast('Please fill in all fields');return;}
   if(!email.includes('@')){showToast('Invalid email address');return;}
   if(pass.length<6){showToast('Password must be at least 6 characters');return;}
   const btn=document.querySelector('.form-submit');btn.textContent='Creating account...';btn.disabled=true;
-  try{
+  try {
     const res=await fetch(`${API}/api/register`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username,email,password:pass})});
     const data=await res.json();
     if(!res.ok){showToast(data.error||'Registration failed');btn.textContent='Create Account';btn.disabled=false;return;}
     saveUser({username:data.username,email,token:data.token,isAdmin:data.isAdmin,avatar_url:data.avatar_url||null});
     updateNavUser();closeAuth();showToast('Account created! Welcome 🎉');
-  }catch(e){showToast('Network error, try again');btn.textContent='Create Account';btn.disabled=false;}
+  } catch(e){showToast('Network error, try again');btn.textContent='Create Account';btn.disabled=false;}
 }
-function updateNavUser(){
+
+function updateNavUser() {
   const container=document.getElementById('nav-auth');
-  if(currentUser){
+  if(currentUser) {
     const adminBadge=currentUser.isAdmin?`<img src="${ADMIN_CHECK_URL}" class="admin-check-img" title="Admin" onerror="this.style.display='none'">`:'' ;
-    const avatarInner=currentUser.avatar_url?`<img src="${currentUser.avatar_url}" style="width:100%;height:100%;object-fit:cover;border-radius:50%" onerror="this.style.display='none'">`:currentUser.username[0].toUpperCase();
-    const pdAvatarInner=currentUser.avatar_url?`<img src="${currentUser.avatar_url}" style="width:100%;height:100%;object-fit:cover">`:currentUser.username[0].toUpperCase();
-    const adminMenuItems=currentUser.isAdmin?`<button class="pd-item" onclick="closeProfileDropdown();openAdmin()"><span class="pd-item-icon">⚙️</span> Admin Panel</button><div class="pd-divider"></div>`:'';
-    container.innerHTML=`<div style="position:relative">
+    const avatarInner=currentUser.avatar_url
+      ?`<img src="${currentUser.avatar_url}" style="width:100%;height:100%;object-fit:cover;border-radius:50%" onerror="this.style.display='none'">`
+      :currentUser.username[0].toUpperCase();
+    const pdAvatarInner=currentUser.avatar_url
+      ?`<img src="${currentUser.avatar_url}" style="width:100%;height:100%;object-fit:cover">`
+      :currentUser.username[0].toUpperCase();
+    const adminMenuItems=currentUser.isAdmin?`
+      <button class="pd-item" onclick="closeProfileDropdown();openAdmin()"><span class="pd-item-icon">⚙️</span> Admin Panel</button>
+      <div class="pd-divider"></div>`:'';
+    container.innerHTML=`
+      <div style="position:relative">
         <div class="user-avatar-btn" id="user-avatar-btn" onclick="toggleProfileDropdown()">
           <div class="user-avatar-circle">${avatarInner}</div>
-          <span>${currentUser.username}</span>${adminBadge}
+          <span>${currentUser.username}</span>
+          ${adminBadge}
           <span class="user-avatar-chevron">▾</span>
         </div>
         <div class="profile-dropdown" id="profile-dropdown">
@@ -1040,75 +1119,112 @@ function updateNavUser(){
           </div>
         </div>
       </div>`;
-  }else{
+  } else {
     container.innerHTML=`<button class="nav-btn nav-btn-ghost" onclick="openAuth('login')">Log in</button><button class="nav-btn nav-btn-accent" onclick="openAuth('register')">Sign up</button>`;
   }
 }
 function logout(){currentUser=null;localStorage.removeItem(STORAGE_KEY);updateNavUser();showToast('Logged out');}
 
 // ===== SETTINGS MODAL =====
-function openSettings(){
-  if(!currentUser)return;
-  pendingAvatarBase64=null;
-  document.getElementById('settings-username').value=currentUser.username||'';
-  document.getElementById('settings-email').value=currentUser.email||'';
-  const preview=document.getElementById('settings-avatar-preview'),letter=document.getElementById('settings-avatar-letter');
-  if(currentUser.avatar_url){preview.style.backgroundImage=`url(${currentUser.avatar_url})`;preview.style.backgroundSize='cover';preview.style.backgroundPosition='center';letter.style.display='none';}
-  else{preview.style.backgroundImage='';letter.style.display='';letter.textContent=currentUser.username[0].toUpperCase();}
+function openSettings() {
+  if(!currentUser) return;
+  pendingAvatarBase64 = null;
+  document.getElementById('settings-username').value = currentUser.username || '';
+  document.getElementById('settings-email').value = currentUser.email || '';
+  const preview = document.getElementById('settings-avatar-preview');
+  const letter = document.getElementById('settings-avatar-letter');
+  if(currentUser.avatar_url) {
+    preview.style.backgroundImage = `url(${currentUser.avatar_url})`;
+    preview.style.backgroundSize = 'cover';
+    preview.style.backgroundPosition = 'center';
+    letter.style.display = 'none';
+  } else {
+    preview.style.backgroundImage = '';
+    letter.style.display = '';
+    letter.textContent = currentUser.username[0].toUpperCase();
+  }
   document.getElementById('settings-modal').classList.add('open');
-  document.body.style.overflow='hidden';
+  document.body.style.overflow = 'hidden';
 }
-function closeSettings(e){
+function closeSettings(e) {
   if(e&&e.target!==document.getElementById('settings-modal'))return;
   document.getElementById('settings-modal').classList.remove('open');
-  document.body.style.overflow='';pendingAvatarBase64=null;
+  document.body.style.overflow='';
+  pendingAvatarBase64=null;
   document.getElementById('avatar-file-input').value='';
 }
-function handleAvatarFile(input){
-  const file=input.files[0];if(!file)return;
-  if(file.size>3*1024*1024){showToast('Image too large (max 3MB)');input.value='';return;}
-  const allowed=['image/jpeg','image/png','image/gif','image/webp'];
-  if(!allowed.includes(file.type)){showToast('Only JPG, PNG, GIF, WEBP allowed');input.value='';return;}
-  const reader=new FileReader();
-  reader.onload=(e)=>{
-    pendingAvatarBase64=e.target.result;
-    const preview=document.getElementById('settings-avatar-preview');
-    preview.style.backgroundImage=`url(${pendingAvatarBase64})`;preview.style.backgroundSize='cover';preview.style.backgroundPosition='center';
-    document.getElementById('settings-avatar-letter').style.display='none';
+
+function handleAvatarFile(input) {
+  const file = input.files[0];
+  if(!file) return;
+  if(file.size > 3*1024*1024) { showToast('Image too large (max 3MB)'); input.value=''; return; }
+  const allowed = ['image/jpeg','image/png','image/gif','image/webp'];
+  if(!allowed.includes(file.type)) { showToast('Only JPG, PNG, GIF, WEBP allowed'); input.value=''; return; }
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    pendingAvatarBase64 = e.target.result;
+    const preview = document.getElementById('settings-avatar-preview');
+    preview.style.backgroundImage = `url(${pendingAvatarBase64})`;
+    preview.style.backgroundSize = 'cover';
+    preview.style.backgroundPosition = 'center';
+    document.getElementById('settings-avatar-letter').style.display = 'none';
     showToast('Photo selected — click Save to apply');
   };
   reader.readAsDataURL(file);
 }
-async function saveSettings(){
-  if(!currentUser)return;
-  const newUsername=document.getElementById('settings-username').value.trim();
-  const btn=document.getElementById('settings-save-btn');btn.textContent='Saving...';btn.disabled=true;
-  try{
-    let avatarChanged=false;
-    if(pendingAvatarBase64){
-      const res=await fetch(`${API}/api/profile/avatar`,{method:'POST',headers:{'Content-Type':'application/json','Authorization':`Bearer ${currentUser.token}`},body:JSON.stringify({image:pendingAvatarBase64})});
-      const data=await res.json();
-      if(!res.ok){showToast(data.error||'Failed to upload avatar');btn.textContent='Save Changes';btn.disabled=false;return;}
-      currentUser.avatar_url=data.avatar_url;avatarChanged=true;
+
+async function saveSettings() {
+  if(!currentUser) return;
+  const newUsername = document.getElementById('settings-username').value.trim();
+  const btn = document.getElementById('settings-save-btn');
+  btn.textContent = 'Saving...'; btn.disabled = true;
+  try {
+    let avatarChanged = false;
+    if(pendingAvatarBase64) {
+      const res = await fetch(`${API}/api/profile/avatar`, {
+        method:'POST',headers:{'Content-Type':'application/json','Authorization':`Bearer ${currentUser.token}`},
+        body:JSON.stringify({image:pendingAvatarBase64})
+      });
+      const data = await res.json();
+      if(!res.ok) { showToast(data.error||'Failed to upload avatar'); btn.textContent='Save Changes'; btn.disabled=false; return; }
+      currentUser.avatar_url = data.avatar_url;
+      avatarChanged = true;
     }
-    let usernameChanged=false;
-    if(newUsername&&newUsername!==currentUser.username){
-      const res=await fetch(`${API}/api/profile`,{method:'PATCH',headers:{'Content-Type':'application/json','Authorization':`Bearer ${currentUser.token}`},body:JSON.stringify({username:newUsername})});
-      const data=await res.json();
-      if(!res.ok){showToast(data.error||'Failed to update username');btn.textContent='Save Changes';btn.disabled=false;return;}
-      currentUser.username=data.user.username;currentUser.token=data.token;usernameChanged=true;
+    let usernameChanged = false;
+    if(newUsername && newUsername !== currentUser.username) {
+      const res = await fetch(`${API}/api/profile`, {
+        method:'PATCH',headers:{'Content-Type':'application/json','Authorization':`Bearer ${currentUser.token}`},
+        body:JSON.stringify({username:newUsername})
+      });
+      const data = await res.json();
+      if(!res.ok) { showToast(data.error||'Failed to update username'); btn.textContent='Save Changes'; btn.disabled=false; return; }
+      currentUser.username = data.user.username;
+      currentUser.token = data.token;
+      usernameChanged = true;
     }
-    if(!avatarChanged&&!usernameChanged){showToast('Nothing to change');btn.textContent='Save Changes';btn.disabled=false;return;}
-    saveUser(currentUser);pendingAvatarBase64=null;document.getElementById('avatar-file-input').value='';
-    updateNavUser();showToast('✓ Profile updated!');
-    setTimeout(()=>{document.getElementById('settings-modal').classList.remove('open');document.body.style.overflow='';},800);
-  }catch(e){showToast('Network error, try again');}
-  btn.textContent='Save Changes';btn.disabled=false;
+    if(!avatarChanged && !usernameChanged) { showToast('Nothing to change'); btn.textContent='Save Changes'; btn.disabled=false; return; }
+    saveUser(currentUser);
+    pendingAvatarBase64 = null;
+    document.getElementById('avatar-file-input').value='';
+    updateNavUser();
+    showToast('✓ Profile updated!');
+    setTimeout(() => { document.getElementById('settings-modal').classList.remove('open'); document.body.style.overflow=''; }, 800);
+  } catch(e) { showToast('Network error, try again'); }
+  btn.textContent='Save Changes'; btn.disabled=false;
 }
 
 // ===== ADMIN =====
-function openAdmin(){if(!currentUser?.isAdmin)return;document.getElementById('admin-modal').classList.add('open');document.body.style.overflow='hidden';switchAdminTab('create');}
-function closeAdmin(e){if(e&&e.target!==document.getElementById('admin-modal'))return;document.getElementById('admin-modal').classList.remove('open');document.body.style.overflow='';adminSelectedCharId=null;adminSelectedCharName=null;}
+function openAdmin(){
+  if(!currentUser?.isAdmin)return;
+  document.getElementById('admin-modal').classList.add('open');
+  document.body.style.overflow='hidden';
+  switchAdminTab('create');
+}
+function closeAdmin(e){
+  if(e&&e.target!==document.getElementById('admin-modal'))return;
+  document.getElementById('admin-modal').classList.remove('open');
+  document.body.style.overflow='';adminSelectedCharId=null;
+}
 function switchAdminTab(tab){
   document.querySelectorAll('.admin-tab').forEach((t,i)=>t.classList.toggle('active',(i===0&&tab==='create')||(i===1&&tab==='manage')||(i===2&&tab==='upcoming')));
   document.getElementById('admin-create').classList.toggle('active',tab==='create');
@@ -1116,10 +1232,11 @@ function switchAdminTab(tab){
   document.getElementById('admin-upcoming').classList.toggle('active',tab==='upcoming');
   if(tab==='manage')loadAdminCharList();
 }
+
 async function loadAdminCharList(){
   const list=document.getElementById('admin-char-list');
   list.innerHTML=`<div style="color:var(--text3);text-align:center;padding:20px">Loading...</div>`;
-  try{
+  try {
     const res=await fetch(`${API}/api/characters`);
     const chars=await res.json();
     if(!chars.length){list.innerHTML=`<div style="color:var(--text3);text-align:center;padding:20px">No characters yet</div>`;return;}
@@ -1132,7 +1249,7 @@ async function loadAdminCharList(){
           </div>
           <div style="display:flex;gap:5px;flex-shrink:0">
             <button class="btn-edit" onclick="toggleEditForm('${c.id}')">✏️</button>
-            <button class="btn-success" onclick="selectCharForImages('${c.id}','${c.name.replace(/'/g,"\\'").replace(/"/g,'&quot;')}')">🖼</button>
+            <button class="btn-success" onclick="selectCharForImages('${c.id}','${c.name.replace(/'/g,"\\'")}')">🖼</button>
             <button class="btn-danger" onclick="adminDeleteChar('${c.id}','${c.name.replace(/'/g,"\\'")}')">🗑</button>
           </div>
         </div>
@@ -1153,192 +1270,117 @@ async function loadAdminCharList(){
           </div>
         </div>
       </div>`).join('');
-  }catch(e){list.innerHTML=`<div style="color:var(--accent);text-align:center;padding:20px">Error loading</div>`;}
+  } catch(e){list.innerHTML=`<div style="color:var(--accent);text-align:center;padding:20px">Error loading</div>`;}
 }
-function toggleEditForm(id){document.getElementById(`edit-form-${id}`).classList.toggle('open');}
+
+function toggleEditForm(id){const form=document.getElementById(`edit-form-${id}`);form.classList.toggle('open');}
+
 async function adminSaveChar(id){
   const name=document.getElementById(`edit-name-${id}`).value.trim();
   const emoji=document.getElementById(`edit-emoji-${id}`).value.trim();
-  const tags=document.getElementById(`edit-tags-${id}`).value.trim().split(',').map(t=>t.trim()).filter(Boolean);
+  const tagsRaw=document.getElementById(`edit-tags-${id}`).value.trim();
   const jai_url=document.getElementById(`edit-jai-${id}`).value.trim();
   const author=document.getElementById(`edit-author-${id}`)?.value.trim()||'';
-  try{
+  const tags=tagsRaw?tagsRaw.split(',').map(t=>t.trim()).filter(Boolean):[];
+  try {
     const res=await fetch(`${API}/api/characters/${id}`,{method:'PATCH',headers:{'Content-Type':'application/json','Authorization':`Bearer ${currentUser.token}`},body:JSON.stringify({name,emoji,tags,jai_url,author})});
     if(res.ok){showToast('✓ Character updated!');await loadCharacters();await loadAdminCharList();}
     else{const err=await res.json();showToast(err.error||'Failed to save');}
-  }catch(e){showToast('Network error');}
+  } catch(e){showToast('Network error');}
 }
+
 async function adminCreateCharacter(){
   const name=document.getElementById('admin-name').value.trim();
-  const tags=document.getElementById('admin-tags').value.trim().split(',').map(t=>t.trim()).filter(Boolean);
+  const tagsRaw=document.getElementById('admin-tags').value.trim();
   const jai_url=document.getElementById('admin-jai').value.trim();
   const emoji=document.getElementById('admin-emoji').value.trim()||'🌸';
   const author=document.getElementById('admin-author').value.trim()||'MrZ1nGo';
   if(!name){showToast('Character name is required');return;}
+  const tags=tagsRaw?tagsRaw.split(',').map(t=>t.trim()).filter(Boolean):[];
   const btn=document.querySelector('#admin-create .admin-btn');btn.textContent='Creating...';btn.disabled=true;
-  try{
+  try {
     const res=await fetch(`${API}/api/characters`,{method:'POST',headers:{'Content-Type':'application/json','Authorization':`Bearer ${currentUser.token}`},body:JSON.stringify({name,tags,jai_url,emoji,author})});
     const data=await res.json();
     if(!res.ok){showToast(data.error||'Failed');btn.textContent='➕ Create Character';btn.disabled=false;return;}
     showToast(`✓ "${name}" created!`);
     ['admin-name','admin-tags','admin-jai','admin-emoji','admin-author'].forEach(id=>document.getElementById(id).value='');
     await loadCharacters();
-  }catch(e){showToast('Network error');}
+  } catch(e){showToast('Network error');}
   btn.textContent='➕ Create Character';btn.disabled=false;
 }
+
 async function adminDeleteChar(id,name){
   if(!confirm(`Delete "${name}"? This will also delete all images and comments.`))return;
-  try{
+  try {
     const res=await fetch(`${API}/api/characters/${id}`,{method:'DELETE',headers:{'Authorization':`Bearer ${currentUser.token}`}});
     if(res.ok){showToast(`✓ "${name}" deleted`);await loadCharacters();await loadAdminCharList();document.getElementById('admin-images-section').style.display='none';}
     else showToast('Failed to delete');
-  }catch(e){showToast('Network error');}
+  } catch(e){showToast('Network error');}
 }
 
-// ===== IMAGE MANAGEMENT WITH MULTI-SELECT =====
 async function selectCharForImages(id,name){
   adminSelectedCharId=id;
-  adminSelectedCharName=name;
-  selectedImageIds=new Set();
   document.getElementById('admin-images-title').textContent=`Images for: ${name}`;
-  document.getElementById('sync-folder-name').textContent=name;
   document.getElementById('admin-images-section').style.display='block';
-  updateSelectedUI();
   await loadAdminImages();
 }
-
 async function loadAdminImages(){
   const list=document.getElementById('admin-img-list');
-  list.innerHTML='<div style="color:var(--text3);font-size:0.8rem;padding:8px">Loading...</div>';
-  selectedImageIds=new Set();
-  updateSelectedUI();
-  try{
+  list.innerHTML='<div style="color:var(--text3);font-size:0.8rem">Loading...</div>';
+  try {
     const res=await fetch(`${API}/api/characters`);
     const chars=await res.json();
     const char=chars.find(c=>c.id===adminSelectedCharId);
     const imgs=char?.images||[];
-    if(!imgs.length){list.innerHTML='<div style="color:var(--text3);font-size:0.8rem;padding:8px">No images yet. Use ⚡ Sync or add by URL below.</div>';return;}
-    list.innerHTML=imgs.map(img=>`
-      <div class="img-item" id="img-item-${img.id}" onclick="toggleImgSelect('${img.id}',this)">
-        <img src="${img.url}" loading="lazy" onerror="this.closest('.img-item').classList.add('broken');this.style.display='none'">
-        <div class="img-select-check" id="sel-${img.id}">✓</div>
-        <button class="img-del" onclick="event.stopPropagation();adminDeleteImage('${img.id}')" title="Delete this image">✕</button>
-      </div>`).join('');
-  }catch(e){list.innerHTML='<div style="color:var(--accent);font-size:0.8rem">Error loading images</div>';}
+    if(!imgs.length){list.innerHTML='<div style="color:var(--text3);font-size:0.8rem">No images yet</div>';return;}
+    // FIX: show broken indicator in admin too
+    list.innerHTML=imgs.map(img=>{
+      const isBroken = !img.url.match(/\.(jpg|jpeg|png|gif|webp|avif)(\?.*)?$/i) && !img.url.includes('ibb.co') && !img.url.includes('cdn') && !img.url.includes('raw.');
+      return `<div class="img-item${isBroken?' broken':''}">
+        <img src="${img.url}" onerror="this.closest('.img-item').classList.add('broken');this.style.display='none'">
+        <button class="img-del" onclick="adminDeleteImage('${img.id}')">✕</button>
+      </div>`;
+    }).join('');
+  } catch(e){list.innerHTML='<div style="color:var(--accent);font-size:0.8rem">Error</div>';}
 }
-
-function toggleImgSelect(id,el){
-  if(selectedImageIds.has(id)){
-    selectedImageIds.delete(id);el.classList.remove('selected');
-  }else{
-    selectedImageIds.add(id);el.classList.add('selected');
-  }
-  updateSelectedUI();
-}
-
-function adminSelectAll(){
-  const items=document.querySelectorAll('#admin-img-list .img-item');
-  const allIds=[...items].map(el=>el.id.replace('img-item-',''));
-  if(selectedImageIds.size===allIds.length){
-    // Deselect all
-    selectedImageIds=new Set();
-    items.forEach(el=>el.classList.remove('selected'));
-  }else{
-    // Select all
-    selectedImageIds=new Set(allIds);
-    items.forEach(el=>el.classList.add('selected'));
-  }
-  updateSelectedUI();
-}
-
-function updateSelectedUI(){
-  const count=selectedImageIds.size;
-  const btn=document.getElementById('admin-delete-selected-btn');
-  if(!btn)return;
-  btn.style.display=count>0?'inline-flex':'none';
-  const span=btn.querySelector('span');
-  if(span)span.textContent=count;
-}
-
-async function adminDeleteSelected(){
-  if(!selectedImageIds.size)return;
-  if(!confirm(`Delete ${selectedImageIds.size} selected image(s)?`))return;
-  const ids=[...selectedImageIds];
-  try{
-    const res=await fetch(`${API}/api/images/delete-bulk`,{
-      method:'POST',
-      headers:{'Content-Type':'application/json','Authorization':`Bearer ${currentUser.token}`},
-      body:JSON.stringify({ids})
-    });
-    if(res.ok){
-      const data=await res.json();
-      showToast(`✓ Deleted ${data.deleted} image(s)`);
-      selectedImageIds=new Set();
-      await loadAdminImages();
-      await loadCharacters();
-    }else{const err=await res.json();showToast(err.error||'Failed to delete');}
-  }catch(e){showToast('Network error');}
-}
-
-async function adminDeleteImage(imgId){
-  try{
-    const res=await fetch(`${API}/api/images/${imgId}`,{method:'DELETE',headers:{'Authorization':`Bearer ${currentUser.token}`}});
-    if(res.ok){showToast('✓ Image deleted');await loadAdminImages();await loadCharacters();}
-    else showToast('Failed to delete image');
-  }catch(e){showToast('Network error');}
-}
-
 async function adminAddImage(){
   const url=document.getElementById('admin-img-url').value.trim();
   if(!url){showToast('Enter image URL');return;}
   if(!adminSelectedCharId){showToast('Select a character first');return;}
-  try{
+  // Warn if not a direct image link
+  if(!url.match(/\.(jpg|jpeg|png|gif|webp|avif)(\?.*)?$/i) && !url.includes('ibb.co') && !url.includes('cdn')) {
+    if(!confirm('This URL might not be a direct image link. Images not ending in .jpg/.png/.gif/.webp may not display. Add anyway?')) return;
+  }
+  try {
     const res=await fetch(`${API}/api/images`,{method:'POST',headers:{'Content-Type':'application/json','Authorization':`Bearer ${currentUser.token}`},body:JSON.stringify({character_id:adminSelectedCharId,url})});
     if(res.ok){document.getElementById('admin-img-url').value='';showToast('✓ Image added!');await loadAdminImages();await loadCharacters();}
     else{const err=await res.json();showToast(err.error||'Failed');}
-  }catch(e){showToast('Network error');}
+  } catch(e){showToast('Network error');}
+}
+async function adminDeleteImage(imgId){
+  try {
+    const res=await fetch(`${API}/api/images/${imgId}`,{method:'DELETE',headers:{'Authorization':`Bearer ${currentUser.token}`}});
+    if(res.ok){showToast('✓ Image deleted');await loadAdminImages();await loadCharacters();}
+    else showToast('Failed to delete image');
+  } catch(e){showToast('Network error');}
 }
 
-// ===== AUTO-SYNC FROM SUPABASE STORAGE =====
-async function adminSyncFromStorage(){
-  if(!adminSelectedCharId){showToast('Select a character first');return;}
-  const btn=document.getElementById('sync-btn');
-  btn.textContent='⏳ Syncing...';btn.disabled=true;
-  try{
-    const res=await fetch(`${API}/api/storage/sync/${adminSelectedCharId}`,{
-      method:'POST',
-      headers:{'Authorization':`Bearer ${currentUser.token}`}
-    });
-    const data=await res.json();
-    if(res.ok){
-      if(data.synced===0&&data.total===0){
-        showToast(`⚠️ No images found in folder "${adminSelectedCharName}"`);
-      }else{
-        showToast(`✓ Synced ${data.synced} new images (${data.skipped} already existed)`);
-        await loadAdminImages();
-        await loadCharacters();
-      }
-    }else{showToast(data.error||'Sync failed');}
-  }catch(e){showToast('Network error');}
-  btn.textContent='⚡ Sync from Storage Folder';btn.disabled=false;
-}
-
-// ===== UPCOMING ADMIN =====
 async function adminSaveUpcoming(){
   const name=document.getElementById('upcoming-admin-name').value.trim();
   const image_url=document.getElementById('upcoming-admin-img').value.trim();
-  const tags=document.getElementById('upcoming-admin-tags').value.trim().split(',').map(t=>t.trim()).filter(Boolean);
-  try{
+  const tagsRaw=document.getElementById('upcoming-admin-tags').value.trim();
+  const tags=tagsRaw?tagsRaw.split(',').map(t=>t.trim()).filter(Boolean):[];
+  try {
     const res=await fetch(`${API}/api/upcoming`,{method:'POST',headers:{'Content-Type':'application/json','Authorization':`Bearer ${currentUser.token}`},body:JSON.stringify({name,image_url,tags})});
     if(res.ok){showToast('✓ Upcoming saved!');await loadUpcoming();}
     else{const err=await res.json();showToast(err.error||'Failed');}
-  }catch(e){showToast('Network error');}
+  } catch(e){showToast('Network error');}
 }
 async function adminClearUpcoming(){
-  try{
+  try {
     await fetch(`${API}/api/upcoming`,{method:'DELETE',headers:{'Authorization':`Bearer ${currentUser.token}`}});
     showToast('✓ Upcoming cleared');document.getElementById('upcoming-section').style.display='none';
-  }catch(e){showToast('Network error');}
+  } catch(e){showToast('Network error');}
 }
 
 // ===== LEGAL =====
@@ -1517,6 +1559,7 @@ const LEGAL_CONTENT = {
     `
   }
 };
+
 function openLegal(type){const page=LEGAL_CONTENT[type];if(!page)return;document.getElementById('legal-modal-title').textContent=page.icon+' '+page.title;document.getElementById('legal-modal-body').innerHTML=page.body;document.getElementById('legal-modal').classList.add('open');document.body.style.overflow='hidden';}
 function closeLegal(e){if(e&&e.target!==document.getElementById('legal-modal'))return;document.getElementById('legal-modal').classList.remove('open');document.body.style.overflow='';}
 
