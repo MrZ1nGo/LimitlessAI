@@ -29,7 +29,6 @@ function adminMiddleware(req, res, next) {
 }
 
 // ===== REGISTER =====
-
 app.post('/api/register', async (req, res) => {
   try {
     let { username, email, password } = req.body;
