@@ -28,6 +28,15 @@ function adminMiddleware(req, res, next) {
   } catch { res.status(401).json({ error: 'Invalid token' }); }
 }
 
+async function checkBanned(req, res, next) {
+  if (!req.user) return next();
+  try {
+    const { data: user } = await supabase.from('users').select('is_banned').eq('id', req.user.userId).single();
+    if (user?.is_banned) return res.status(403).json({ error: 'Account banned' });
+    next();
+  } catch { next(); }
+}
+
 // ===== REGISTER =====
 app.post('/api/register', async (req, res) => {
   try {
@@ -53,6 +62,7 @@ app.post('/api/login', async (req, res) => {
     const input = email.trim().toLowerCase();
     const { data: user } = await supabase.from('users').select('*').or(`email.eq.${input},username.ilike.${input}`).maybeSingle();
     if (!user) return res.status(400).json({ error: 'Invalid email or password' });
+    if (user.is_banned) return res.status(403).json({ error: 'Your account has been banned.' });
     const valid = await bcrypt.compare(password, user.password_hash);
     if (!valid) return res.status(400).json({ error: 'Invalid email or password' });
     const token = jwt.sign({ userId: user.id, username: user.username, isAdmin: user.is_admin }, JWT_SECRET, { expiresIn: '90d' });
@@ -60,7 +70,7 @@ app.post('/api/login', async (req, res) => {
   } catch (err) { res.status(500).json({ error: err.message }); }
 });
 
-// ===== GET PROFILE =====
+// ===== GET OWN PROFILE =====
 app.get('/api/profile', authMiddleware, async (req, res) => {
   try {
     const { data: user, error } = await supabase.from('users').select('id, username, email, avatar_url, is_admin, created_at').eq('id', req.user.userId).single();
@@ -69,8 +79,133 @@ app.get('/api/profile', authMiddleware, async (req, res) => {
   } catch (err) { res.status(500).json({ error: err.message }); }
 });
 
+// ===== GET PUBLIC PROFILE BY USERNAME =====
+app.get('/api/users/:username/profile', async (req, res) => {
+  try {
+    const { username } = req.params;
+    const viewerId = req.query.viewerId || null;
+
+    const { data: user, error } = await supabase
+      .from('users')
+      .select('id, username, avatar_url, is_admin, created_at')
+      .ilike('username', username)
+      .single();
+    if (error || !user) return res.status(404).json({ error: 'User not found' });
+
+    const { count: followersCount } = await supabase
+      .from('followers')
+      .select('*', { count: 'exact', head: true })
+      .eq('following_id', user.id);
+
+    const { count: followingCount } = await supabase
+      .from('followers')
+      .select('*', { count: 'exact', head: true })
+      .eq('follower_id', user.id);
+
+    let isFollowing = false;
+    if (viewerId) {
+      const { data: f } = await supabase.from('followers').select('id').eq('follower_id', viewerId).eq('following_id', user.id).maybeSingle();
+      isFollowing = !!f;
+    }
+
+    const { data: chars } = await supabase
+      .from('characters')
+      .select('*, images(id, url), comments(id), character_likes(user_id)')
+      .eq('author', user.username)
+      .order('created_at', { ascending: false });
+
+    const characters = (chars || []).map(c => ({
+      ...c,
+      likes_count: c.character_likes?.length || 0,
+      user_liked: viewerId ? c.character_likes?.some(l => l.user_id === viewerId) : false,
+    }));
+
+    res.json({
+      user: { ...user, followers_count: followersCount || 0, following_count: followingCount || 0 },
+      characters,
+      isFollowing
+    });
+  } catch (err) { res.status(500).json({ error: err.message }); }
+});
+
+// ===== FOLLOW / UNFOLLOW =====
+app.post('/api/users/:username/follow', authMiddleware, checkBanned, async (req, res) => {
+  try {
+    const { username } = req.params;
+    const followerId = req.user.userId;
+    const { data: target } = await supabase.from('users').select('id').ilike('username', username).single();
+    if (!target) return res.status(404).json({ error: 'User not found' });
+    if (target.id === followerId) return res.status(400).json({ error: 'Cannot follow yourself' });
+    const { data: existing } = await supabase.from('followers').select('id').eq('follower_id', followerId).eq('following_id', target.id).maybeSingle();
+    if (existing) {
+      await supabase.from('followers').delete().eq('id', existing.id);
+      res.json({ following: false });
+    } else {
+      await supabase.from('followers').insert({ follower_id: followerId, following_id: target.id });
+      res.json({ following: true });
+    }
+  } catch (err) { res.status(500).json({ error: err.message }); }
+});
+
+// ===== ANALYTICS =====
+app.get('/api/analytics', authMiddleware, async (req, res) => {
+  try {
+    const userId = req.user.userId;
+    const { data: user } = await supabase.from('users').select('username').eq('id', userId).single();
+    if (!user) return res.status(404).json({ error: 'User not found' });
+
+    const { data: chars } = await supabase
+      .from('characters')
+      .select('id, name, views, created_at, images(id), comments(id, created_at, users(username, avatar_url)), character_likes(user_id, created_at, users(username, avatar_url))')
+      .eq('author', user.username)
+      .order('created_at', { ascending: false });
+
+    const totalViews = (chars || []).reduce((s, c) => s + (c.views || 0), 0);
+    const totalLikes = (chars || []).reduce((s, c) => s + (c.character_likes?.length || 0), 0);
+    const totalComments = (chars || []).reduce((s, c) => s + (c.comments?.length || 0), 0);
+
+    const { data: followersList } = await supabase
+      .from('followers')
+      .select('created_at, users!follower_id(username, avatar_url)')
+      .eq('following_id', userId)
+      .order('created_at', { ascending: false });
+
+    const recentLikes = [];
+    for (const c of (chars || [])) {
+      for (const like of (c.character_likes || [])) {
+        recentLikes.push({ character_name: c.name, character_id: c.id, username: like.users?.username || 'Unknown', avatar_url: like.users?.avatar_url || null, created_at: like.created_at });
+      }
+    }
+    recentLikes.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+
+    const recentComments = [];
+    for (const c of (chars || [])) {
+      for (const cm of (c.comments || [])) {
+        recentComments.push({ character_name: c.name, character_id: c.id, username: cm.users?.username || 'Anonymous', avatar_url: cm.users?.avatar_url || null, created_at: cm.created_at });
+      }
+    }
+    recentComments.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+
+    const charStats = (chars || []).map(c => ({
+      id: c.id, name: c.name, views: c.views || 0,
+      likes: c.character_likes?.length || 0,
+      comments: c.comments?.length || 0,
+      images: c.images?.length || 0,
+      created_at: c.created_at
+    }));
+
+    res.json({
+      totals: { views: totalViews, likes: totalLikes, comments: totalComments, characters: (chars || []).length, followers: (followersList || []).length },
+      charStats,
+      followers: (followersList || []).map(f => ({ username: f.users?.username, avatar_url: f.users?.avatar_url, followed_at: f.created_at })),
+      recentLikes: recentLikes.slice(0, 50),
+      recentComments: recentComments.slice(0, 50)
+    });
+  } catch (err) { res.status(500).json({ error: err.message }); }
+});
+
 // ===== UPDATE PROFILE =====
-app.patch('/api/profile', authMiddleware, async (req, res) => {
+app.patch('/api/profile', authMiddleware, checkBanned, async (req, res) => {
   try {
     const { username } = req.body;
     if (!username?.trim()) return res.status(400).json({ error: 'Username is required' });
@@ -88,7 +223,7 @@ app.patch('/api/profile', authMiddleware, async (req, res) => {
 });
 
 // ===== UPLOAD AVATAR =====
-app.post('/api/profile/avatar', authMiddleware, async (req, res) => {
+app.post('/api/profile/avatar', authMiddleware, checkBanned, async (req, res) => {
   try {
     const { image } = req.body;
     if (!image) return res.status(400).json({ error: 'No image provided' });
@@ -109,14 +244,36 @@ app.post('/api/profile/avatar', authMiddleware, async (req, res) => {
   } catch (err) { res.status(500).json({ error: err.message }); }
 });
 
-// ===== STORAGE: List files in folder by character name =====
+// ===== ADMIN: BAN / UNBAN USER =====
+app.post('/api/admin/users/:userId/ban', adminMiddleware, async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const { ban } = req.body;
+    const { data: target } = await supabase.from('users').select('is_admin, username').eq('id', userId).single();
+    if (!target) return res.status(404).json({ error: 'User not found' });
+    if (target.is_admin) return res.status(403).json({ error: 'Cannot ban an admin' });
+    await supabase.from('users').update({ is_banned: ban }).eq('id', userId);
+    res.json({ success: true, banned: ban, username: target.username });
+  } catch (err) { res.status(500).json({ error: err.message }); }
+});
+
+// ===== ADMIN: LIST USERS =====
+app.get('/api/admin/users', adminMiddleware, async (req, res) => {
+  try {
+    const { data, error } = await supabase
+      .from('users')
+      .select('id, username, email, avatar_url, is_admin, is_banned, created_at')
+      .order('created_at', { ascending: false });
+    if (error) return res.status(500).json({ error: error.message });
+    res.json(data);
+  } catch (err) { res.status(500).json({ error: err.message }); }
+});
+
+// ===== STORAGE =====
 app.get('/api/storage/images/:folderName', adminMiddleware, async (req, res) => {
   try {
     const folderName = decodeURIComponent(req.params.folderName);
-    const { data, error } = await supabase.storage.from('images').list(folderName, {
-      limit: 500,
-      sortBy: { column: 'name', order: 'asc' }
-    });
+    const { data, error } = await supabase.storage.from('images').list(folderName, { limit: 500, sortBy: { column: 'name', order: 'asc' } });
     if (error) return res.status(500).json({ error: error.message });
     const files = (data || []).filter(f => f.name && !f.name.endsWith('/'));
     const urls = files.map(f => {
@@ -127,53 +284,32 @@ app.get('/api/storage/images/:folderName', adminMiddleware, async (req, res) => 
   } catch (err) { res.status(500).json({ error: err.message }); }
 });
 
-// ===== STORAGE: Sync images from folder to character =====
-// Reads all files in images/{characterName}/ and adds them to DB if not already there
 app.post('/api/storage/sync/:characterId', adminMiddleware, async (req, res) => {
   try {
     const { characterId } = req.params;
-
-    // Get character name
     const { data: char, error: charError } = await supabase.from('characters').select('name').eq('id', characterId).single();
     if (charError || !char) return res.status(404).json({ error: 'Character not found' });
-
     const folderName = char.name;
-
-    // List files in storage folder
-    const { data: files, error: listError } = await supabase.storage.from('images').list(folderName, {
-      limit: 500,
-      sortBy: { column: 'name', order: 'asc' }
-    });
+    const { data: files, error: listError } = await supabase.storage.from('images').list(folderName, { limit: 500, sortBy: { column: 'name', order: 'asc' } });
     if (listError) return res.status(500).json({ error: `Storage error: ${listError.message}` });
-
     const validFiles = (files || []).filter(f => f.name && f.name.match(/\.(jpg|jpeg|png|gif|webp|avif)$/i));
-    if (!validFiles.length) return res.json({ synced: 0, message: 'No image files found in folder' });
-
-    // Get existing URLs for this character
+    if (!validFiles.length) return res.json({ synced: 0, total: 0, skipped: 0, message: 'No image files found in folder' });
     const { data: existingImages } = await supabase.from('images').select('url').eq('character_id', characterId);
     const existingUrls = new Set((existingImages || []).map(i => i.url));
-
-    // Build public URLs and insert only new ones
     const toInsert = [];
     for (const file of validFiles) {
       const path = `${folderName}/${file.name}`;
       const { data: urlData } = supabase.storage.from('images').getPublicUrl(path);
-      const url = urlData.publicUrl;
-      if (!existingUrls.has(url)) {
-        toInsert.push({ character_id: characterId, url });
-      }
+      if (!existingUrls.has(urlData.publicUrl)) toInsert.push({ character_id: characterId, url: urlData.publicUrl });
     }
-
     if (toInsert.length > 0) {
       const { error: insertError } = await supabase.from('images').insert(toInsert);
       if (insertError) return res.status(500).json({ error: insertError.message });
     }
-
     res.json({ synced: toInsert.length, total: validFiles.length, skipped: validFiles.length - toInsert.length });
   } catch (err) { res.status(500).json({ error: err.message }); }
 });
 
-// ===== STORAGE: Delete file from storage =====
 app.delete('/api/storage/file', adminMiddleware, async (req, res) => {
   try {
     const { path } = req.body;
@@ -214,6 +350,7 @@ app.post('/api/characters', adminMiddleware, async (req, res) => {
   try {
     const { name, tags, jai_url, emoji, author } = req.body;
     if (!name) return res.status(400).json({ error: 'Name is required' });
+    if (tags && tags.length > 10) return res.status(400).json({ error: 'Maximum 10 tags allowed' });
     const { data, error } = await supabase.from('characters').insert({
       name, tags: tags || [], jai_url: jai_url || '', emoji: emoji || '🌸',
       author: author || req.user.username || 'MrZ1nGo'
@@ -227,6 +364,7 @@ app.post('/api/characters', adminMiddleware, async (req, res) => {
 app.patch('/api/characters/:id', adminMiddleware, async (req, res) => {
   try {
     const { name, tags, emoji, jai_url, author } = req.body;
+    if (tags && tags.length > 10) return res.status(400).json({ error: 'Maximum 10 tags allowed' });
     const { data, error } = await supabase.from('characters').update({ name, tags, emoji, jai_url, author }).eq('id', req.params.id).select().single();
     if (error) return res.status(500).json({ error: error.message });
     res.json(data);
@@ -251,7 +389,7 @@ app.post('/api/characters/:id/view', async (req, res) => {
 });
 
 // ===== CHARACTER LIKE =====
-app.post('/api/characters/:id/like', authMiddleware, async (req, res) => {
+app.post('/api/characters/:id/like', authMiddleware, checkBanned, async (req, res) => {
   try {
     const charId = req.params.id;
     const userId = req.user.userId;
@@ -266,7 +404,7 @@ app.post('/api/characters/:id/like', authMiddleware, async (req, res) => {
   } catch (err) { res.status(500).json({ error: err.message }); }
 });
 
-// ===== IMAGES ADD (manual URL) =====
+// ===== IMAGES ADD =====
 app.post('/api/images', adminMiddleware, async (req, res) => {
   try {
     const { character_id, url } = req.body;
@@ -277,7 +415,7 @@ app.post('/api/images', adminMiddleware, async (req, res) => {
   } catch (err) { res.status(500).json({ error: err.message }); }
 });
 
-// ===== IMAGES DELETE (single) =====
+// ===== IMAGES DELETE =====
 app.delete('/api/images/:id', adminMiddleware, async (req, res) => {
   try {
     const { error } = await supabase.from('images').delete().eq('id', req.params.id);
@@ -319,7 +457,7 @@ app.get('/api/comments/:characterId', async (req, res) => {
 });
 
 // ===== COMMENTS ADD =====
-app.post('/api/comments', authMiddleware, async (req, res) => {
+app.post('/api/comments', authMiddleware, checkBanned, async (req, res) => {
   try {
     const { character_id, text } = req.body;
     if (!text?.trim()) return res.status(400).json({ error: 'Comment cannot be empty' });
@@ -352,7 +490,7 @@ app.patch('/api/comments/:id/pin', adminMiddleware, async (req, res) => {
 });
 
 // ===== COMMENT LIKES =====
-app.post('/api/comments/:id/like', authMiddleware, async (req, res) => {
+app.post('/api/comments/:id/like', authMiddleware, checkBanned, async (req, res) => {
   try {
     const { isAuthorLike } = req.body;
     const commentId = req.params.id;
