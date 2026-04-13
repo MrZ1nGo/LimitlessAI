@@ -9,7 +9,7 @@ app.use(cors());
 app.use(express.json({ limit: '10mb' }));
 
 const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_KEY);
-const CDN_URL = "limitlessai-images.dingobrouset.workers.dev";
+const CDN_URL = "https://limitlessai-images.dingobrouset.workers.dev";
 
 function toCdnUrl(supabaseUrl) {
   return supabaseUrl.replace(process.env.SUPABASE_URL, CDN_URL);
