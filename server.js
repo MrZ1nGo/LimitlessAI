@@ -9,6 +9,11 @@ app.use(cors());
 app.use(express.json({ limit: '10mb' }));
 
 const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_KEY);
+const CDN_URL = "limitlessai-images.dingobrouset.workers.dev";
+
+function toCdnUrl(supabaseUrl) {
+  return supabaseUrl.replace(process.env.SUPABASE_URL, CDN_URL);
+}
 const JWT_SECRET = process.env.JWT_SECRET;
 
 function authMiddleware(req, res, next) {
@@ -239,8 +244,8 @@ app.post('/api/profile/avatar', authMiddleware, checkBanned, async (req, res) =>
     const { error: uploadError } = await supabase.storage.from('avatars').upload(fileName, buffer, { contentType: mimeType, upsert: true });
     if (uploadError) return res.status(500).json({ error: uploadError.message });
     const { data: urlData } = supabase.storage.from('avatars').getPublicUrl(fileName);
-    await supabase.from('users').update({ avatar_url: urlData.publicUrl }).eq('id', req.user.userId);
-    res.json({ success: true, avatar_url: urlData.publicUrl });
+    await supabase.from('users').update({ avatar_url: toCdnUrl(urlData.publicUrl) }).eq('id', req.user.userId);
+    res.json({ success: true, avatar_url: toCdnUrl(urlData.publicUrl) });
   } catch (err) { res.status(500).json({ error: err.message }); }
 });
 
@@ -278,7 +283,7 @@ app.get('/api/storage/images/:folderName', adminMiddleware, async (req, res) => 
     const files = (data || []).filter(f => f.name && !f.name.endsWith('/'));
     const urls = files.map(f => {
       const { data: urlData } = supabase.storage.from('images').getPublicUrl(`${folderName}/${f.name}`);
-      return { name: f.name, url: urlData.publicUrl, path: `${folderName}/${f.name}` };
+      return { name: f.name, url: toCdnUrl(urlData.publicUrl), path: `${folderName}/${f.name}` };
     });
     res.json(urls);
   } catch (err) { res.status(500).json({ error: err.message }); }
@@ -300,7 +305,7 @@ app.post('/api/storage/sync/:characterId', adminMiddleware, async (req, res) => 
     for (const file of validFiles) {
       const path = `${folderName}/${file.name}`;
       const { data: urlData } = supabase.storage.from('images').getPublicUrl(path);
-      if (!existingUrls.has(urlData.publicUrl)) toInsert.push({ character_id: characterId, url: urlData.publicUrl });
+      if (!existingUrls.has(toCdnUrl(urlData.publicUrl))) toInsert.push({ character_id: characterId, url: toCdnUrl(urlData.publicUrl) });
     }
     if (toInsert.length > 0) {
       const { error: insertError } = await supabase.from('images').insert(toInsert);
