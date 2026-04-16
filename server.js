@@ -6,7 +6,7 @@ const { createClient } = require('@supabase/supabase-js');
 
 const app = express();
 app.use(cors());
-app.use(express.json({ limit: '50mb' })); // увеличен лимит для загрузки изображений
+app.use(express.json({ limit: '10mb' }));
 
 const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_KEY);
 const CDN_URL = "https://limitlessai-images.dingobrouset.workers.dev";
@@ -274,37 +274,6 @@ app.get('/api/admin/users', adminMiddleware, async (req, res) => {
   } catch (err) { res.status(500).json({ error: err.message }); }
 });
 
-// ===== ADMIN: LIST PENDING CARDS =====
-app.get('/api/admin/pending', adminMiddleware, async (req, res) => {
-  try {
-    const { data, error } = await supabase
-      .from('characters')
-      .select('*, images(id, url)')
-      .eq('status', 'pending')
-      .order('created_at', { ascending: false });
-    if (error) return res.status(500).json({ error: error.message });
-    res.json(data || []);
-  } catch (err) { res.status(500).json({ error: err.message }); }
-});
-
-// ===== ADMIN: APPROVE / REJECT CARD =====
-app.post('/api/admin/pending/:id/review', adminMiddleware, async (req, res) => {
-  try {
-    const { action, reason } = req.body; // action: 'approve' | 'reject'
-    const { id } = req.params;
-    if (!['approve', 'reject'].includes(action)) return res.status(400).json({ error: 'action must be approve or reject' });
-    const newStatus = action === 'approve' ? 'published' : 'rejected';
-    const { data, error } = await supabase
-      .from('characters')
-      .update({ status: newStatus, review_reason: reason || null })
-      .eq('id', id)
-      .select()
-      .single();
-    if (error) return res.status(500).json({ error: error.message });
-    res.json({ success: true, status: newStatus, character: data });
-  } catch (err) { res.status(500).json({ error: err.message }); }
-});
-
 // ===== STORAGE =====
 app.get('/api/storage/images/:folderName', adminMiddleware, async (req, res) => {
   try {
@@ -356,79 +325,12 @@ app.delete('/api/storage/file', adminMiddleware, async (req, res) => {
   } catch (err) { res.status(500).json({ error: err.message }); }
 });
 
-// ===== USER: UPLOAD IMAGE TO STORAGE =====
-// Позволяет любому залогиненному пользователю загрузить изображение в папку персонажа
-app.post('/api/user/upload-image', authMiddleware, checkBanned, async (req, res) => {
-  try {
-    const { character_id, image, filename } = req.body;
-    if (!character_id || !image || !filename) {
-      return res.status(400).json({ error: 'character_id, image, and filename are required' });
-    }
-
-    // Проверяем что карточка принадлежит этому пользователю
-    const { data: char, error: charErr } = await supabase
-      .from('characters')
-      .select('id, name, author, status')
-      .eq('id', character_id)
-      .single();
-
-    if (charErr || !char) return res.status(404).json({ error: 'Character not found' });
-    if (char.author !== req.user.username && !req.user.isAdmin) {
-      return res.status(403).json({ error: 'You can only upload images to your own characters' });
-    }
-
-    // Парсим base64
-    const matches = image.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/);
-    if (!matches) return res.status(400).json({ error: 'Invalid image format' });
-    const mimeType = matches[1];
-    const buffer = Buffer.from(matches[2], 'base64');
-
-    // Лимит на файл — 8MB
-    if (buffer.length > 8 * 1024 * 1024) return res.status(400).json({ error: 'Image too large (max 8MB per file)' });
-    const allowed = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
-    if (!allowed.includes(mimeType)) return res.status(400).json({ error: 'Only JPG, PNG, GIF, WEBP allowed' });
-
-    // Sanitize имя файла
-    const ext = mimeType.split('/')[1].replace('jpeg', 'jpg');
-    const safeName = filename.replace(/[^a-zA-Z0-9._\-]/g, '_').substring(0, 80);
-    const uniqueName = `${Date.now()}_${safeName}`;
-    const storagePath = `${char.name}/${uniqueName}`;
-
-    // Загружаем в Supabase Storage
-    const { error: uploadError } = await supabase.storage
-      .from('images')
-      .upload(storagePath, buffer, { contentType: mimeType, upsert: false });
-
-    if (uploadError) return res.status(500).json({ error: `Storage error: ${uploadError.message}` });
-
-    // Получаем публичный URL
-    const { data: urlData } = supabase.storage.from('images').getPublicUrl(storagePath);
-    const finalUrl = toCdnUrl(urlData.publicUrl);
-
-    // Добавляем запись в таблицу images
-    const { data: imgRow, error: imgErr } = await supabase
-      .from('images')
-      .insert({ character_id: char.id, url: finalUrl })
-      .select()
-      .single();
-
-    if (imgErr) return res.status(500).json({ error: imgErr.message });
-
-    res.json({ success: true, image: imgRow, url: finalUrl });
-  } catch (err) { res.status(500).json({ error: err.message }); }
-});
-
 // ===== CHARACTERS GET =====
 app.get('/api/characters', async (req, res) => {
   try {
     const { search, tag } = req.query;
     const userId = req.query.userId || null;
-    let query = supabase
-      .from('characters')
-      .select('*, images ( id, url ), comments ( id ), character_likes ( user_id )')
-      // Показываем только опубликованные карточки (или те без статуса — обратная совместимость)
-      .or('status.eq.published,status.is.null');
-
+    let query = supabase.from('characters').select('*, images ( id, url ), comments ( id ), character_likes ( user_id )');
     if (search) query = query.ilike('name', `%${search}%`);
     const { data, error } = await query.order('created_at', { ascending: false });
     if (error) return res.status(500).json({ error: error.message });
@@ -448,39 +350,15 @@ app.get('/api/characters', async (req, res) => {
   } catch (err) { res.status(500).json({ error: err.message }); }
 });
 
-// ===== MY CARDS (pending + published) =====
-app.get('/api/my-characters', authMiddleware, async (req, res) => {
-  try {
-    const { data, error } = await supabase
-      .from('characters')
-      .select('*, images(id, url), comments(id), character_likes(user_id)')
-      .eq('author', req.user.username)
-      .order('created_at', { ascending: false });
-    if (error) return res.status(500).json({ error: error.message });
-    const result = (data || []).map(c => ({
-      ...c,
-      likes_count: c.character_likes?.length || 0,
-    }));
-    res.json(result);
-  } catch (err) { res.status(500).json({ error: err.message }); }
-});
-
 // ===== CHARACTERS CREATE =====
-// Теперь: admins → сразу published, users → status=pending
-app.post('/api/characters', authMiddleware, checkBanned, async (req, res) => {
+app.post('/api/characters', adminMiddleware, async (req, res) => {
   try {
     const { name, tags, jai_url, emoji, author } = req.body;
     if (!name) return res.status(400).json({ error: 'Name is required' });
     if (tags && tags.length > 10) return res.status(400).json({ error: 'Maximum 10 tags allowed' });
-
-    const isAdmin = req.user.isAdmin;
-    const status = isAdmin ? 'published' : 'pending';
-    const cardAuthor = isAdmin ? (author || req.user.username || 'MrZ1nGo') : req.user.username;
-
     const { data, error } = await supabase.from('characters').insert({
       name, tags: tags || [], jai_url: jai_url || '', emoji: emoji || '🌸',
-      author: cardAuthor,
-      status
+      author: author || req.user.username || 'MrZ1nGo'
     }).select().single();
     if (error) return res.status(500).json({ error: error.message });
     res.json(data);
@@ -488,37 +366,19 @@ app.post('/api/characters', authMiddleware, checkBanned, async (req, res) => {
 });
 
 // ===== CHARACTERS UPDATE =====
-app.patch('/api/characters/:id', authMiddleware, checkBanned, async (req, res) => {
+app.patch('/api/characters/:id', adminMiddleware, async (req, res) => {
   try {
     const { name, tags, emoji, jai_url, author } = req.body;
-
-    // Проверяем владение или admin
-    const { data: char } = await supabase.from('characters').select('author, status').eq('id', req.params.id).single();
-    if (!char) return res.status(404).json({ error: 'Not found' });
-    if (!req.user.isAdmin && char.author !== req.user.username) {
-      return res.status(403).json({ error: 'Forbidden' });
-    }
-
     if (tags && tags.length > 10) return res.status(400).json({ error: 'Maximum 10 tags allowed' });
-
-    const updateData = { name, tags, emoji, jai_url };
-    if (req.user.isAdmin && author !== undefined) updateData.author = author;
-
-    const { data, error } = await supabase.from('characters').update(updateData).eq('id', req.params.id).select().single();
+    const { data, error } = await supabase.from('characters').update({ name, tags, emoji, jai_url, author }).eq('id', req.params.id).select().single();
     if (error) return res.status(500).json({ error: error.message });
     res.json(data);
   } catch (err) { res.status(500).json({ error: err.message }); }
 });
 
 // ===== CHARACTERS DELETE =====
-app.delete('/api/characters/:id', authMiddleware, checkBanned, async (req, res) => {
+app.delete('/api/characters/:id', adminMiddleware, async (req, res) => {
   try {
-    // Проверяем владение или admin
-    const { data: char } = await supabase.from('characters').select('author').eq('id', req.params.id).single();
-    if (!char) return res.status(404).json({ error: 'Not found' });
-    if (!req.user.isAdmin && char.author !== req.user.username) {
-      return res.status(403).json({ error: 'Forbidden' });
-    }
     const { error } = await supabase.from('characters').delete().eq('id', req.params.id);
     if (error) return res.status(500).json({ error: error.message });
     res.json({ success: true });
@@ -549,7 +409,7 @@ app.post('/api/characters/:id/like', authMiddleware, checkBanned, async (req, re
   } catch (err) { res.status(500).json({ error: err.message }); }
 });
 
-// ===== IMAGES ADD (admin only) =====
+// ===== IMAGES ADD =====
 app.post('/api/images', adminMiddleware, async (req, res) => {
   try {
     const { character_id, url } = req.body;
@@ -561,20 +421,8 @@ app.post('/api/images', adminMiddleware, async (req, res) => {
 });
 
 // ===== IMAGES DELETE =====
-app.delete('/api/images/:id', authMiddleware, checkBanned, async (req, res) => {
+app.delete('/api/images/:id', adminMiddleware, async (req, res) => {
   try {
-    // Разрешаем удалять admin или владельцу карточки
-    const { data: img } = await supabase
-      .from('images')
-      .select('id, character_id, characters(author)')
-      .eq('id', req.params.id)
-      .single();
-
-    if (!img) return res.status(404).json({ error: 'Image not found' });
-    if (!req.user.isAdmin && img.characters?.author !== req.user.username) {
-      return res.status(403).json({ error: 'Forbidden' });
-    }
-
     const { error } = await supabase.from('images').delete().eq('id', req.params.id);
     if (error) return res.status(500).json({ error: error.message });
     res.json({ success: true });
