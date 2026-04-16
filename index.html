@@ -39,9 +39,11 @@
   *{margin:0;padding:0;box-sizing:border-box;}
   body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;transition:background var(--transition),color var(--transition);}
 
-  .page{display:none;} .page.active{display:block;}
+  /* ===== PAGE SYSTEM ===== */
+  .page{display:none;}
+  .page.active{display:block;}
 
-  /* AGE GATE */
+  /* ===== AGE GATE ===== */
   #age-gate{position:fixed;inset:0;z-index:9999;background:#0a0908;display:flex;align-items:center;justify-content:center;padding:20px;}
   .age-gate-box{max-width:480px;width:100%;text-align:center;animation:fadeUp 0.6s ease;}
   .age-gate-logo{font-family:'Playfair Display',serif;font-size:2.5rem;font-weight:900;color:#f0ece4;margin-bottom:8px;}
@@ -54,7 +56,7 @@
   .btn-enter:hover{background:#f07050;}
   .btn-leave{background:transparent;color:#6a6460;border:1px solid #333;padding:14px 32px;font-family:'DM Sans',sans-serif;font-size:0.95rem;cursor:pointer;border-radius:4px;}
 
-  /* NAVBAR */
+  /* ===== NAVBAR ===== */
   nav{position:sticky;top:0;z-index:100;background:var(--nav-bg);backdrop-filter:blur(12px);border-bottom:1px solid var(--card-border);padding:0 16px;transition:background var(--transition);}
   .nav-inner{max-width:1400px;margin:0 auto;display:flex;align-items:center;height:60px;gap:10px;}
   .logo{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:900;color:var(--text);text-decoration:none;letter-spacing:-0.5px;cursor:pointer;white-space:nowrap;flex-shrink:0;}
@@ -75,7 +77,7 @@
   .nav-btn-support:hover{opacity:0.9;}
   .admin-check-img{width:14px;height:14px;border-radius:50%;flex-shrink:0;vertical-align:middle;}
 
-  /* USER AVATAR BTN */
+  /* ===== USER AVATAR BTN ===== */
   .user-avatar-btn{position:relative;cursor:pointer;display:flex;align-items:center;gap:6px;padding:4px 8px 4px 4px;border-radius:10px;border:1px solid var(--card-border);background:var(--bg2);transition:all 0.2s;font-size:0.82rem;font-weight:500;user-select:none;white-space:nowrap;}
   .user-avatar-btn:hover{background:var(--bg3);}
   .user-avatar-circle{width:28px;height:28px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:0.7rem;font-weight:700;color:#fff;overflow:hidden;flex-shrink:0;border:2px solid transparent;transition:border-color 0.2s;}
@@ -84,7 +86,7 @@
   .user-avatar-chevron{color:var(--text3);font-size:0.65rem;transition:transform 0.2s;}
   .user-avatar-btn.open .user-avatar-chevron{transform:rotate(180deg);}
 
-  /* PROFILE DROPDOWN */
+  /* ===== PROFILE DROPDOWN ===== */
   .profile-dropdown{position:absolute;top:calc(100% + 10px);right:0;width:260px;background:var(--card);border:1px solid var(--card-border);border-radius:14px;box-shadow:0 8px 40px rgba(0,0,0,0.2);z-index:200;overflow:hidden;opacity:0;transform:translateY(-8px) scale(0.97);pointer-events:none;transition:all 0.2s cubic-bezier(0.4,0,0.2,1);}
   .profile-dropdown.open{opacity:1;transform:translateY(0) scale(1);pointer-events:all;}
   .pd-header{padding:14px;border-bottom:1px solid var(--card-border);display:flex;align-items:center;gap:10px;}
@@ -106,7 +108,7 @@
   .admin-badge-wrap:hover .admin-tooltip{opacity:1;}
   .admin-badge-wrap .admin-tooltip::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:4px solid transparent;border-top-color:var(--text);}
 
-  /* SETTINGS MODAL */
+  /* ===== SETTINGS MODAL ===== */
   .settings-overlay{position:fixed;inset:0;z-index:400;background:var(--modal-overlay);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;padding:24px;opacity:0;pointer-events:none;transition:opacity 0.3s;}
   .settings-overlay.open{opacity:1;pointer-events:all;}
   .settings-modal{background:var(--card);border:1px solid var(--card-border);border-radius:20px;width:100%;max-width:480px;overflow:hidden;transform:scale(0.95);transition:transform 0.3s;position:relative;}
@@ -132,8 +134,9 @@
   .settings-field input:disabled{opacity:0.5;cursor:not-allowed;}
   .settings-save-btn{width:100%;padding:11px;background:var(--accent);color:#fff;border:none;border-radius:9px;font-family:'DM Sans',sans-serif;font-size:0.9rem;font-weight:600;cursor:pointer;transition:all 0.2s;margin-top:4px;}
   .settings-save-btn:hover{background:var(--accent2);}
+  .settings-save-btn:disabled{opacity:0.6;cursor:not-allowed;}
 
-  /* MAIN / HOME */
+  /* ===== MAIN / HOME ===== */
   .main-wrap{max-width:1400px;margin:0 auto;padding:24px 16px;}
   .hero{text-align:center;padding:36px 16px 32px;margin-bottom:8px;}
   .hero-eyebrow{font-size:0.65rem;letter-spacing:4px;text-transform:uppercase;color:var(--accent);font-weight:600;margin-bottom:12px;}
@@ -141,7 +144,7 @@
   .hero h1 em{font-style:italic;color:var(--accent);}
   .hero p{color:var(--text2);font-size:1rem;max-width:520px;margin:0 auto 24px;line-height:1.6;}
 
-  /* UPCOMING */
+  /* ===== UPCOMING ===== */
   #upcoming-section{display:none;margin-bottom:28px;}
   .upcoming-card{background:linear-gradient(135deg,var(--bg2) 0%,var(--bg3) 100%);border:1px solid var(--card-border);border-radius:20px;padding:0;display:flex;align-items:stretch;position:relative;overflow:hidden;min-height:160px;}
   .upcoming-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(201,65,42,0.08),transparent 60%);pointer-events:none;}
@@ -157,7 +160,7 @@
   .upcoming-tag{background:var(--tag-bg);color:var(--tag-text);font-size:0.7rem;font-weight:600;padding:3px 10px;border-radius:100px;}
   .upcoming-sub{font-size:0.8rem;color:var(--text3);}
 
-  /* SORT DROPDOWN */
+  /* ===== SORT DROPDOWN ===== */
   .section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;gap:10px;flex-wrap:wrap;}
   .section-title{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:700;letter-spacing:-0.5px;}
   .section-right{display:flex;align-items:center;gap:10px;}
@@ -175,14 +178,14 @@
   .sort-option-icon{font-size:1rem;width:20px;text-align:center;}
   .sort-option-sub{font-size:0.72rem;color:var(--text3);margin-top:1px;}
 
-  /* TAGS */
+  /* ===== TAGS ===== */
   .tags-section{margin-bottom:28px;}
   .tags-label{font-size:0.68rem;letter-spacing:3px;text-transform:uppercase;color:var(--text3);font-weight:600;margin-bottom:10px;}
   .tags-row{display:flex;flex-wrap:wrap;gap:7px;}
   .tag{background:var(--tag-bg);color:var(--tag-text);border:1px solid transparent;padding:5px 12px;border-radius:100px;font-size:0.78rem;font-weight:500;cursor:pointer;transition:all 0.2s;user-select:none;}
   .tag:hover,.tag.active{background:var(--accent);color:#fff;}
 
-  /* GALLERY */
+  /* ===== GALLERY ===== */
   .gallery-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:18px;margin-bottom:48px;}
   .char-card{background:var(--card);border:1px solid var(--card-border);border-radius:12px;overflow:hidden;cursor:pointer;transition:all var(--transition);box-shadow:var(--shadow);animation:fadeUp 0.5s ease backwards;}
   .char-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-hover);border-color:var(--accent);}
@@ -206,7 +209,7 @@
   .char-jai-link{color:var(--accent);text-decoration:none;font-weight:500;font-size:0.75rem;}
   .char-stats{display:flex;gap:8px;align-items:center;}
 
-  /* CHARACTER MODAL */
+  /* ===== CHARACTER MODAL ===== */
   .modal-overlay{position:fixed;inset:0;z-index:200;background:var(--modal-overlay);backdrop-filter:blur(6px);display:flex;align-items:flex-start;justify-content:center;padding:16px;overflow-y:auto;opacity:0;pointer-events:none;transition:opacity 0.3s;}
   .modal-overlay.open{opacity:1;pointer-events:all;}
   .modal{background:var(--card);border:1px solid var(--card-border);border-radius:16px;width:100%;max-width:900px;margin:auto;transform:translateY(20px);transition:transform 0.3s;overflow:hidden;}
@@ -226,7 +229,7 @@
   .modal-img.broken{border-color:rgba(201,65,42,0.4);background:rgba(201,65,42,0.05);}
   .modal-img.broken::after{content:'⚠️ Bad URL';position:absolute;bottom:6px;left:0;right:0;text-align:center;font-size:0.65rem;color:var(--accent);}
 
-  /* COMMENTS */
+  /* ===== COMMENTS ===== */
   .comments-section{border-top:1px solid var(--card-border);padding-top:20px;}
   .comments-title{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:700;margin-bottom:14px;}
   .comment-input-wrap{display:flex;gap:8px;margin-bottom:18px;}
@@ -256,7 +259,7 @@
   .admin-action-btn{background:none;border:none;color:var(--text3);font-size:0.72rem;cursor:pointer;padding:2px 7px;border-radius:4px;transition:all 0.2s;font-family:'DM Sans',sans-serif;}
   .admin-action-btn:hover{color:var(--accent);background:rgba(201,65,42,0.1);}
 
-  /* LIGHTBOX */
+  /* ===== LIGHTBOX ===== */
   .lightbox{position:fixed;inset:0;z-index:500;background:rgba(0,0,0,0.96);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity 0.3s;}
   .lightbox.open{opacity:1;pointer-events:all;}
   .lightbox-img-wrap img{max-width:90vw;max-height:85vh;object-fit:contain;border-radius:8px;}
@@ -266,7 +269,7 @@
   .lightbox-prev{left:12px;}.lightbox-next{right:12px;}
   .lightbox-counter{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.6);color:#fff;font-size:0.82rem;padding:5px 14px;border-radius:20px;backdrop-filter:blur(8px);}
 
-  /* AUTH MODAL */
+  /* ===== AUTH MODAL ===== */
   .auth-modal-overlay{position:fixed;inset:0;z-index:300;background:var(--modal-overlay);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;padding:16px;opacity:0;pointer-events:none;transition:opacity 0.3s;}
   .auth-modal-overlay.open{opacity:1;pointer-events:all;}
   .auth-modal{background:var(--card);border:1px solid var(--card-border);border-radius:16px;width:100%;max-width:400px;padding:28px;transform:scale(0.95);transition:transform 0.3s;position:relative;}
@@ -286,7 +289,7 @@
   .form-submit:hover{background:var(--accent2);}
   .form-note{font-size:0.75rem;color:var(--text3);margin-top:10px;text-align:center;line-height:1.5;}
 
-  /* ADMIN MODAL */
+  /* ===== ADMIN MODAL ===== */
   .admin-modal-overlay{position:fixed;inset:0;z-index:300;background:var(--modal-overlay);backdrop-filter:blur(8px);display:flex;align-items:flex-start;justify-content:center;padding:16px;overflow-y:auto;opacity:0;pointer-events:none;transition:opacity 0.3s;}
   .admin-modal-overlay.open{opacity:1;pointer-events:all;}
   .admin-modal{background:var(--card);border:1px solid var(--card-border);border-radius:16px;width:100%;max-width:700px;margin:auto;overflow:hidden;transform:translateY(20px);transition:transform 0.3s;}
@@ -294,8 +297,8 @@
   .admin-header{display:flex;align-items:center;justify-content:space-between;padding:18px 20px;border-bottom:1px solid var(--card-border);background:var(--bg2);}
   .admin-title{font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:700;}
   .admin-body{padding:20px;}
-  .admin-tabs{display:flex;margin-bottom:20px;border-radius:8px;overflow:hidden;border:1px solid var(--card-border);flex-wrap:wrap;}
-  .admin-tab{flex:1;padding:9px;background:transparent;border:none;font-family:'DM Sans',sans-serif;font-size:0.78rem;font-weight:500;color:var(--text2);cursor:pointer;transition:all 0.2s;min-width:80px;}
+  .admin-tabs{display:flex;margin-bottom:20px;border-radius:8px;overflow:hidden;border:1px solid var(--card-border);}
+  .admin-tab{flex:1;padding:9px;background:transparent;border:none;font-family:'DM Sans',sans-serif;font-size:0.78rem;font-weight:500;color:var(--text2);cursor:pointer;transition:all 0.2s;}
   .admin-tab.active{background:var(--accent);color:#fff;}
   .admin-section{display:none;}.admin-section.active{display:block;}
   .char-list-item{padding:10px 14px;background:var(--bg2);border:1px solid var(--card-border);border-radius:8px;margin-bottom:8px;}
@@ -326,7 +329,7 @@
   .admin-btn:hover{background:var(--accent2);}
   .admin-btn:disabled{opacity:0.6;cursor:not-allowed;}
 
-  /* TAG SELECTOR */
+  /* ===== TAG SELECTOR (Create Card / Tag Picker) ===== */
   .tag-picker-wrap{border:1px solid var(--input-border);border-radius:10px;padding:12px;background:var(--input-bg);margin-bottom:14px;}
   .tag-picker-label{font-size:0.72rem;color:var(--text3);font-weight:600;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px;}
   .tag-picker-grid{display:flex;flex-wrap:wrap;gap:6px;max-height:160px;overflow-y:auto;margin-bottom:10px;}
@@ -343,44 +346,7 @@
   .tag-chip-remove:hover{opacity:1;}
   .tag-count-info{font-size:0.72rem;color:var(--text3);margin-top:4px;}
 
-  /* ===== IMAGE UPLOAD ZONE (новая система) ===== */
-  .upload-zone{border:2px dashed var(--input-border);border-radius:14px;padding:28px 20px;text-align:center;background:var(--input-bg);cursor:pointer;transition:all 0.25s;position:relative;margin-bottom:14px;}
-  .upload-zone:hover,.upload-zone.drag-over{border-color:var(--accent);background:var(--accent-glow);}
-  .upload-zone-icon{font-size:2.4rem;margin-bottom:10px;display:block;}
-  .upload-zone-title{font-weight:600;font-size:0.95rem;margin-bottom:4px;}
-  .upload-zone-sub{color:var(--text3);font-size:0.78rem;line-height:1.5;}
-  #create-img-file-input{display:none;}
-  .upload-previews{display:grid;grid-template-columns:repeat(auto-fill,minmax(90px,1fr));gap:8px;margin-top:12px;}
-  .upload-preview-item{position:relative;aspect-ratio:3/4;border-radius:8px;overflow:hidden;border:1px solid var(--card-border);background:var(--bg3);}
-  .upload-preview-item img{width:100%;height:100%;object-fit:cover;}
-  .upload-preview-remove{position:absolute;top:4px;right:4px;width:20px;height:20px;background:rgba(0,0,0,0.75);color:#fff;border:none;border-radius:50%;font-size:0.65rem;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:2;transition:background 0.15s;}
-  .upload-preview-remove:hover{background:var(--accent);}
-  .upload-preview-status{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:700;color:#fff;background:rgba(0,0,0,0.55);border-radius:8px;}
-  .upload-preview-status.done{background:rgba(76,175,80,0.7);}
-  .upload-preview-status.error{background:rgba(201,65,42,0.7);}
-  .upload-progress-bar{height:4px;background:var(--bg3);border-radius:100px;overflow:hidden;margin-top:4px;}
-  .upload-progress-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:100px;transition:width 0.3s;}
-
-  /* Upload overall progress */
-  .upload-overall{background:var(--bg2);border:1px solid var(--card-border);border-radius:10px;padding:14px;margin-bottom:14px;display:none;}
-  .upload-overall.visible{display:block;}
-  .upload-overall-title{font-weight:600;font-size:0.85rem;margin-bottom:8px;display:flex;justify-content:space-between;}
-  .upload-overall-bar{height:8px;background:var(--bg3);border-radius:100px;overflow:hidden;}
-  .upload-overall-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:100px;transition:width 0.4s;}
-
-  /* Pending status notice */
-  .pending-notice{background:rgba(247,168,0,0.12);border:1px solid rgba(247,168,0,0.35);border-radius:10px;padding:12px 16px;font-size:0.82rem;color:#b07d00;line-height:1.6;margin-bottom:16px;}
-  [data-theme="dark"] .pending-notice{color:#f7c840;background:rgba(247,168,0,0.08);}
-  .pending-notice strong{font-weight:700;}
-
-  /* My Cards status badges */
-  .status-badge{display:inline-flex;align-items:center;gap:4px;font-size:0.65rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:2px 8px;border-radius:100px;}
-  .status-pending{background:rgba(247,168,0,0.15);color:#b07d00;}
-  [data-theme="dark"] .status-pending{color:#f7c840;}
-  .status-published{background:rgba(76,175,80,0.15);color:#2e7d32;}
-  .status-rejected{background:rgba(201,65,42,0.15);color:var(--accent);}
-
-  /* FULLPAGE OVERLAYS */
+  /* ===== PAGE FULLSCREEN OVERLAYS ===== */
   .fullpage-overlay{position:fixed;inset:0;z-index:250;background:var(--bg);overflow-y:auto;opacity:0;pointer-events:none;transition:opacity 0.3s;display:none;}
   .fullpage-overlay.open{opacity:1;pointer-events:all;display:block;}
   .fullpage-header{background:var(--nav-bg);backdrop-filter:blur(12px);border-bottom:1px solid var(--card-border);padding:0 20px;position:sticky;top:0;z-index:10;}
@@ -390,7 +356,7 @@
   .fullpage-title{font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:700;}
   .fullpage-body{max-width:1000px;margin:0 auto;padding:32px 20px;}
 
-  /* PROFILE PAGE */
+  /* ===== PROFILE PAGE ===== */
   .profile-hero{display:flex;align-items:flex-start;gap:24px;margin-bottom:36px;flex-wrap:wrap;}
   .profile-avatar-big{width:96px;height:96px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:2.4rem;font-weight:700;color:#fff;overflow:hidden;flex-shrink:0;border:4px solid var(--accent);}
   .profile-avatar-big img{width:100%;height:100%;object-fit:cover;}
@@ -408,11 +374,11 @@
   .profile-follow-btn.following:hover{background:rgba(201,65,42,0.1);color:var(--accent);border-color:var(--accent);}
   .profile-cards-title{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid var(--card-border);}
 
-  /* CREATE CARD PAGE */
+  /* ===== CREATE CARD PAGE ===== */
   .create-form{background:var(--card);border:1px solid var(--card-border);border-radius:16px;padding:28px;margin-bottom:24px;}
   .create-section-title{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:700;margin-bottom:16px;padding-bottom:8px;border-bottom:1px solid var(--card-border);}
 
-  /* ANALYTICS PAGE */
+  /* ===== ANALYTICS PAGE ===== */
   .analytics-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:14px;margin-bottom:28px;}
   .analytics-stat-card{background:var(--card);border:1px solid var(--card-border);border-radius:12px;padding:18px;text-align:center;}
   .analytics-stat-icon{font-size:1.8rem;margin-bottom:8px;}
@@ -439,7 +405,7 @@
   .analytics-bar-bg{background:var(--bg3);border-radius:100px;height:7px;overflow:hidden;}
   .analytics-bar-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:100px;transition:width 0.8s cubic-bezier(0.4,0,0.2,1);}
 
-  /* USERS ADMIN TABLE */
+  /* ===== USERS ADMIN TABLE ===== */
   .user-admin-row{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--bg2);border:1px solid var(--card-border);border-radius:8px;margin-bottom:6px;flex-wrap:wrap;}
   .user-admin-avatar{width:32px;height:32px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:700;color:#fff;overflow:hidden;flex-shrink:0;}
   .user-admin-avatar img{width:100%;height:100%;object-fit:cover;}
@@ -449,7 +415,7 @@
   .badge-banned{background:rgba(201,65,42,0.15);color:var(--accent);font-size:0.68rem;font-weight:700;padding:2px 8px;border-radius:100px;letter-spacing:1px;}
   .badge-admin{background:rgba(59,130,246,0.15);color:#3b82f6;font-size:0.68rem;font-weight:700;padding:2px 8px;border-radius:100px;}
 
-  /* LEGAL */
+  /* ===== LEGAL ===== */
   .legal-body h3{font-family:'Playfair Display',serif;font-size:1.05rem;font-weight:700;color:var(--text);margin:24px 0 10px;padding-bottom:6px;border-bottom:1px solid var(--card-border);}
   .legal-body p{color:var(--text2);font-size:0.875rem;line-height:1.75;margin-bottom:12px;}
   .legal-body ul{margin:0 0 14px 0;padding-left:20px;}
@@ -459,7 +425,7 @@
   .legal-warning-box{background:rgba(201,65,42,0.1);border:1px solid rgba(201,65,42,0.3);border-radius:8px;padding:14px 18px;color:var(--accent);font-weight:700;font-size:0.85rem;text-align:center;margin-bottom:20px;}
   .legal-contact-box{background:var(--bg2);border:1px solid var(--card-border);border-radius:8px;padding:14px 18px;margin:12px 0 16px;font-size:0.875rem;color:var(--text2);line-height:2;}
 
-  /* FOOTER */
+  /* ===== FOOTER ===== */
   footer{border-top:1px solid var(--card-border);padding:28px 16px;text-align:center;color:var(--text3);font-size:0.8rem;line-height:2;}
   footer a{color:var(--text2);text-decoration:none;}
   footer a:hover{color:var(--accent);}
@@ -468,7 +434,7 @@
   .footer-social-btn:hover{background:var(--bg3);transform:translateY(-2px);border-color:var(--accent);}
   .footer-social-btn img{width:24px;height:24px;object-fit:contain;}
 
-  /* TOAST */
+  /* ===== TOAST ===== */
   .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--text);color:var(--bg);padding:10px 20px;border-radius:8px;font-size:0.85rem;font-weight:500;z-index:700;transition:transform 0.3s;pointer-events:none;white-space:nowrap;}
   .toast.show{transform:translateX(-50%) translateY(0);}
 
@@ -649,12 +615,6 @@
     </div>
   </div>
   <div class="fullpage-body">
-
-    <!-- Pending notice для обычных пользователей -->
-    <div class="pending-notice" id="create-pending-notice" style="display:none">
-      📋 <strong>How it works:</strong> Fill in the info and upload your images. Your card will go to <strong>admin review</strong> before appearing publicly. Usually approved within 24 hours!
-    </div>
-
     <div class="create-form">
       <div class="create-section-title">Basic Info</div>
       <div class="form-group">
@@ -670,7 +630,6 @@
         <input class="form-input" id="create-jai" placeholder="https://janitorai.com/characters/...">
       </div>
     </div>
-
     <div class="create-form">
       <div class="create-section-title">Tags <span style="font-size:0.75rem;color:var(--text3);font-family:'DM Sans',sans-serif;font-weight:400">(max 10 total)</span></div>
       <div class="tag-picker-wrap">
@@ -687,51 +646,8 @@
         </div>
       </div>
     </div>
-
-    <!-- IMAGES UPLOAD (новая секция) -->
-    <div class="create-form">
-      <div class="create-section-title">
-        Images
-        <span style="font-size:0.75rem;color:var(--text3);font-family:'DM Sans',sans-serif;font-weight:400">
-          (JPG, PNG, GIF, WEBP · max 8MB each · up to 30 files)
-        </span>
-      </div>
-
-      <!-- Общий прогресс загрузки (появится при сабмите) -->
-      <div class="upload-overall" id="upload-overall">
-        <div class="upload-overall-title">
-          <span id="upload-overall-text">Uploading images...</span>
-          <span id="upload-overall-pct">0%</span>
-        </div>
-        <div class="upload-overall-bar">
-          <div class="upload-overall-fill" id="upload-overall-fill" style="width:0%"></div>
-        </div>
-      </div>
-
-      <!-- Drag & Drop зона -->
-      <div class="upload-zone" id="create-upload-zone"
-           onclick="document.getElementById('create-img-file-input').click()"
-           ondragover="handleDragOver(event)"
-           ondragleave="handleDragLeave(event)"
-           ondrop="handleDrop(event)">
-        <span class="upload-zone-icon">🖼️</span>
-        <div class="upload-zone-title">Drop images here or click to browse</div>
-        <div class="upload-zone-sub">Supports JPG, PNG, GIF, WEBP · Max 8MB per file · Up to 30 images</div>
-      </div>
-      <input type="file" id="create-img-file-input" accept="image/jpeg,image/png,image/gif,image/webp" multiple
-             onchange="handleImageFilesSelected(this.files)">
-
-      <!-- Превью выбранных изображений -->
-      <div class="upload-previews" id="create-upload-previews"></div>
-      <div id="create-img-count" style="font-size:0.75rem;color:var(--text3);margin-top:6px;display:none;"></div>
-    </div>
-
-    <button class="admin-btn" style="width:100%;padding:14px;font-size:1rem;justify-content:center;" id="create-submit-btn" onclick="submitCreateCard()">
-      ✨ Submit Card for Review
-    </button>
-    <p style="font-size:0.75rem;color:var(--text3);text-align:center;margin-top:10px;" id="create-submit-note">
-      Your card will be reviewed by admins before appearing publicly.
-    </p>
+    <button class="admin-btn" style="width:100%;padding:14px;font-size:1rem;justify-content:center;" onclick="submitCreateCard()">✨ Submit Card for Review</button>
+    <p style="font-size:0.75rem;color:var(--text3);text-align:center;margin-top:10px;">Your card will be reviewed by admins before publishing.</p>
   </div>
 </div>
 
@@ -745,19 +661,6 @@
   </div>
   <div class="fullpage-body" id="analytics-body">
     <div class="empty-state"><div class="empty-state-icon">⏳</div><h3>Loading analytics...</h3></div>
-  </div>
-</div>
-
-<!-- MY CARDS PAGE OVERLAY -->
-<div class="fullpage-overlay" id="mycards-page">
-  <div class="fullpage-header">
-    <div class="fullpage-header-inner">
-      <button class="fullpage-back" onclick="closeFullpage('mycards-page')">←</button>
-      <div class="fullpage-title">🃏 My Cards</div>
-    </div>
-  </div>
-  <div class="fullpage-body" id="mycards-body">
-    <div class="empty-state"><div class="empty-state-icon">⏳</div><h3>Loading...</h3></div>
   </div>
 </div>
 
@@ -827,7 +730,6 @@
         <button class="admin-tab" onclick="switchAdminTab('manage')">🗂 Manage</button>
         <button class="admin-tab" onclick="switchAdminTab('upcoming')">🔥 Upcoming</button>
         <button class="admin-tab" onclick="switchAdminTab('users')">👥 Users</button>
-        <button class="admin-tab" onclick="switchAdminTab('pending')">📋 Pending</button>
       </div>
 
       <!-- CREATE TAB -->
@@ -893,16 +795,6 @@
         </div>
         <div id="admin-users-list"><div style="color:var(--text3);text-align:center;padding:20px">Click Refresh to load users</div></div>
       </div>
-
-      <!-- PENDING CARDS TAB -->
-      <div class="admin-section" id="admin-pending">
-        <div style="margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;">
-          <div style="font-weight:600;font-size:0.9rem;">Pending Cards</div>
-          <button class="admin-btn" style="padding:6px 12px;font-size:0.78rem;" onclick="loadAdminPending()">🔄 Refresh</button>
-        </div>
-        <div id="admin-pending-list"><div style="color:var(--text3);text-align:center;padding:20px">Click Refresh to load pending cards</div></div>
-      </div>
-
     </div>
   </div>
 </div>
@@ -956,6 +848,7 @@ const API = 'https://limitlessai-production.up.railway.app';
 const ADMIN_CHECK_URL = 'https://i.ibb.co.com/R4hKHQr9/check-1.png';
 const STORAGE_KEY = 'lai_user_v2';
 
+// BASE TAGS LIST
 const BASE_TAGS = [
   '👨 Male','⛓ Dominant','👩 Female','📚 Fictional','🧑‍🎨 OC','❤‍🔥 Smut','🙇‍♂️ Submissive','🎮 Game','📺 Anime','🦄 Non-human','👤 AnyPOV','🕊🗡 Dead Dove','🌗 Switch','💞 Fluff','👭 Multiple','🔮 Magical','🦹‍♂️ Villain','👨‍❤️‍💋‍👨 MLM','🔗 Scenario','👨 MalePOV','👩 FemPOV','🦸‍♂️ Hero','💔 Angst','👑 Royalty','👹 Monster','🏰 Historical','⚔ Enemies to Lovers','🐺 Furry','🙋‍♀️ Giant','🌈 Non-binary','👩‍❤️‍💋‍👩 WLW','🧬 Demi-human','🎲 RPG','🌎 Non-English','🔦 Horror','👧 Monster Girl','🤖 Robot','😂 Comedy','🧛‍♂️ Vampire','📚 Books','🐙 Pokemon','👽 Alien','🏳 Trans','🕵️‍♂️ Detective','🧝‍♀️ Elf','📜 Politics'
 ];
@@ -965,10 +858,8 @@ let adminSelectedCharId = null, adminSelectedCharName = null, currentSort = 'vie
 let lightboxImages = [], lightboxIndex = 0;
 let pendingAvatarBase64 = null;
 let selectedImageIds = new Set();
+// Create card tag state
 let createSelectedTags = [];
-
-// Image upload state
-let pendingImageFiles = []; // [{file, previewUrl, id}]
 
 // ===== INIT =====
 window.addEventListener('DOMContentLoaded', async () => {
@@ -1144,6 +1035,7 @@ async function openCharModal(id){
   document.getElementById('modal-jai-link').href=currentChar.jai_url||'https://janitorai.com';
   document.getElementById('modal-char-tags').innerHTML=(currentChar.tags||[]).map(t=>`<span class="tag active" style="cursor:default">${t}</span>`).join('');
   document.getElementById('modal-meta').innerHTML=`<span>👁 ${currentChar.views||0} views</span><span>❤️ ${currentChar.likes_count||0} likes</span><span>💬 <span id="modal-comment-count">${currentChar.comments?.length||0}</span> comments</span><span>by <a onclick="event.preventDefault();closeCharModal();setTimeout(()=>openUserProfile('${currentChar.author||'MrZ1nGo'}'),200)" href="#" style="color:var(--accent);font-weight:600;text-decoration:none">@${currentChar.author||'MrZ1nGo'}</a></span>`;
+  // Show admin delete button
   const adminDelBtn = document.getElementById('modal-admin-delete-btn');
   if(adminDelBtn) adminDelBtn.style.display = currentUser?.isAdmin ? 'inline-flex' : 'none';
   const imgs=currentChar.images||[];
@@ -1168,6 +1060,8 @@ function closeCharModal(e){
   document.getElementById('char-modal').classList.remove('open');
   document.body.style.overflow='';currentChar=null;
 }
+
+// Admin delete from modal
 async function adminDeleteCharFromModal(){
   if(!currentUser?.isAdmin||!currentChar)return;
   if(!confirm(`Delete "${currentChar.name}"? This will also delete all images and comments.`))return;
@@ -1337,7 +1231,6 @@ function updateNavUser(){
           <div class="pd-menu">
             <button class="pd-item" onclick="closeProfileDropdown();openUserProfile('${currentUser.username}')"><span class="pd-item-icon">👤</span> Profile</button>
             <button class="pd-item" onclick="closeProfileDropdown();openCreatePage()"><span class="pd-item-icon">✨</span> Create Card</button>
-            <button class="pd-item" onclick="closeProfileDropdown();openMyCards()"><span class="pd-item-icon">🃏</span> My Cards</button>
             <button class="pd-item" onclick="closeProfileDropdown();openAnalytics()"><span class="pd-item-icon">📊</span> Analytics</button>
             <button class="pd-item" onclick="closeProfileDropdown();openSettings()"><span class="pd-item-icon">⚙️</span> Profile Settings</button>
             ${adminMenuItems}
@@ -1428,64 +1321,13 @@ async function toggleFollow(username) {
   } catch(e) { showToast('Network error'); }
 }
 
-// ===== MY CARDS PAGE =====
-async function openMyCards() {
-  if(!currentUser) { openAuth('login'); return; }
-  openFullpage('mycards-page');
-  const body = document.getElementById('mycards-body');
-  body.innerHTML = `<div class="empty-state"><div class="empty-state-icon">⏳</div><h3>Loading your cards...</h3></div>`;
-  try {
-    const res = await fetch(`${API}/api/my-characters`, {
-      headers: { 'Authorization': `Bearer ${currentUser.token}` }
-    });
-    if(!res.ok) throw new Error('fail');
-    const cards = await res.json();
-    if(!cards.length) {
-      body.innerHTML = `<div class="empty-state"><div class="empty-state-icon">🃏</div><h3>No cards yet</h3><p>Create your first character card!</p><button class="admin-btn" style="margin-top:16px" onclick="closeFullpage('mycards-page');openCreatePage()">✨ Create Card</button></div>`;
-      return;
-    }
-    const STATUS_LABELS = {published:'✅ Published',pending:'⏳ Pending Review',rejected:'❌ Rejected'};
-    const STATUS_CLASS = {published:'status-published',pending:'status-pending',rejected:'status-danger'};
-    body.innerHTML = `
-      <div style="margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
-        <div style="font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;">My Character Cards</div>
-        <button class="admin-btn" onclick="closeFullpage('mycards-page');openCreatePage()">✨ Create New</button>
-      </div>
-      <div class="gallery-grid">
-        ${cards.map(c => {
-          const img = c.images?.[0]?.url;
-          const thumb = img ? `<img src="${img}" style="width:100%;height:100%;object-fit:cover" loading="lazy" onerror="this.parentElement.innerHTML='<span>${c.emoji||'🌸'}</span>'">` : `<span>${c.emoji||'🌸'}</span>`;
-          const status = c.status || 'published';
-          const statusLabel = STATUS_LABELS[status] || status;
-          const statusClass = STATUS_CLASS[status] || '';
-          const clickAction = status === 'published' ? `closeFullpage('mycards-page');setTimeout(()=>openCharModal('${c.id}'),200)` : '';
-          return `<div class="char-card" ${clickAction ? `onclick="${clickAction}"` : ''} style="${status!=='published'?'cursor:default;opacity:0.8':''}">
-            <div class="char-thumb">${thumb}<div class="char-thumb-overlay"></div>
-              <div style="position:absolute;top:8px;left:8px"><span class="status-badge ${statusClass}">${statusLabel}</span></div>
-            </div>
-            <div class="char-info">
-              <div class="char-name">${c.name}</div>
-              <div class="char-tags">${(c.tags||[]).slice(0,3).map(t=>`<span class="char-tag">${t}</span>`).join('')}</div>
-              <div class="char-meta">
-                <div class="char-stats"><span>📷 ${(c.images||[]).length}</span><span>👁 ${c.views||0}</span></div>
-                ${status==='rejected'&&c.review_reason?`<span style="font-size:0.7rem;color:var(--accent)">Reason: ${c.review_reason}</span>`:''}
-              </div>
-            </div>
-          </div>`;
-        }).join('')}
-      </div>
-    `;
-  } catch(e) {
-    body.innerHTML = `<div class="empty-state"><div class="empty-state-icon">⚠️</div><h3>Could not load cards</h3></div>`;
-  }
-}
-
-// ===== CREATE CARD PAGE — TAGS =====
+// ===== CREATE CARD PAGE =====
 function renderBaseTagsGrid() {
   const grid = document.getElementById('create-base-tags-grid');
   if(!grid) return;
   grid.innerHTML = BASE_TAGS.map(tag => `<span class="tag-picker-item" onclick="toggleBaseTag('${tag.replace(/'/g,"\\'")}')">${tag}</span>`).join('');
 }
+
 function toggleBaseTag(tag) {
   if(createSelectedTags.includes(tag)) {
     createSelectedTags = createSelectedTags.filter(t=>t!==tag);
@@ -1497,6 +1339,7 @@ function toggleBaseTag(tag) {
   }
   renderSelectedTags();
 }
+
 function addCustomTag() {
   const input = document.getElementById('create-custom-tag-input');
   let val = input.value.trim().replace(/^#+/,'');
@@ -1508,11 +1351,14 @@ function addCustomTag() {
   input.value = '';
   renderSelectedTags();
 }
+
 function removeTag(tag) {
   createSelectedTags = createSelectedTags.filter(t=>t!==tag);
+  // Deselect in grid if it's a base tag
   document.querySelectorAll('.tag-picker-item').forEach(el=>{ if(el.textContent===tag) el.classList.remove('selected'); });
   renderSelectedTags();
 }
+
 function renderSelectedTags() {
   const row = document.getElementById('create-selected-tags');
   const count = document.getElementById('create-tag-count');
@@ -1520,125 +1366,17 @@ function renderSelectedTags() {
   if(count) count.textContent = `${createSelectedTags.length} / 10 tags selected`;
 }
 
-// ===== CREATE CARD PAGE — IMAGE UPLOAD =====
-function handleDragOver(e) {
-  e.preventDefault();
-  document.getElementById('create-upload-zone').classList.add('drag-over');
-}
-function handleDragLeave(e) {
-  document.getElementById('create-upload-zone').classList.remove('drag-over');
-}
-function handleDrop(e) {
-  e.preventDefault();
-  document.getElementById('create-upload-zone').classList.remove('drag-over');
-  const files = Array.from(e.dataTransfer.files).filter(f => f.type.startsWith('image/'));
-  addImageFiles(files);
-}
-function handleImageFilesSelected(fileList) {
-  const files = Array.from(fileList);
-  addImageFiles(files);
-  // Сбрасываем input чтобы можно было добавить те же файлы снова
-  document.getElementById('create-img-file-input').value = '';
-}
-function addImageFiles(files) {
-  const allowed = ['image/jpeg','image/png','image/gif','image/webp'];
-  let added = 0;
-  for(const file of files) {
-    if(pendingImageFiles.length >= 30) { showToast('Maximum 30 images allowed'); break; }
-    if(!allowed.includes(file.type)) { showToast(`Skipped: ${file.name} (unsupported format)`); continue; }
-    if(file.size > 8 * 1024 * 1024) { showToast(`Skipped: ${file.name} (max 8MB)`); continue; }
-    const id = `img_${Date.now()}_${Math.random().toString(36).slice(2)}`;
-    const previewUrl = URL.createObjectURL(file);
-    pendingImageFiles.push({ file, previewUrl, id });
-    added++;
-  }
-  if(added > 0) renderImagePreviews();
-}
-function removeImageFile(id) {
-  const item = pendingImageFiles.find(f => f.id === id);
-  if(item) URL.revokeObjectURL(item.previewUrl);
-  pendingImageFiles = pendingImageFiles.filter(f => f.id !== id);
-  renderImagePreviews();
-}
-function renderImagePreviews() {
-  const container = document.getElementById('create-upload-previews');
-  const countEl = document.getElementById('create-img-count');
-  if(!pendingImageFiles.length) {
-    container.innerHTML = '';
-    if(countEl) { countEl.style.display='none'; countEl.textContent=''; }
-    return;
-  }
-  container.innerHTML = pendingImageFiles.map(f => `
-    <div class="upload-preview-item" id="preview-${f.id}">
-      <img src="${f.previewUrl}" alt="">
-      <button class="upload-preview-remove" onclick="removeImageFile('${f.id}')">✕</button>
-    </div>
-  `).join('');
-  if(countEl) {
-    countEl.style.display = 'block';
-    countEl.textContent = `${pendingImageFiles.length} image${pendingImageFiles.length!==1?'s':''} selected`;
-  }
-}
-function setPreviewStatus(id, status, text) {
-  const item = document.getElementById(`preview-${id}`);
-  if(!item) return;
-  let statusEl = item.querySelector('.upload-preview-status');
-  if(!statusEl) {
-    statusEl = document.createElement('div');
-    statusEl.className = 'upload-preview-status';
-    item.appendChild(statusEl);
-  }
-  statusEl.className = `upload-preview-status ${status}`;
-  statusEl.textContent = text;
-}
-function updateOverallProgress(done, total) {
-  const pct = total === 0 ? 0 : Math.round(done / total * 100);
-  const overall = document.getElementById('upload-overall');
-  const fill = document.getElementById('upload-overall-fill');
-  const pctEl = document.getElementById('upload-overall-pct');
-  const textEl = document.getElementById('upload-overall-text');
-  if(overall) { overall.classList.add('visible'); }
-  if(fill) fill.style.width = pct + '%';
-  if(pctEl) pctEl.textContent = pct + '%';
-  if(textEl) textEl.textContent = `Uploading images... (${done}/${total})`;
-}
-
-function fileToBase64(file) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = e => resolve(e.target.result);
-    reader.onerror = () => reject(new Error('Read error'));
-    reader.readAsDataURL(file);
-  });
-}
-
-// ===== OPEN CREATE PAGE =====
 function openCreatePage() {
   if(!currentUser) { openAuth('login'); return; }
-  // Reset state
   createSelectedTags = [];
-  pendingImageFiles = [];
   renderBaseTagsGrid();
   renderSelectedTags();
-  renderImagePreviews();
   document.getElementById('create-name').value = '';
   document.getElementById('create-emoji').value = '';
   document.getElementById('create-jai').value = '';
-  document.getElementById('upload-overall').classList.remove('visible');
-  // Show pending notice for non-admins
-  const notice = document.getElementById('create-pending-notice');
-  if(notice) notice.style.display = currentUser.isAdmin ? 'none' : 'block';
-  // Update submit button text
-  const btn = document.getElementById('create-submit-btn');
-  if(btn) btn.innerHTML = currentUser.isAdmin ? '➕ Create Character' : '✨ Submit Card for Review';
-  const note = document.getElementById('create-submit-note');
-  if(note) note.textContent = currentUser.isAdmin
-    ? 'Card published immediately. You can add images after creating.'
-    : 'Your card will be reviewed by admins before appearing publicly.';
   openFullpage('create-page');
 }
 
-// ===== SUBMIT CREATE CARD =====
 async function submitCreateCard() {
   if(!currentUser) { openAuth('login'); return; }
   const name = document.getElementById('create-name').value.trim();
@@ -1646,75 +1384,21 @@ async function submitCreateCard() {
   const jai_url = document.getElementById('create-jai').value.trim();
   if(!name) { showToast('Character name is required'); return; }
   if(createSelectedTags.length === 0) { showToast('Please add at least one tag'); return; }
-
-  const btn = document.getElementById('create-submit-btn');
-  btn.textContent = 'Creating card...'; btn.disabled = true;
-
+  const btn = document.querySelector('#create-page .admin-btn');
+  btn.textContent = 'Submitting...'; btn.disabled = true;
   try {
-    // 1. Создаём карточку
     const res = await fetch(`${API}/api/characters`, {
       method:'POST',
       headers:{'Content-Type':'application/json','Authorization':`Bearer ${currentUser.token}`},
-      body: JSON.stringify({ name, tags: createSelectedTags, jai_url, emoji, author: currentUser.username })
+      body: JSON.stringify({name, tags: createSelectedTags, jai_url, emoji, author: currentUser.username})
     });
     const data = await res.json();
-    if(!res.ok) { showToast(data.error || 'Failed to create card'); btn.textContent='✨ Submit Card for Review'; btn.disabled=false; return; }
-
-    const charId = data.id;
-
-    // 2. Загружаем изображения (если есть)
-    if(pendingImageFiles.length > 0) {
-      const total = pendingImageFiles.length;
-      let done = 0;
-      updateOverallProgress(0, total);
-
-      for(const imgItem of pendingImageFiles) {
-        setPreviewStatus(imgItem.id, '', '⏳');
-        try {
-          const base64 = await fileToBase64(imgItem.file);
-          const uploadRes = await fetch(`${API}/api/user/upload-image`, {
-            method: 'POST',
-            headers: {'Content-Type':'application/json','Authorization':`Bearer ${currentUser.token}`},
-            body: JSON.stringify({ character_id: charId, image: base64, filename: imgItem.file.name })
-          });
-          if(uploadRes.ok) {
-            setPreviewStatus(imgItem.id, 'done', '✓');
-          } else {
-            const err = await uploadRes.json();
-            setPreviewStatus(imgItem.id, 'error', '✕');
-            console.warn('Upload failed:', err.error);
-          }
-        } catch(e) {
-          setPreviewStatus(imgItem.id, 'error', '✕');
-        }
-        done++;
-        updateOverallProgress(done, total);
-      }
-
-      btn.textContent = 'Done!';
-      await new Promise(r => setTimeout(r, 600));
-    }
-
-    // 3. Финальное сообщение
-    if(currentUser.isAdmin) {
-      showToast(`✓ "${name}" created!`);
-    } else {
-      showToast('✓ Card submitted for review!');
-    }
-
-    // Очищаем состояние
-    pendingImageFiles.forEach(f => URL.revokeObjectURL(f.previewUrl));
-    pendingImageFiles = [];
-
+    if(!res.ok) { showToast(data.error||'Failed to submit'); btn.textContent='✨ Submit Card for Review'; btn.disabled=false; return; }
+    showToast('✓ Card submitted! Awaiting admin review.');
     closeFullpage('create-page');
     await loadCharacters();
-
-  } catch(e) {
-    showToast('Network error');
-  }
-
-  btn.textContent = currentUser?.isAdmin ? '➕ Create Character' : '✨ Submit Card for Review';
-  btn.disabled = false;
+  } catch(e) { showToast('Network error'); }
+  btn.textContent = '✨ Submit Card for Review'; btn.disabled = false;
 }
 
 // ===== ANALYTICS PAGE =====
@@ -1731,6 +1415,7 @@ async function openAnalytics() {
     const maxLikes = Math.max(...(d.charStats||[]).map(c=>c.likes),1);
 
     body.innerHTML = `
+      <!-- TOTALS -->
       <div class="analytics-grid">
         <div class="analytics-stat-card"><div class="analytics-stat-icon">👁</div><div class="analytics-stat-val">${d.totals.views.toLocaleString()}</div><div class="analytics-stat-label">Total Views</div></div>
         <div class="analytics-stat-card"><div class="analytics-stat-icon">❤️</div><div class="analytics-stat-val">${d.totals.likes.toLocaleString()}</div><div class="analytics-stat-label">Total Likes</div></div>
@@ -1738,6 +1423,8 @@ async function openAnalytics() {
         <div class="analytics-stat-card"><div class="analytics-stat-icon">🃏</div><div class="analytics-stat-val">${d.totals.characters}</div><div class="analytics-stat-label">Cards Published</div></div>
         <div class="analytics-stat-card"><div class="analytics-stat-icon">👥</div><div class="analytics-stat-val">${d.totals.followers}</div><div class="analytics-stat-label">Followers</div></div>
       </div>
+
+      <!-- VIEWS BY CARD -->
       <div class="analytics-section">
         <div class="analytics-section-title">🔥 Views by Character</div>
         <div class="analytics-bar-wrap">
@@ -1748,6 +1435,8 @@ async function openAnalytics() {
             </div>`).join('') || '<div style="padding:20px;color:var(--text3);text-align:center">No data yet</div>'}
         </div>
       </div>
+
+      <!-- LIKES BY CARD -->
       <div class="analytics-section">
         <div class="analytics-section-title">❤️ Likes by Character</div>
         <div class="analytics-bar-wrap">
@@ -1758,7 +1447,9 @@ async function openAnalytics() {
             </div>`).join('') || '<div style="padding:20px;color:var(--text3);text-align:center">No data yet</div>'}
         </div>
       </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;" class="analytics-two-col">
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;flex-wrap:wrap;" class="analytics-two-col">
+        <!-- RECENT LIKES -->
         <div class="analytics-section" style="margin-bottom:0">
           <div class="analytics-section-title">👍 Recent Likes</div>
           <div class="analytics-table">
@@ -1769,6 +1460,7 @@ async function openAnalytics() {
             }).join('') || '<div class="analytics-row" style="justify-content:center;color:var(--text3)">No likes yet</div>'}
           </div>
         </div>
+        <!-- RECENT COMMENTS -->
         <div class="analytics-section" style="margin-bottom:0">
           <div class="analytics-section-title">💬 Recent Comments</div>
           <div class="analytics-table">
@@ -1781,6 +1473,7 @@ async function openAnalytics() {
         </div>
       </div>
       <br>
+      <!-- FOLLOWERS -->
       <div class="analytics-section">
         <div class="analytics-section-title">👥 Your Followers</div>
         <div class="analytics-table">
@@ -1792,6 +1485,7 @@ async function openAnalytics() {
         </div>
       </div>
     `;
+    // Trigger bar animations
     setTimeout(()=>{
       document.querySelectorAll('.analytics-bar-fill').forEach(el=>{
         const w=el.style.width;el.style.width='0';
@@ -1867,85 +1561,13 @@ async function saveSettings(){
 function openAdmin(){if(!currentUser?.isAdmin)return;document.getElementById('admin-modal').classList.add('open');document.body.style.overflow='hidden';switchAdminTab('create');}
 function closeAdmin(e){if(e&&e.target!==document.getElementById('admin-modal'))return;document.getElementById('admin-modal').classList.remove('open');document.body.style.overflow='';adminSelectedCharId=null;adminSelectedCharName=null;}
 function switchAdminTab(tab){
-  const tabs=['create','manage','upcoming','users','pending'];
-  document.querySelectorAll('.admin-tab').forEach((t,i)=>t.classList.toggle('active',tabs[i]===tab));
-  tabs.forEach(t=>{
-    const el=document.getElementById('admin-'+t);
-    if(el) el.classList.toggle('active',t===tab);
-  });
+  document.querySelectorAll('.admin-tab').forEach((t,i)=>t.classList.toggle('active',(i===0&&tab==='create')||(i===1&&tab==='manage')||(i===2&&tab==='upcoming')||(i===3&&tab==='users')));
+  document.getElementById('admin-create').classList.toggle('active',tab==='create');
+  document.getElementById('admin-manage').classList.toggle('active',tab==='manage');
+  document.getElementById('admin-upcoming').classList.toggle('active',tab==='upcoming');
+  document.getElementById('admin-users').classList.toggle('active',tab==='users');
   if(tab==='manage')loadAdminCharList();
   if(tab==='users')loadAdminUsers();
-  if(tab==='pending')loadAdminPending();
-}
-
-// ===== ADMIN: PENDING CARDS =====
-async function loadAdminPending() {
-  const list = document.getElementById('admin-pending-list');
-  list.innerHTML = '<div style="color:var(--text3);text-align:center;padding:20px">Loading...</div>';
-  try {
-    const res = await fetch(`${API}/api/admin/pending`, { headers:{'Authorization':`Bearer ${currentUser.token}`} });
-    if(!res.ok) throw new Error('fail');
-    const cards = await res.json();
-    if(!cards.length) { list.innerHTML='<div style="color:var(--text3);text-align:center;padding:20px">🎉 No pending cards</div>'; return; }
-    list.innerHTML = cards.map(c => {
-      const img = c.images?.[0]?.url;
-      const thumb = img ? `<img src="${img}" style="width:60px;height:80px;object-fit:cover;border-radius:6px">` : `<span style="font-size:1.8rem">${c.emoji||'🌸'}</span>`;
-      return `<div class="char-list-item" id="pending-card-${c.id}">
-        <div class="char-list-top">
-          <div style="display:flex;align-items:center;gap:10px;flex:1;min-width:0">
-            <div style="flex-shrink:0;width:60px;height:80px;border-radius:6px;overflow:hidden;background:var(--bg3);display:flex;align-items:center;justify-content:center">${thumb}</div>
-            <div style="min-width:0">
-              <div class="char-list-name">${c.name}</div>
-              <div class="char-list-tags">by @${c.author} · ${(c.tags||[]).join(', ')} · ${(c.images||[]).length} imgs</div>
-              <div style="font-size:0.7rem;color:var(--text3);margin-top:2px">${new Date(c.created_at).toLocaleDateString()}</div>
-            </div>
-          </div>
-          <div style="display:flex;gap:5px;flex-shrink:0;flex-wrap:wrap">
-            <button class="btn-success" onclick="adminReviewCard('${c.id}','approve')">✅ Approve</button>
-            <button class="btn-danger" onclick="adminReviewCardReject('${c.id}','${c.name.replace(/'/g,"\\'")}')">❌ Reject</button>
-          </div>
-        </div>
-        ${(c.images||[]).length>0 ? `<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;">${(c.images||[]).slice(0,6).map(i=>`<img src="${i.url}" style="width:60px;height:80px;object-fit:cover;border-radius:5px" loading="lazy">`).join('')}</div>` : ''}
-        <div id="reject-form-${c.id}" style="display:none;margin-top:10px">
-          <input class="form-input" id="reject-reason-${c.id}" placeholder="Rejection reason (optional)" style="margin-bottom:7px">
-          <div style="display:flex;gap:6px">
-            <button class="btn-danger" onclick="adminConfirmReject('${c.id}')">Confirm Reject</button>
-            <button class="btn-edit" onclick="document.getElementById('reject-form-${c.id}').style.display='none'">Cancel</button>
-          </div>
-        </div>
-      </div>`;
-    }).join('');
-  } catch(e) {
-    list.innerHTML = '<div style="color:var(--accent);text-align:center;padding:20px">Error loading</div>';
-  }
-}
-
-async function adminReviewCard(id, action, reason='') {
-  try {
-    const res = await fetch(`${API}/api/admin/pending/${id}/review`, {
-      method: 'POST',
-      headers: {'Content-Type':'application/json','Authorization':`Bearer ${currentUser.token}`},
-      body: JSON.stringify({ action, reason })
-    });
-    const data = await res.json();
-    if(res.ok) {
-      const el = document.getElementById(`pending-card-${id}`);
-      if(el) el.remove();
-      showToast(action === 'approve' ? '✅ Card approved & published!' : '❌ Card rejected');
-      await loadCharacters();
-    } else { showToast(data.error || 'Failed'); }
-  } catch(e) { showToast('Network error'); }
-}
-
-function adminReviewCardReject(id, name) {
-  const form = document.getElementById(`reject-form-${id}`);
-  if(form) form.style.display = 'block';
-}
-
-async function adminConfirmReject(id) {
-  const reasonEl = document.getElementById(`reject-reason-${id}`);
-  const reason = reasonEl ? reasonEl.value.trim() : '';
-  await adminReviewCard(id, 'reject', reason);
 }
 
 // ===== ADMIN: USERS =====
@@ -1976,6 +1598,7 @@ async function loadAdminUsers() {
     list.innerHTML = '<div style="color:var(--accent);text-align:center;padding:20px">Error loading users</div>';
   }
 }
+
 async function adminToggleBan(userId, ban, username) {
   if(!confirm(`${ban?'Ban':'Unban'} @${username}?`)) return;
   try {
